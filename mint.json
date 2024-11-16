@@ -83,13 +83,15 @@
               "group": "General Inference",
               "icon": "robot",
               "pages": [
-                "examples/general_inference/flux"
+                "examples/general_inference/flux",
+                "examples/general_inference/json_schema"
               ]
             }
             
             
           ]
         }
+       
       ]
     }
   ],
