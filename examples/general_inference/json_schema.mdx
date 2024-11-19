@@ -13,6 +13,10 @@ This example is tailored for testing with CentML’s hosted LLM endpoint, using 
 
 ## Prerequisites
 clone the codex repo
+```bash
+git clone https://github.com/CentML/codex.git
+cd codex
+```
 
 ### Python Environment:
 - Ensure you have Python 3.7 or later installed.
@@ -90,10 +94,7 @@ export CENTML_MODEL_NAME="meta-llama/Meta-Llama-3-8B-Instruct" # replace with yo
 
 - **Schema Validation:** Ensures all generated JSON profiles adhere to the predefined schema.
 - **Guided Decoding:** Uses guided decoding to enforce structure in the generated data.
-- **Environment Configurable:** Reads endpoint, API key, and model name from environment variables for flexibility.
-- **Error Handling:**
-    - Detects and reports schema validation issues.
-    - Ensures generated profiles are unique in key fields (name, age).
+
 
 ## Troubleshooting
 
