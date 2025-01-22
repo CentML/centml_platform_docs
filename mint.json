@@ -4,8 +4,8 @@
   "theme": "prism",
   "layout": "solidSidenav",
   "logo": {
-    "dark": "https://centml.ai/wp-content/themes/centml/inc/assets/img/centml-logo-light.svg",
-    "light": "https://centml.ai/wp-content/themes/centml/inc/assets/img/centml-logo-dark.svg",
+    "dark": "https://wp-backend.centml.ai/wp-content/themes/centml/inc/assets/img/centml-logo-light.svg",
+    "light": "https://wp-backend.centml.ai/wp-content/themes/centml/inc/assets/img/centml-logo-dark.svg",
     "href": "https://centml.ai/"
   },
   "favicon": "/favicon.png",
