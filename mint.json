@@ -57,6 +57,7 @@
       "pages": [
         "resources/custom_image",
         "resources/private",
+	"resources/json_and_tool",
         "resources/pricing"
       ]
     },
