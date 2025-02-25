@@ -1,0 +1,179 @@
+---
+title: 'Agent Support'
+description: 'How to build AI agents using structured outputs such as JSON and function/tool calls with CentML'
+icon: 'user-gear'
+---
+
+Both **Serverless** and **Dedicated** LLM APIs from CentML support structured outputs using the same OpenAI-compatible API. These features are crucial for agentic workloads that require reliable data parsing and function calling. The CentML platform also provides reasoning-enabled models (e.g., `DeepSeek-AI/deepseek-r1`) that can perform reasoning before generating structured outputs.
+
+## JSON Schema Output
+
+When you need a response strictly formatted as JSON, you can use JSON schema constraints. This is particularly useful in scenarios where your system or other downstream processes rely on valid JSON.
+
+Below is an example of how to set up a request to the CentML LLM API using JSON schema enforcement. 
+
+```python
+from openai import OpenAI
+import os
+
+# Retrieve the model name from environment variables
+model = os.environ.get("MODEL", "deepseek-ai/DeepSeek-R1")
+
+# Supply your API key from https://app.centml.com/user/credentials
+api_key = os.environ.get("OPENAI_API_KEY")
+assert api_key is not None, "Please provide an API Key"
+
+
+# Define the prompt for the OpenAI API
+prompt = [
+    {
+        "content": (
+            "You are a helpful assistant that answers in JSON. Here's the json schema you must adhere to:\n"
+            "<schema>\n"
+            "{'title': 'WirelessAccessPoint', 'type': 'object', 'properties': {'ssid': {'title': 'SSID', 'type': 'string'}, "
+            "'securityProtocol': {'title': 'SecurityProtocol', 'type': 'string'}, 'bandwidth': {'title': 'Bandwidth', 'type': 'string'}}, "
+            "'required': ['ssid', 'securityProtocol', 'bandwidth']}\n"
+            "</schema>\n"
+        ),
+        "role": "system"
+    },
+    {
+        "content": (
+            "The access point's SSID should be 'OfficeNetSecure', it uses WPA2-Enterprise as its security protocol, "
+            "and it's capable of a bandwidth of up to 1300 Mbps on the 5 GHz band. This JSON object will be used to document our network "
+            "configurations and to automate the setup process for additional access points in the future. Please provide a JSON object that "
+            "includes these details."
+        ),
+        "role": "user"
+    }
+]
+
+# Define the JSON schema for the wireless access point configuration
+schema_json = {
+    "title": "WirelessAccessPoint",
+    "type": "object",
+    "properties": {
+        "ssid": {"title": "SSID", "type": "string"},
+        "securityProtocol": {"title": "SecurityProtocol", "type": "string"},
+        "bandwidth": {"title": "Bandwidth", "type": "integer"}
+    },
+    "required": ["ssid", "securityProtocol", "bandwidth"]
+}
+
+# Initialize the OpenAI (CentML) client with the API key and base URL
+client = OpenAI(
+    api_key=api_key,
+    base_url="https://api.centml.com/openai/v1",
+)
+
+# Create a chat completion request with the defined prompt and schema
+chat_completion = client.chat.completions.create(
+    model=model,
+    messages=prompt,
+    max_tokens=5000,
+    temperature=0,
+    response_format={
+        "type": "json_schema",
+        "json_schema": {"name": "schema", "schema": schema_json}
+    }
+)
+
+# Print the entire chat completion response
+print("Chat Completion Response:", chat_completion)
+
+# Print the content of the first choice in the chat completion response
+print("Generated JSON Object:", chat_completion.choices[0].message.content)
+```
+
+### How it Works
+
+1. **Prompt Construction**: Provide a system message telling the model to respond in JSON, along with the JSON schema itself.
+2. **Schema Enforcement**: In the `response_format` parameter, specify `"type": "json_schema"` and include your JSON schema definition.
+3. **Parsing the Output**: The response is guaranteed to follow the schema (as strictly as the model can enforce it). You can then parse it directly in your application.
+
+---
+
+## Tool (Function) Calling
+
+CentML’s LLM APIs support function calling similarly to OpenAI’s “function calling” feature. This allows you to define “tools” that the model can call with structured parameters. For example, you might have a `get_weather` function your model can invoke based on user requests.
+
+```python
+from openai import OpenAI
+import os
+
+# Retrieve the model name from environment variables
+model = os.environ.get("MODEL", "meta-llama/Llama-3.3-70B-Instruct")
+
+# Supply your API key from https://app.centml.com/user/credentials
+api_key = os.environ.get("OPENAI_API_KEY")
+assert api_key is not None, "Please provide an API Key"
+
+# Initialize the OpenAI (CentML) client
+client = OpenAI(
+    api_key=api_key,
+    base_url="https://api.centml.com/openai/v1",
+)
+
+# Define a tool (function) the model can call
+tools = [{
+    "type": "function",
+    "function": {
+        "name": "get_weather",
+        "description": "Get current temperature for a given location.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "location": {
+                    "type": "string",
+                    "description": "City and country e.g. Bogotá, Colombia"
+                }
+            },
+            "required": ["location"],
+            "additionalProperties": False
+        },
+        "strict": True
+    }
+}]
+
+# Create the chat completion with tool definitions
+completion = client.chat.completions.create(
+    model=model,
+    messages=[{"role": "user", "content": "What is the weather like in Paris today?"}],
+    tools=tools
+)
+
+# Print any tool calls the model attempts
+print("Tool Calls:", completion.choices[0].message.tool_calls)
+```
+
+### How it Works
+
+1. **Tool Definition**: In the `tools` parameter, define a function with a `name`, `description`, and a JSON schema for parameters.
+2. **Function Invocation**: The model may decide to call the function (tool), returning the parameters it deems relevant based on user input.
+3. **Your Application Logic**: You receive the structured function arguments in `completion.choices[0].message.tool_calls`. You can then handle them programmatically (e.g., call an actual weather service).
+
+<Note>
+**Tip**: Make sure your model (e.g., `gpt-4o` or `deepseek-ai/DeepSeek-R1`) is function-call capable. Not all model versions support function calling. Always check the CentML model documentation for compatibility.
+</Note>
+
+---
+
+## Best Practices and Tips
+
+- **Schema Validation**: The model will try to adhere to your schema, but always perform server-side validation before using the data (especially important in production).
+- **Temperature Setting**: When generating structured data, lower the temperature to reduce the likelihood of extraneous or incorrect fields.
+- **Use Reasoning Models**: For complex tasks requiring reasoning steps, consider using `deepseek-ai/DeepSeek-R1`. It provides chain-of-thought style reasoning capabilities.
+- **Production Hardening**: If you’re building an agentic or workflow-driven application, ensure you handle potential parsing errors and fallback scenarios gracefully.
+
+<Note>
+Both Serverless and Dedicated LLM APIs share the same interface and usage pattern. You only need to change the **base URL** (and any relevant credentials) if you switch between them.
+</Note>
+
+---
+
+## Conclusion
+
+Using JSON schema enforcement and function calling (tools) with CentML LLM APIs lets you build more reliable, agentic, and automated workflows. With minimal changes to your existing OpenAI-compatible code, you can take advantage of these features on the CentML platform—whether you’re deploying on **Serverless** or **Dedicated**.
+
+For more details, visit our [CentML Documentation](https://docs.centml.ai) or reach out on [Slack](https://join.slack.com/t/centmlcommunity/shared_invite/zt-2vmo66c1i-G7YzIUwXUvLTUXLZ~wR4Ww) if you have any questions!
+```
