@@ -1,10 +1,10 @@
 ---
 title: 'Agent Support'
-description: 'How to leverage structured outputs such as JSON and function calls using CentML LLM APIs'
+description: 'How to build AI agents using structured outputs such as JSON and function/tool calls with CentML'
 icon: 'user-gear'
 ---
 
-Both **Serverless** and **Dedicated** LLM APIs from CentML support structured outputs using the same OpenAI-compatible API. These features are crucial for agentic workloads that require reliable data parsing and function calling. The CentML platform also provides reasoning-enabled models (e.g., `DeepSeek-AI/deepseek-r1`) that can leverage these structured generation features.
+Both **Serverless** and **Dedicated** LLM APIs from CentML support structured outputs using the same OpenAI-compatible API. These features are crucial for agentic workloads that require reliable data parsing and function calling. The CentML platform also provides reasoning-enabled models (e.g., `DeepSeek-AI/deepseek-r1`) that can perform reasoning before generating structured outputs.
 
 ## JSON Schema Output
 
@@ -18,6 +18,11 @@ import os
 
 # Retrieve the model name from environment variables
 model = os.environ.get("MODEL", "deepseek-ai/DeepSeek-R1")
+
+# Supply your API key from https://app.centml.com/user/credentials
+api_key = os.environ.get("OPENAI_API_KEY")
+assert api_key is not None, "Please provide an API Key"
+
 
 # Define the prompt for the OpenAI API
 prompt = [
@@ -57,7 +62,7 @@ schema_json = {
 
 # Initialize the OpenAI (CentML) client with the API key and base URL
 client = OpenAI(
-    api_key="<your CentML API Key obtained under https://app.centml.com/user/credentials>",
+    api_key=api_key,
     base_url="https://api.centml.com/openai/v1",
 )
 
@@ -94,10 +99,18 @@ CentML’s LLM APIs support function calling similarly to OpenAI’s “function
 
 ```python
 from openai import OpenAI
+import os
+
+# Retrieve the model name from environment variables
+model = os.environ.get("MODEL", "meta-llama/Llama-3.3-70B-Instruct")
+
+# Supply your API key from https://app.centml.com/user/credentials
+api_key = os.environ.get("OPENAI_API_KEY")
+assert api_key is not None, "Please provide an API Key"
 
 # Initialize the OpenAI (CentML) client
 client = OpenAI(
-    api_key="<your CentML API Key>",
+    api_key=api_key,
     base_url="https://api.centml.com/openai/v1",
 )
 
@@ -124,7 +137,7 @@ tools = [{
 
 # Create the chat completion with tool definitions
 completion = client.chat.completions.create(
-    model="gpt-4o",
+    model=model,
     messages=[{"role": "user", "content": "What is the weather like in Paris today?"}],
     tools=tools
 )
