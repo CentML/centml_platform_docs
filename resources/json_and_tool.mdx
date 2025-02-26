@@ -139,7 +139,8 @@ tools = [{
 completion = client.chat.completions.create(
     model=model,
     messages=[{"role": "user", "content": "What is the weather like in Paris today?"}],
-    tools=tools
+    tools=tools,
+    tool_choice="auto"
 )
 
 # Print any tool calls the model attempts
