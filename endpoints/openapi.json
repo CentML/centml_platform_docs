@@ -1,128 +1,61 @@
 {
-    "openapi": "3.0.1",
-    "info": {
-      "title": "OpenAPI Plant Store",
-      "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-      "license": {
-        "name": "MIT"
-      },
-      "version": "1.0.0"
-    },
-    "servers": [
-      {
-        "url": "https://api.centml.com/openai/"
-      }
-    ],
-    "security": [
-      {
-        "bearerAuth": []
-      }
-    ],
-    "paths": {
-      "/v1/chat/completions": {
-        "get": {
-          "description": "Returns all models from the system that the endpoint has access to",
-          "parameters": [
-            {
-              "name": "limit",
-              "in": "query",
-              "description": "The maximum number of results to return",
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Platform External API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/daily_bills": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Usage",
+        "operationId": "get_usage_daily_bills_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Start Date"
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "Plant response",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/Plant"
-                    }
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Unexpected error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/Error"
-                  }
-                }
-              }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "End Date"
             }
           }
-        },
-        "post": {
-          "description": "Generate a new chat completion",
-          "requestBody": {
-            "description": "The Chat you want to send to the model",
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NewPlant"
+                  "$ref": "#/components/schemas/ListDailyBillResponse"
                 }
               }
-            },
-            "required": true
+            }
           },
-          "responses": {
-            "200": {
-              "description": "plant response",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "unexpected error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/Error"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/plants/{id}": {
-        "delete": {
-          "description": "Deletes a single plant based on the ID supplied",
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "description": "ID of plant to delete",
-              "required": true,
-              "schema": {
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          ],
-          "responses": {
-            "204": {
-              "description": "Plant deleted",
-              "content": {}
-            },
-            "400": {
-              "description": "unexpected error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/Error"
-                  }
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -130,66 +63,4460 @@
         }
       }
     },
-    "components": {
-      "schemas": {
-        "Plant": {
-          "required": [
-            "name"
-          ],
-          "type": "object",
-          "properties": {
-            "name": {
-              "description": "The name of the plant",
-              "type": "string"
-            },
-            "tag": {
-              "description": "Tag to specify the type",
-              "type": "string"
+    "/deployments": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Deployments",
+        "operationId": "get_deployments_deployments_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/DeploymentType"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Type"
+            }
+          },
+          {
+            "name": "search_query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Search Query"
             }
           }
-        },
-        "NewPlant": {
-          "allOf": [
-            {
-              "$ref": "#/components/schemas/Plant"
-            },
-            {
-              "required": [
-                "id"
-              ],
-              "type": "object",
-              "properties": {
-                "id": {
-                  "description": "Identification number of the plant",
-                  "type": "integer",
-                  "format": "int64"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListGetDeploymentResponse"
                 }
               }
             }
-          ]
-        },
-        "Error": {
-          "required": [
-            "error",
-            "message"
-          ],
-          "type": "object",
-          "properties": {
-            "error": {
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deployments/compute/{deployment_id}": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Compute Deployment",
+        "operationId": "get_compute_deployment_deployments_compute__deployment_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "deployment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
               "type": "integer",
-              "format": "int32"
-            },
-            "message": {
-              "type": "string"
+              "title": "Deployment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetComputeDeploymentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deployments/inference/{deployment_id}": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Inference Deployment",
+        "operationId": "get_inference_deployment_deployments_inference__deployment_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "deployment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Deployment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetInferenceDeploymentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deployments/cserve/recipes": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Cserve Recipe",
+        "operationId": "get_cserve_recipe_deployments_cserve_recipes_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Model"
+            }
+          },
+          {
+            "name": "cluster_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cluster Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListCServeRecipeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deployments/cserve/{deployment_id}": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Cserve Deployment",
+        "operationId": "get_cserve_deployment_deployments_cserve__deployment_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "deployment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Deployment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCServeDeploymentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deployments/cserve_v2/{deployment_id}": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Cserve V2 Deployment",
+        "operationId": "get_cserve_v2_deployment_deployments_cserve_v2__deployment_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "deployment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Deployment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCServeV2DeploymentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deployments/rag/{deployment_id}": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Rag Deployment",
+        "operationId": "get_rag_deployment_deployments_rag__deployment_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "deployment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Deployment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetRagDeploymentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deployments/cserve": {
+      "post": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Create Cserve Deployment",
+        "operationId": "create_cserve_deployment_deployments_cserve_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCServeDeploymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCServeDeploymentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/deployments/cserve_v2": {
+      "post": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Create Cserve V2 Deployment",
+        "operationId": "create_cserve_v2_deployment_deployments_cserve_v2_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCServeV2DeploymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCServeV2DeploymentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/deployments/rag": {
+      "post": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Create Rag Deployment",
+        "operationId": "create_rag_deployment_deployments_rag_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRagDeploymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateRagDeploymentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/deployments/compute": {
+      "post": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Create Compute Deployment",
+        "operationId": "create_compute_deployment_deployments_compute_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateComputeDeploymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateComputeDeploymentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/deployments/inference": {
+      "post": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Create Inference Deployment",
+        "operationId": "create_inference_deployment_deployments_inference_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInferenceDeploymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateInferenceDeploymentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/deployments/status/{deployment_id}": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Deployment Status",
+        "operationId": "get_deployment_status_deployments_status__deployment_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "deployment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Deployment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeploymentStatusResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
             }
           }
         }
       },
-      "securitySchemes": {
-        "bearerAuth": {
-          "type": "http",
-          "scheme": "bearer"
+      "put": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Update Deployment Status",
+        "operationId": "update_deployment_status_deployments_status__deployment_id__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "deployment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Deployment Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeploymentStatusRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeploymentStatusResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
         }
+      }
+    },
+    "/deployments/logs/{deployment_id}": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Deployment Logs",
+        "operationId": "get_deployment_logs_deployments_logs__deployment_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "deployment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Deployment Id"
+            }
+          },
+          {
+            "name": "next_page_token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Next Page Token"
+            }
+          },
+          {
+            "name": "start_time",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Start Time"
+            }
+          },
+          {
+            "name": "end_time",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "End Time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDeploymentLogResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deployments/usage/{deployment_id}": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Usage",
+        "operationId": "get_usage_deployments_usage__deployment_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "deployment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Deployment Id"
+            }
+          },
+          {
+            "name": "metric",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Metric"
+            }
+          },
+          {
+            "name": "duration",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Duration"
+            }
+          },
+          {
+            "name": "end_time",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "End Time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDeploymentUsageResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user_vault": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get All User Vault Items Endpoint",
+        "description": "Retrieve all items of a specific type for the user.",
+        "operationId": "get_all_user_vault_items_endpoint_user_vault_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/UserVaultType"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Type"
+            }
+          },
+          {
+            "name": "search_query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Search Query"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListUserVaultItemsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Update User Vault Item Endpoint",
+        "description": "Update or add multiple items of a specific type for the user.",
+        "operationId": "update_user_vault_item_endpoint_user_vault_put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserVaultItem-Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Delete User Vault Item Endpoint",
+        "description": "Delete an item of a specific type for the user.",
+        "operationId": "delete_user_vault_item_endpoint_user_vault_delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserVaultItem-Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Payments",
+        "operationId": "get_payments_payments_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "starting_after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Starting After"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPaymentsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/setup": {
+      "post": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Setup Stripe Customer",
+        "operationId": "setup_stripe_customer_payments_setup_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/payments/setup_checkout": {
+      "post": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Create Setup",
+        "operationId": "create_setup_payments_setup_checkout_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSetupCheckoutRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCheckoutSessionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/payments/checkout": {
+      "post": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Create Checkout",
+        "operationId": "create_checkout_payments_checkout_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCheckoutRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCheckoutSessionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/prebuilt-images": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Prebuilt Images",
+        "operationId": "get_prebuilt_images_prebuilt_images_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/DeploymentType"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Type"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListPrebuiltImageResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hardware-instances": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Hardware Instances",
+        "operationId": "get_hardware_instances_hardware_instances_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cluster Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListHardwareInstanceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/credits": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Credits",
+        "operationId": "get_credits_credits_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditsResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/support/user-requests": {
+      "post": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Add User Request",
+        "operationId": "add_user_request_support_user_requests_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSupportEmailRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/credentials/api-key": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Api Keys",
+        "operationId": "get_api_keys_credentials_api_key_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListAPIKeyResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Create Api Key",
+        "operationId": "create_api_key_credentials_api_key_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/APIKeyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIKeyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/credentials/api-key/{id}": {
+      "delete": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Delete Api Key",
+        "operationId": "delete_api_key_credentials_api_key__id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clusters": {
+      "get": {
+        "tags": [
+          "EXTERNAL"
+        ],
+        "summary": "Get Clusters",
+        "operationId": "get_clusters_clusters_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListGetClusterResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "APIKeyRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "APIKeyRequest"
+      },
+      "APIKeyResponse": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "id",
+          "created_at"
+        ],
+        "title": "APIKeyResponse"
+      },
+      "CServeRecipe": {
+        "properties": {
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "is_embedding_model": {
+            "type": "boolean",
+            "title": "Is Embedding Model",
+            "default": false
+          },
+          "tensor_parallel_size": {
+            "type": "integer",
+            "title": "Tensor Parallel Size"
+          },
+          "pipeline_parallel_size": {
+            "type": "integer",
+            "title": "Pipeline Parallel Size"
+          },
+          "block_size": {
+            "type": "integer",
+            "enum": [
+              16,
+              32
+            ],
+            "title": "Block Size",
+            "default": 32
+          },
+          "swap_space": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Swap Space",
+            "default": 0
+          },
+          "gpu_mem_util": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Gpu Mem Util",
+            "default": 0.95
+          },
+          "max_num_seqs": {
+            "type": "integer",
+            "title": "Max Num Seqs",
+            "default": 256
+          },
+          "offloading_num": {
+            "type": "integer",
+            "title": "Offloading Num",
+            "default": 0
+          },
+          "use_prefix_caching": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Use Prefix Caching",
+            "default": false
+          },
+          "use_chunked_prefill": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Use Chunked Prefill",
+            "default": false
+          },
+          "chunked_prefill_size": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chunked Prefill Size"
+          },
+          "eager_execution": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eager Execution",
+            "default": true
+          },
+          "num_scheduler_steps": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Num Scheduler Steps",
+            "default": 1
+          },
+          "use_flashinfer": {
+            "type": "boolean",
+            "title": "Use Flashinfer",
+            "default": false
+          },
+          "max_model_len": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 128.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Model Len"
+          },
+          "dtype": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "float16",
+              "float32",
+              "bfloat16"
+            ],
+            "title": "Dtype",
+            "default": "auto"
+          },
+          "tokenizer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tokenizer"
+          },
+          "spec_proposer": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "draft",
+                  "prompt_lookup"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Proposer"
+          },
+          "spec_draft_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Draft Model"
+          },
+          "spec_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Tokens"
+          },
+          "spec_prompt_lookup_min": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Prompt Lookup Min"
+          },
+          "spec_prompt_lookup_max": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Prompt Lookup Max"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "model",
+          "tensor_parallel_size",
+          "pipeline_parallel_size"
+        ],
+        "title": "CServeRecipe",
+        "description": "Base class for deployment planner"
+      },
+      "CServeRecipePerf": {
+        "properties": {
+          "recipe": {
+            "$ref": "#/components/schemas/CServeV2Recipe-Output"
+          },
+          "hardware_instance_id": {
+            "type": "integer",
+            "title": "Hardware Instance Id"
+          },
+          "output_tp": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Output Tp"
+          },
+          "mean_ttft": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Mean Ttft"
+          }
+        },
+        "type": "object",
+        "required": [
+          "recipe",
+          "hardware_instance_id",
+          "output_tp",
+          "mean_ttft"
+        ],
+        "title": "CServeRecipePerf"
+      },
+      "CServeRecipeResponse": {
+        "properties": {
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "cluster_id": {
+            "type": "integer",
+            "title": "Cluster Id"
+          },
+          "fastest": {
+            "$ref": "#/components/schemas/CServeRecipePerf"
+          },
+          "cheapest": {
+            "$ref": "#/components/schemas/CServeRecipePerf"
+          },
+          "best_value": {
+            "$ref": "#/components/schemas/CServeRecipePerf"
+          }
+        },
+        "type": "object",
+        "required": [
+          "model",
+          "cluster_id",
+          "fastest",
+          "cheapest",
+          "best_value"
+        ],
+        "title": "CServeRecipeResponse"
+      },
+      "CServeV2Recipe-Input": {
+        "properties": {
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "max_model_len": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Model Len"
+          },
+          "is_embedding_model": {
+            "type": "boolean",
+            "title": "Is Embedding Model",
+            "default": false
+          },
+          "tokenizer": {
+            "type": "string",
+            "title": "Tokenizer"
+          },
+          "tensor_parallel_size": {
+            "type": "integer",
+            "title": "Tensor Parallel Size"
+          },
+          "pipeline_parallel_size": {
+            "type": "integer",
+            "title": "Pipeline Parallel Size"
+          },
+          "gpu_mem_util": {
+            "type": "number",
+            "title": "Gpu Mem Util",
+            "default": 0.95
+          },
+          "block_size": {
+            "type": "integer",
+            "title": "Block Size",
+            "default": 16
+          },
+          "swap_space": {
+            "type": "integer",
+            "title": "Swap Space",
+            "default": 0
+          },
+          "quantization": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantization"
+          },
+          "dtype": {
+            "type": "string",
+            "title": "Dtype",
+            "default": "auto"
+          },
+          "cache_dtype": {
+            "type": "string",
+            "title": "Cache Dtype",
+            "default": "auto"
+          },
+          "max_num_seqs": {
+            "type": "integer",
+            "title": "Max Num Seqs",
+            "default": 256
+          },
+          "eager_execution": {
+            "type": "boolean",
+            "title": "Eager Execution",
+            "default": true
+          },
+          "use_flashinfer": {
+            "type": "boolean",
+            "title": "Use Flashinfer",
+            "default": false
+          },
+          "offloading_num": {
+            "type": "number",
+            "title": "Offloading Num",
+            "default": 0
+          },
+          "spec_draft_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Draft Model"
+          },
+          "spec_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Tokens"
+          },
+          "spec_prompt_lookup_max": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Prompt Lookup Max"
+          },
+          "spec_prompt_lookup_min": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Prompt Lookup Min"
+          },
+          "use_prefix_caching": {
+            "type": "boolean",
+            "title": "Use Prefix Caching",
+            "default": false
+          },
+          "use_chunked_prefill": {
+            "type": "boolean",
+            "title": "Use Chunked Prefill",
+            "default": false
+          },
+          "chunked_prefill_size": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chunked Prefill Size"
+          },
+          "max_seq_len_to_capture": {
+            "type": "integer",
+            "title": "Max Seq Len To Capture",
+            "default": 8192
+          },
+          "distributed_executor_backend": {
+            "type": "string",
+            "title": "Distributed Executor Backend",
+            "default": "mp"
+          },
+          "spec_max_batch_size": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Max Batch Size"
+          },
+          "spec_max_seq_len": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Max Seq Len"
+          },
+          "num_scheduler_steps": {
+            "type": "integer",
+            "title": "Num Scheduler Steps",
+            "default": 1
+          }
+        },
+        "type": "object",
+        "required": [
+          "model",
+          "tokenizer",
+          "tensor_parallel_size",
+          "pipeline_parallel_size"
+        ],
+        "title": "CServeV2Recipe",
+        "description": "Inputs to start deployment"
+      },
+      "CServeV2Recipe-Output": {
+        "properties": {
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "max_model_len": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Model Len"
+          },
+          "is_embedding_model": {
+            "type": "boolean",
+            "title": "Is Embedding Model",
+            "default": false
+          },
+          "tokenizer": {
+            "type": "string",
+            "title": "Tokenizer"
+          },
+          "tensor_parallel_size": {
+            "type": "integer",
+            "title": "Tensor Parallel Size"
+          },
+          "pipeline_parallel_size": {
+            "type": "integer",
+            "title": "Pipeline Parallel Size"
+          },
+          "gpu_mem_util": {
+            "type": "number",
+            "title": "Gpu Mem Util",
+            "default": 0.95
+          },
+          "block_size": {
+            "type": "integer",
+            "title": "Block Size",
+            "default": 16
+          },
+          "swap_space": {
+            "type": "integer",
+            "title": "Swap Space",
+            "default": 0
+          },
+          "quantization": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantization"
+          },
+          "dtype": {
+            "type": "string",
+            "title": "Dtype",
+            "default": "auto"
+          },
+          "cache_dtype": {
+            "type": "string",
+            "title": "Cache Dtype",
+            "default": "auto"
+          },
+          "max_num_seqs": {
+            "type": "integer",
+            "title": "Max Num Seqs",
+            "default": 256
+          },
+          "eager_execution": {
+            "type": "boolean",
+            "title": "Eager Execution",
+            "default": true
+          },
+          "use_flashinfer": {
+            "type": "boolean",
+            "title": "Use Flashinfer",
+            "default": false
+          },
+          "offloading_num": {
+            "type": "number",
+            "title": "Offloading Num",
+            "default": 0
+          },
+          "spec_draft_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Draft Model"
+          },
+          "spec_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Tokens"
+          },
+          "spec_prompt_lookup_max": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Prompt Lookup Max"
+          },
+          "spec_prompt_lookup_min": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Prompt Lookup Min"
+          },
+          "use_prefix_caching": {
+            "type": "boolean",
+            "title": "Use Prefix Caching",
+            "default": false
+          },
+          "use_chunked_prefill": {
+            "type": "boolean",
+            "title": "Use Chunked Prefill",
+            "default": false
+          },
+          "chunked_prefill_size": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chunked Prefill Size"
+          },
+          "max_seq_len_to_capture": {
+            "type": "integer",
+            "title": "Max Seq Len To Capture",
+            "default": 8192
+          },
+          "distributed_executor_backend": {
+            "type": "string",
+            "title": "Distributed Executor Backend",
+            "default": "mp"
+          },
+          "spec_max_batch_size": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Max Batch Size"
+          },
+          "spec_max_seq_len": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Max Seq Len"
+          },
+          "num_scheduler_steps": {
+            "type": "integer",
+            "title": "Num Scheduler Steps",
+            "default": 1
+          }
+        },
+        "type": "object",
+        "required": [
+          "model",
+          "max_model_len",
+          "is_embedding_model",
+          "tokenizer",
+          "tensor_parallel_size",
+          "pipeline_parallel_size",
+          "gpu_mem_util",
+          "block_size",
+          "swap_space",
+          "quantization",
+          "dtype",
+          "cache_dtype",
+          "max_num_seqs",
+          "eager_execution",
+          "use_flashinfer",
+          "offloading_num",
+          "spec_draft_model",
+          "spec_tokens",
+          "spec_prompt_lookup_max",
+          "spec_prompt_lookup_min",
+          "use_prefix_caching",
+          "use_chunked_prefill",
+          "chunked_prefill_size",
+          "max_seq_len_to_capture",
+          "distributed_executor_backend",
+          "spec_max_batch_size",
+          "spec_max_seq_len",
+          "num_scheduler_steps"
+        ],
+        "title": "CServeV2Recipe",
+        "description": "Inputs to start deployment"
+      },
+      "CreateCServeDeploymentRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 12,
+            "title": "Name"
+          },
+          "cluster_id": {
+            "type": "integer",
+            "title": "Cluster Id"
+          },
+          "hardware_instance_id": {
+            "type": "integer",
+            "title": "Hardware Instance Id"
+          },
+          "recipe": {
+            "$ref": "#/components/schemas/CServeRecipe"
+          },
+          "hf_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hf Token"
+          },
+          "endpoint_certificate_authority": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endpoint Certificate Authority"
+          },
+          "min_scale": {
+            "type": "integer",
+            "title": "Min Scale"
+          },
+          "max_scale": {
+            "type": "integer",
+            "title": "Max Scale"
+          },
+          "concurrency": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Concurrency"
+          },
+          "env_vars": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Env Vars",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "cluster_id",
+          "hardware_instance_id",
+          "recipe",
+          "min_scale",
+          "max_scale"
+        ],
+        "title": "CreateCServeDeploymentRequest"
+      },
+      "CreateCServeDeploymentResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "endpoint_url": {
+            "type": "string",
+            "title": "Endpoint Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "endpoint_url"
+        ],
+        "title": "CreateCServeDeploymentResponse"
+      },
+      "CreateCServeV2DeploymentRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 12,
+            "title": "Name"
+          },
+          "cluster_id": {
+            "type": "integer",
+            "title": "Cluster Id"
+          },
+          "hardware_instance_id": {
+            "type": "integer",
+            "title": "Hardware Instance Id"
+          },
+          "recipe": {
+            "$ref": "#/components/schemas/CServeV2Recipe-Input"
+          },
+          "hf_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hf Token"
+          },
+          "endpoint_certificate_authority": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endpoint Certificate Authority"
+          },
+          "min_scale": {
+            "type": "integer",
+            "title": "Min Scale"
+          },
+          "max_scale": {
+            "type": "integer",
+            "title": "Max Scale"
+          },
+          "concurrency": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Concurrency"
+          },
+          "env_vars": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Env Vars",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "cluster_id",
+          "hardware_instance_id",
+          "recipe",
+          "min_scale",
+          "max_scale"
+        ],
+        "title": "CreateCServeV2DeploymentRequest"
+      },
+      "CreateCServeV2DeploymentResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "endpoint_url": {
+            "type": "string",
+            "title": "Endpoint Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "endpoint_url"
+        ],
+        "title": "CreateCServeV2DeploymentResponse"
+      },
+      "CreateCheckoutRequest": {
+        "properties": {
+          "amount_credits": {
+            "type": "integer",
+            "title": "Amount Credits"
+          },
+          "success_url": {
+            "type": "string",
+            "title": "Success Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "amount_credits",
+          "success_url"
+        ],
+        "title": "CreateCheckoutRequest"
+      },
+      "CreateCheckoutSessionResponse": {
+        "properties": {
+          "url": {
+            "type": "string",
+            "title": "Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "title": "CreateCheckoutSessionResponse"
+      },
+      "CreateComputeDeploymentRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 12,
+            "title": "Name"
+          },
+          "cluster_id": {
+            "type": "integer",
+            "title": "Cluster Id"
+          },
+          "hardware_instance_id": {
+            "type": "integer",
+            "title": "Hardware Instance Id"
+          },
+          "image_url": {
+            "type": "string",
+            "title": "Image Url"
+          },
+          "enable_jupyter": {
+            "type": "boolean",
+            "title": "Enable Jupyter",
+            "default": false
+          },
+          "ssh_public_key": {
+            "type": "string",
+            "title": "Ssh Public Key"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "cluster_id",
+          "hardware_instance_id",
+          "image_url",
+          "ssh_public_key"
+        ],
+        "title": "CreateComputeDeploymentRequest"
+      },
+      "CreateComputeDeploymentResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "endpoint_url": {
+            "type": "string",
+            "title": "Endpoint Url"
+          },
+          "port": {
+            "type": "integer",
+            "title": "Port"
+          },
+          "jupyter_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jupyter Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "endpoint_url",
+          "port",
+          "jupyter_token"
+        ],
+        "title": "CreateComputeDeploymentResponse"
+      },
+      "CreateInferenceDeploymentRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 12,
+            "title": "Name"
+          },
+          "cluster_id": {
+            "type": "integer",
+            "title": "Cluster Id"
+          },
+          "hardware_instance_id": {
+            "type": "integer",
+            "title": "Hardware Instance Id"
+          },
+          "image_url": {
+            "type": "string",
+            "title": "Image Url"
+          },
+          "port": {
+            "type": "integer",
+            "title": "Port"
+          },
+          "min_scale": {
+            "type": "integer",
+            "title": "Min Scale"
+          },
+          "max_scale": {
+            "type": "integer",
+            "title": "Max Scale"
+          },
+          "concurrency": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Concurrency"
+          },
+          "healthcheck": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Healthcheck"
+          },
+          "env_vars": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Env Vars"
+          },
+          "command": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Command"
+          },
+          "command_args": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Command Args"
+          },
+          "endpoint_certificate_authority": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endpoint Certificate Authority"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "cluster_id",
+          "hardware_instance_id",
+          "image_url",
+          "port",
+          "min_scale",
+          "max_scale"
+        ],
+        "title": "CreateInferenceDeploymentRequest"
+      },
+      "CreateInferenceDeploymentResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "endpoint_url": {
+            "type": "string",
+            "title": "Endpoint Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "endpoint_url"
+        ],
+        "title": "CreateInferenceDeploymentResponse"
+      },
+      "CreateRagDeploymentRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 12,
+            "title": "Name"
+          },
+          "cluster_id": {
+            "type": "integer",
+            "title": "Cluster Id"
+          },
+          "hardware_instance_id": {
+            "type": "integer",
+            "title": "Hardware Instance Id"
+          },
+          "recipe": {
+            "$ref": "#/components/schemas/CServeV2Recipe-Input"
+          },
+          "hf_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hf Token"
+          },
+          "llm_model": {
+            "type": "string",
+            "title": "Llm Model"
+          },
+          "centml_api_key": {
+            "type": "string",
+            "title": "Centml Api Key"
+          },
+          "min_scale": {
+            "type": "integer",
+            "title": "Min Scale",
+            "default": 1
+          },
+          "max_scale": {
+            "type": "integer",
+            "title": "Max Scale",
+            "default": 1
+          },
+          "endpoint_certificate_authority": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endpoint Certificate Authority"
+          },
+          "concurrency": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Concurrency"
+          },
+          "env_vars": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Env Vars",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "cluster_id",
+          "hardware_instance_id",
+          "recipe",
+          "llm_model",
+          "centml_api_key"
+        ],
+        "title": "CreateRagDeploymentRequest"
+      },
+      "CreateRagDeploymentResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "endpoint_url": {
+            "type": "string",
+            "title": "Endpoint Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "endpoint_url"
+        ],
+        "title": "CreateRagDeploymentResponse"
+      },
+      "CreateSetupCheckoutRequest": {
+        "properties": {
+          "success_url": {
+            "type": "string",
+            "title": "Success Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "success_url"
+        ],
+        "title": "CreateSetupCheckoutRequest"
+      },
+      "CreditsResponse": {
+        "properties": {
+          "credits": {
+            "type": "number",
+            "title": "Credits"
+          }
+        },
+        "type": "object",
+        "required": [
+          "credits"
+        ],
+        "title": "CreditsResponse"
+      },
+      "DailyBillResponse": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "credits": {
+            "type": "number",
+            "title": "Credits"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "credits"
+        ],
+        "title": "DailyBillResponse"
+      },
+      "DeploymentStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "paused",
+          "deleted"
+        ],
+        "title": "DeploymentStatus"
+      },
+      "DeploymentStatusRequest": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/DeploymentStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "DeploymentStatusRequest"
+      },
+      "DeploymentStatusResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "type": {
+            "$ref": "#/components/schemas/DeploymentType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DeploymentStatus"
+          },
+          "service_status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ServiceStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Message"
+          },
+          "endpoint_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endpoint Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "status",
+          "service_status",
+          "error_message",
+          "endpoint_url"
+        ],
+        "title": "DeploymentStatusResponse"
+      },
+      "DeploymentType": {
+        "type": "string",
+        "enum": [
+          "inference",
+          "training",
+          "compute",
+          "compilation",
+          "inference_v2",
+          "compute_v2",
+          "cserve",
+          "cserve_v2",
+          "deployment",
+          "rag"
+        ],
+        "title": "DeploymentType"
+      },
+      "DeploymentUsageValue": {
+        "properties": {
+          "timestamp": {
+            "type": "integer",
+            "title": "Timestamp"
+          },
+          "value": {
+            "type": "number",
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "timestamp",
+          "value"
+        ],
+        "title": "DeploymentUsageValue"
+      },
+      "GetCServeDeploymentResponse": {
+        "properties": {
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "is_embedding_model": {
+            "type": "boolean",
+            "title": "Is Embedding Model",
+            "default": false
+          },
+          "tensor_parallel_size": {
+            "type": "integer",
+            "title": "Tensor Parallel Size"
+          },
+          "pipeline_parallel_size": {
+            "type": "integer",
+            "title": "Pipeline Parallel Size"
+          },
+          "block_size": {
+            "type": "integer",
+            "enum": [
+              16,
+              32
+            ],
+            "title": "Block Size",
+            "default": 32
+          },
+          "swap_space": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Swap Space",
+            "default": 0
+          },
+          "gpu_mem_util": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Gpu Mem Util",
+            "default": 0.95
+          },
+          "max_num_seqs": {
+            "type": "integer",
+            "title": "Max Num Seqs",
+            "default": 256
+          },
+          "offloading_num": {
+            "type": "integer",
+            "title": "Offloading Num",
+            "default": 0
+          },
+          "use_prefix_caching": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Use Prefix Caching",
+            "default": false
+          },
+          "use_chunked_prefill": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Use Chunked Prefill",
+            "default": false
+          },
+          "chunked_prefill_size": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chunked Prefill Size"
+          },
+          "eager_execution": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eager Execution",
+            "default": true
+          },
+          "num_scheduler_steps": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Num Scheduler Steps",
+            "default": 1
+          },
+          "use_flashinfer": {
+            "type": "boolean",
+            "title": "Use Flashinfer",
+            "default": false
+          },
+          "max_model_len": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 128.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Model Len"
+          },
+          "dtype": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "float16",
+              "float32",
+              "bfloat16"
+            ],
+            "title": "Dtype",
+            "default": "auto"
+          },
+          "tokenizer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tokenizer"
+          },
+          "spec_proposer": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "draft",
+                  "prompt_lookup"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Proposer"
+          },
+          "spec_draft_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Draft Model"
+          },
+          "spec_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Tokens"
+          },
+          "spec_prompt_lookup_min": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Prompt Lookup Min"
+          },
+          "spec_prompt_lookup_max": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spec Prompt Lookup Max"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "default": 0
+          },
+          "cluster_id": {
+            "type": "integer",
+            "title": "Cluster Id"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "endpoint_url": {
+            "type": "string",
+            "title": "Endpoint Url"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
+          },
+          "type": {
+            "$ref": "#/components/schemas/DeploymentType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DeploymentStatus"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "hardware_instance_id": {
+            "type": "integer",
+            "title": "Hardware Instance Id"
+          },
+          "min_scale": {
+            "type": "integer",
+            "title": "Min Scale"
+          },
+          "max_scale": {
+            "type": "integer",
+            "title": "Max Scale"
+          },
+          "endpoint_certificate_authority": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endpoint Certificate Authority"
+          },
+          "concurrency": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Concurrency"
+          },
+          "env_vars": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Env Vars",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "required": [
+          "model",
+          "is_embedding_model",
+          "tensor_parallel_size",
+          "pipeline_parallel_size",
+          "block_size",
+          "swap_space",
+          "gpu_mem_util",
+          "max_num_seqs",
+          "offloading_num",
+          "use_prefix_caching",
+          "use_chunked_prefill",
+          "chunked_prefill_size",
+          "eager_execution",
+          "num_scheduler_steps",
+          "use_flashinfer",
+          "max_model_len",
+          "dtype",
+          "tokenizer",
+          "spec_proposer",
+          "spec_draft_model",
+          "spec_tokens",
+          "spec_prompt_lookup_min",
+          "spec_prompt_lookup_max",
+          "seed",
+          "cluster_id",
+          "id",
+          "name",
+          "endpoint_url",
+          "image_url",
+          "type",
+          "status",
+          "created_at",
+          "hardware_instance_id",
+          "min_scale",
+          "max_scale",
+          "endpoint_certificate_authority",
+          "concurrency",
+          "env_vars"
+        ],
+        "title": "GetCServeDeploymentResponse"
+      },
+      "GetCServeV2DeploymentResponse": {
+        "properties": {
+          "cluster_id": {
+            "type": "integer",
+            "title": "Cluster Id"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "endpoint_url": {
+            "type": "string",
+            "title": "Endpoint Url"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
+          },
+          "type": {
+            "$ref": "#/components/schemas/DeploymentType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DeploymentStatus"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "hardware_instance_id": {
+            "type": "integer",
+            "title": "Hardware Instance Id"
+          },
+          "recipe": {
+            "$ref": "#/components/schemas/CServeV2Recipe-Output"
+          },
+          "min_scale": {
+            "type": "integer",
+            "title": "Min Scale"
+          },
+          "max_scale": {
+            "type": "integer",
+            "title": "Max Scale"
+          },
+          "endpoint_certificate_authority": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endpoint Certificate Authority"
+          },
+          "concurrency": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Concurrency"
+          },
+          "env_vars": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Env Vars",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "required": [
+          "cluster_id",
+          "id",
+          "name",
+          "endpoint_url",
+          "image_url",
+          "type",
+          "status",
+          "created_at",
+          "hardware_instance_id",
+          "recipe",
+          "min_scale",
+          "max_scale",
+          "endpoint_certificate_authority",
+          "concurrency",
+          "env_vars"
+        ],
+        "title": "GetCServeV2DeploymentResponse"
+      },
+      "GetClusterResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "region": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "display_name",
+          "region"
+        ],
+        "title": "GetClusterResponse"
+      },
+      "GetComputeDeploymentResponse": {
+        "properties": {
+          "cluster_id": {
+            "type": "integer",
+            "title": "Cluster Id"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "endpoint_url": {
+            "type": "string",
+            "title": "Endpoint Url"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
+          },
+          "type": {
+            "$ref": "#/components/schemas/DeploymentType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DeploymentStatus"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "hardware_instance_id": {
+            "type": "integer",
+            "title": "Hardware Instance Id"
+          },
+          "exposed_port": {
+            "type": "integer",
+            "title": "Exposed Port"
+          },
+          "ssh_public_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ssh Public Key"
+          },
+          "ssh_password": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ssh Password"
+          },
+          "env_vars": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Env Vars"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cluster_id",
+          "id",
+          "name",
+          "endpoint_url",
+          "image_url",
+          "type",
+          "status",
+          "created_at",
+          "hardware_instance_id",
+          "exposed_port",
+          "ssh_public_key",
+          "ssh_password",
+          "env_vars"
+        ],
+        "title": "GetComputeDeploymentResponse"
+      },
+      "GetDeploymentLogResponse": {
+        "properties": {
+          "events": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Events"
+          },
+          "next_page_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Page Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "events",
+          "next_page_token"
+        ],
+        "title": "GetDeploymentLogResponse"
+      },
+      "GetDeploymentResponse": {
+        "properties": {
+          "cluster_id": {
+            "type": "integer",
+            "title": "Cluster Id"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "endpoint_url": {
+            "type": "string",
+            "title": "Endpoint Url"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
+          },
+          "type": {
+            "$ref": "#/components/schemas/DeploymentType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DeploymentStatus"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "hardware_instance_id": {
+            "type": "integer",
+            "title": "Hardware Instance Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cluster_id",
+          "id",
+          "name",
+          "endpoint_url",
+          "image_url",
+          "type",
+          "status",
+          "created_at",
+          "hardware_instance_id"
+        ],
+        "title": "GetDeploymentResponse"
+      },
+      "GetDeploymentUsageResponse": {
+        "properties": {
+          "values": {
+            "items": {
+              "$ref": "#/components/schemas/DeploymentUsageValue"
+            },
+            "type": "array",
+            "title": "Values"
+          }
+        },
+        "type": "object",
+        "required": [
+          "values"
+        ],
+        "title": "GetDeploymentUsageResponse"
+      },
+      "GetInferenceDeploymentResponse": {
+        "properties": {
+          "cluster_id": {
+            "type": "integer",
+            "title": "Cluster Id"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "endpoint_url": {
+            "type": "string",
+            "title": "Endpoint Url"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
+          },
+          "type": {
+            "$ref": "#/components/schemas/DeploymentType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DeploymentStatus"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "hardware_instance_id": {
+            "type": "integer",
+            "title": "Hardware Instance Id"
+          },
+          "container_port": {
+            "type": "integer",
+            "title": "Container Port"
+          },
+          "min_scale": {
+            "type": "integer",
+            "title": "Min Scale"
+          },
+          "max_scale": {
+            "type": "integer",
+            "title": "Max Scale"
+          },
+          "concurrency": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Concurrency"
+          },
+          "healthcheck": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Healthcheck"
+          },
+          "endpoint_certificate_authority": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endpoint Certificate Authority"
+          },
+          "env_vars": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Env Vars"
+          },
+          "command": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Command"
+          },
+          "command_args": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Command Args"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cluster_id",
+          "id",
+          "name",
+          "endpoint_url",
+          "image_url",
+          "type",
+          "status",
+          "created_at",
+          "hardware_instance_id",
+          "container_port",
+          "min_scale",
+          "max_scale",
+          "concurrency",
+          "healthcheck",
+          "endpoint_certificate_authority",
+          "env_vars",
+          "command",
+          "command_args"
+        ],
+        "title": "GetInferenceDeploymentResponse"
+      },
+      "GetPaymentsResponse": {
+        "properties": {
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          },
+          "payments": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Payments"
+          }
+        },
+        "type": "object",
+        "required": [
+          "has_more",
+          "payments"
+        ],
+        "title": "GetPaymentsResponse"
+      },
+      "GetRagDeploymentResponse": {
+        "properties": {
+          "cluster_id": {
+            "type": "integer",
+            "title": "Cluster Id"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "endpoint_url": {
+            "type": "string",
+            "title": "Endpoint Url"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
+          },
+          "type": {
+            "$ref": "#/components/schemas/DeploymentType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DeploymentStatus"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "hardware_instance_id": {
+            "type": "integer",
+            "title": "Hardware Instance Id"
+          },
+          "recipe": {
+            "$ref": "#/components/schemas/CServeV2Recipe-Output"
+          },
+          "llm_model": {
+            "type": "string",
+            "title": "Llm Model"
+          },
+          "centml_api_key": {
+            "type": "string",
+            "title": "Centml Api Key"
+          },
+          "min_scale": {
+            "type": "integer",
+            "title": "Min Scale",
+            "default": 1
+          },
+          "max_scale": {
+            "type": "integer",
+            "title": "Max Scale",
+            "default": 1
+          },
+          "endpoint_certificate_authority": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endpoint Certificate Authority"
+          },
+          "concurrency": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Concurrency"
+          },
+          "env_vars": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Env Vars",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "required": [
+          "cluster_id",
+          "id",
+          "name",
+          "endpoint_url",
+          "image_url",
+          "type",
+          "status",
+          "created_at",
+          "hardware_instance_id",
+          "recipe",
+          "llm_model",
+          "centml_api_key",
+          "min_scale",
+          "max_scale",
+          "endpoint_certificate_authority",
+          "concurrency",
+          "env_vars"
+        ],
+        "title": "GetRagDeploymentResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HardwareInstanceResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "gpu_type": {
+            "type": "string",
+            "title": "Gpu Type"
+          },
+          "num_gpu": {
+            "type": "integer",
+            "title": "Num Gpu"
+          },
+          "cpu": {
+            "type": "integer",
+            "title": "Cpu"
+          },
+          "memory": {
+            "type": "integer",
+            "title": "Memory"
+          },
+          "cost_per_hr": {
+            "type": "integer",
+            "title": "Cost Per Hr"
+          },
+          "cluster_id": {
+            "type": "integer",
+            "title": "Cluster Id"
+          },
+          "provider": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider"
+          },
+          "num_accelerators": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Num Accelerators"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "gpu_type",
+          "num_gpu",
+          "cpu",
+          "memory",
+          "cost_per_hr",
+          "cluster_id",
+          "provider",
+          "num_accelerators"
+        ],
+        "title": "HardwareInstanceResponse"
+      },
+      "ListAPIKeyResponse": {
+        "properties": {
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/APIKeyResponse"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "results"
+        ],
+        "title": "ListAPIKeyResponse"
+      },
+      "ListCServeRecipeResponse": {
+        "properties": {
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/CServeRecipeResponse"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "results"
+        ],
+        "title": "ListCServeRecipeResponse"
+      },
+      "ListDailyBillResponse": {
+        "properties": {
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/DailyBillResponse"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "results"
+        ],
+        "title": "ListDailyBillResponse"
+      },
+      "ListGetClusterResponse": {
+        "properties": {
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/GetClusterResponse"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "results"
+        ],
+        "title": "ListGetClusterResponse"
+      },
+      "ListGetDeploymentResponse": {
+        "properties": {
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/GetDeploymentResponse"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "results"
+        ],
+        "title": "ListGetDeploymentResponse"
+      },
+      "ListHardwareInstanceResponse": {
+        "properties": {
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/HardwareInstanceResponse"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "results"
+        ],
+        "title": "ListHardwareInstanceResponse"
+      },
+      "ListPrebuiltImageResponse": {
+        "properties": {
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/PrebuiltImageResponse"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "results"
+        ],
+        "title": "ListPrebuiltImageResponse"
+      },
+      "ListUserVaultItemsResponse": {
+        "properties": {
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/UserVaultItem-Output"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "results"
+        ],
+        "title": "ListUserVaultItemsResponse"
+      },
+      "Metric": {
+        "type": "string",
+        "enum": [
+          "cpu",
+          "memory",
+          "gpu"
+        ],
+        "title": "Metric"
+      },
+      "PrebuiltImageResponse": {
+        "properties": {
+          "image_name": {
+            "type": "string",
+            "title": "Image Name"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags"
+          },
+          "type": {
+            "$ref": "#/components/schemas/DeploymentType"
+          },
+          "port": {
+            "type": "integer",
+            "title": "Port"
+          },
+          "healthcheck": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Healthcheck"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image_name",
+          "label",
+          "tags",
+          "type",
+          "port",
+          "healthcheck"
+        ],
+        "title": "PrebuiltImageResponse"
+      },
+      "ServiceStatus": {
+        "type": "string",
+        "enum": [
+          "Healthy",
+          "Missing",
+          "ScalingUp",
+          "Pulling",
+          "Initializing",
+          "Error",
+          "CreateContainerConfigError",
+          "CrashLoopBackOff",
+          "ImagePullBackOff",
+          "ProgressDeadlineExceeded",
+          "NotReady",
+          "Unknown"
+        ],
+        "title": "ServiceStatus"
+      },
+      "UserSupportEmailRequest": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "subject": {
+            "type": "string",
+            "title": "Subject"
+          },
+          "send_to_sales": {
+            "type": "boolean",
+            "title": "Send To Sales"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message",
+          "subject",
+          "send_to_sales"
+        ],
+        "title": "UserSupportEmailRequest"
+      },
+      "UserVaultItem-Input": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/UserVaultType"
+          },
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "key"
+        ],
+        "title": "UserVaultItem"
+      },
+      "UserVaultItem-Output": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/UserVaultType"
+          },
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "key",
+          "value"
+        ],
+        "title": "UserVaultItem"
+      },
+      "UserVaultType": {
+        "type": "string",
+        "enum": [
+          "env_vars",
+          "ssh_keys",
+          "access_tokens",
+          "certificates"
+        ],
+        "title": "UserVaultType"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
       }
     }
   }
+}
