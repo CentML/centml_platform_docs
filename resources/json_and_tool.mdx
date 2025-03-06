@@ -60,7 +60,7 @@ schema_json = {
     "required": ["ssid", "securityProtocol", "bandwidth"]
 }
 
-# Initialize the OpenAI compatible CentML client with the API key and base URL
+# Initialize the OpenAI (CentML) client with the API key and base URL
 client = OpenAI(
     api_key=api_key,
     base_url="https://api.centml.com/openai/v1",
@@ -108,7 +108,7 @@ model = os.environ.get("MODEL", "meta-llama/Llama-3.3-70B-Instruct")
 api_key = os.environ.get("CENTML_API_KEY")
 assert api_key is not None, "Please provide an API Key"
 
-# Initialize the OpenAI compatible CentML client
+# Initialize the OpenAI (CentML) client with the API key and base URL
 client = OpenAI(
     api_key=api_key,
     base_url="https://api.centml.com/openai/v1",
