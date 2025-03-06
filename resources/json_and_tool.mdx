@@ -20,11 +20,11 @@ import os
 model = os.environ.get("MODEL", "deepseek-ai/DeepSeek-R1")
 
 # Supply your API key from https://app.centml.com/user/vault
-api_key = os.environ.get("OPENAI_API_KEY")
+api_key = os.environ.get("CENTML_API_KEY")
 assert api_key is not None, "Please provide an API Key"
 
 
-# Define the prompt for the OpenAI API
+# Define the prompt for the OpenAI compatible API
 prompt = [
     {
         "content": (
@@ -105,10 +105,10 @@ import os
 model = os.environ.get("MODEL", "meta-llama/Llama-3.3-70B-Instruct")
 
 # Supply your API key from https://app.centml.com/user/vault
-api_key = os.environ.get("OPENAI_API_KEY")
+api_key = os.environ.get("CENTML_API_KEY")
 assert api_key is not None, "Please provide an API Key"
 
-# Initialize the OpenAI (CentML) client
+# Initialize the OpenAI (CentML) client with the API key and base URL
 client = OpenAI(
     api_key=api_key,
     base_url="https://api.centml.com/openai/v1",
