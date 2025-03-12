@@ -102,12 +102,29 @@ from openai import OpenAI
 import os
 import json
 import time
-from weather_utils import get_weather
 
 # Supply your API key from https://app.centml.com/user/vault
 api_key = os.environ.get("CENTML_API_KEY")
 assert api_key is not None, "Please provide an API Key"
 base_url = "https://api.centml.com/openai/v1"
+
+def get_weather(location):
+    """
+    Simulates getting weather data for a location.
+    In a real application, this would call a weather API.
+    """
+    # This is a mock implementation
+    weather_data = {
+        "Paris, France": "temperature: 22",
+        "London, UK": "temperature: 18",
+        "New York, USA": "temperature: 25",
+        "Tokyo, Japan": "temperature: 27",
+        "Bogotá, Colombia": "temperature: 20"
+    }
+
+    # Return mock data if location exists, otherwise return a default
+    return weather_data.get(location, "temperature: 20")
+
 
 # Define a tool (function) the model can call
 tools = [{
