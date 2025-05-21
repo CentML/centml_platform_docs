@@ -18,19 +18,7 @@ Run the following command to login to CentML using the client credentials.
 centml login
 ```
 
-The first time, you'll be prompted to download the credentials from the CentML Platform console under [Account -> Vault](https://app.centml.com/user/vault).
-
-<Frame>
-    <img src="/images/credentials.png" style={{ borderRadius: '0.5rem' }} />
-</Frame>
-
-Run the login command again with the downloaded credential file.
-
-```bash
-centml login <path_to>/credentials.json
-```
-
-Once logged in, you are all set to use CentML client. You can use centml CLI command to list your deployments.
+The first time, you'll be prompted to login to your Platform account through a browser. Once logged in, you are all set to use CentML client. You can use centml CLI command to list your deployments.
 
 ```bash
 centml cluster ls
