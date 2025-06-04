@@ -1,0 +1,90 @@
+---
+title: 'The Model Integration Lifecycle'
+description: 'An Introduction to the Model Integration Lifecycle'
+icon: 'arrows-spin'
+---
+
+The Model Integration Lifecycle (MILC) can be viewed as a practical extension—or counterpart—to the Model Infrastructure Lifecycle. Its purpose is to define common terminology and provide a structured framework for teams adopting large language models (LLMs) and managing their transition into and out of production environments.
+
+MILC aligns closely with the [Model Development Lifecycle (MDLC)](https://www.frgrisk.com/the-model-development-lifecycle-mdlc-building-and-testing-the-model/), while also embracing DevOps and MLOps principles of continuous improvement and evaluation.
+
+| Phase                         | Purpose                                                   | Example                                                                                      |
+|------------------------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------------|
+| Requirements Gathering       | Identify business needs and model fit                    | Need a model to summarize tickets in less than 3s with PII redaction                                  |
+| Feasibility Analysis         | Evaluate performance, latency, cost, infra readiness     | LLaMA 2-70B meets quality targets; latency less than 1s possible via serverless CentML endpoint       |
+| Design & Architecture        | Plan API integration, security, auth, observability      | Use CentML’s `/v1/chat/completions` endpoint (OpenAI-compatible); authenticate using API tokens; log request/response metadata to BigQuery |
+| Development & Integration    | Build prompt templates, format inputs/outputs, handle tokens, retries | Build API route to send prompt to CentML endpoint and return structured response |
+| Fine-tuning (optional)       | Improve model behavior on domain-specific tasks          | Fine-tune LLaMA 2 on internal support ticket dataset                                         |
+| Testing & Validation         | Run unit, functional, latency, and accuracy tests        | Compare LLM summaries to human-written ones; use ROUGE/LFQA scoring                          |
+| A/B Testing or Canary Deploy | Gradually release the model to validate behavior and avoid regressions | Route 10% of support queries to new model or prompt version, measure impact       |
+| Deployment                   | Roll out model integration in production                 | Deploy autoscaled API backend with load-balanced access to CentML endpoint                  |
+| Monitoring & Optimization    | Track usage, quality, token cost, drift                  | Monitor latency, output quality; alert on spike in cost per token                            |
+| Model Retirement / Replacement | Retire underperforming models or roll in upgraded versions | Decommission v1 endpoint after v2 adoption; archive prompts and logs for compliance         |
+
+
+## Where Does CentML Fit In?
+CentML can support teams during multiple phases of the Model Integration Lifecycle. See below for details
+
+### Model Integration Life Cycle Phases and How CentML Supports Them
+1. **Requirements Gathering:**	Teams can evaluate CentML’s API features (e.g., latency, scalability, cost models) as well as model quality to inform LLM feasibility.
+2. **Feasibility Analysis:**	CentML allows instant access to high-performance LLM endpoints, enabling latency, throughput, and cost testing early on.
+3. **Design & Architecture:**	CentML exposes standardized /v1/chat/completions endpoints with token-based auth, simplifying architecture planning.
+4. **Development & Integration:**	Developers integrate CentML endpoints using standard OpenAI SDKs or HTTP clients like httpx, minimizing boilerplate.
+5. **Fine-tuning (optional iteration step):**	While CentML currently focuses on serving, [Custom Model Endpoints](apps/inference) and [LLM serving](apps/llm) support serving fine-tuned models.
+6. **Testing & Validation:**	Teams can test prompt formats and model behavior in CentML’s hosted environment with minimal infrastructure overhead.
+7. **A/B Testing or Canary:** Deploy	CentML's flexibility allows parallel deployments. Users must implement endpoint routing logic for A/B or canary testing via external tooling.
+8. **Deployment:**	CentML handles scalable, production-ready deployment — no need to manage GPU infra or custom serving stacks.
+9. **Monitoring & Optimization:**	Users can track token usage, latency, and costs through CentML’s reporting, and tune prompt performance accordingly.
+10. **Model Retirement / Replacement:**	Teams can switch CentML endpoints to newer models they've evauluated with CentMLs serverless endpoints or deploy multiple endpoints with different model versions without re-architecting infrastructure.
+
+## Want to Learn More?
+Feel free to reach out to sales@centml.ai to engage with the solutions team, check out the [examples codex](examples/codex), read [The CentML Blog](https://centml.ai/blog/), and visit CentML's [website](https://centml.ai/)
+
+
+
+## What's Next
+
+<CardGroup cols={2}>
+  <Card
+    title="LLM Serving"
+    icon="messages"
+    href="/apps/llm"
+  >
+    Explore dedicated public and private endpoints for production model deployments.
+  </Card>
+  <Card
+    title="Clients"
+    icon="terminal"
+    href="/clients/setup"
+  >
+    Learn how to interact with the CentML platform programmatically.
+  </Card>
+  <Card
+    title="Resources and Pricing"
+    icon="coins"
+    href="/resources/pricing"
+  >
+    Learn more about the CentML platform's pricing.
+  </Card>
+  <Card
+    title="Deploying Custom Models"
+    icon="screwdriver-wrench"
+    href="/resources/custom_image"
+  >
+    Learn how to build your own containerized inference engines and deploy them on the CentML platform.
+  </Card>
+  <Card
+    title="Submit a Support Request"
+    icon="headset"
+    href="/resources/requesting_support"
+  >
+    Submit a support request.
+  </Card>
+  <Card
+    title="Agents on CentML"
+    icon="user-secret"
+    href="/resources/json_and_tool"
+  >
+    Learn how agents can interact with CentML services.
+  </Card>
+</CardGroup>

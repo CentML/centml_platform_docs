@@ -42,7 +42,8 @@
         "apps/llm",
         "apps/inference",
         "apps/compute",
-        "apps/rag"
+        "apps/rag",
+        "apps/serverless"
       ]
     },
     {
@@ -58,7 +59,11 @@
         "resources/custom_image",
         "resources/private",
 	"resources/json_and_tool",
-        "resources/pricing"
+        "resources/pricing",
+        "resources/account_creation",
+        "resources/requesting_support",
+        "resources/generation_api_key",
+        "resources/model_integration_lifecycle"
       ]
     },
     {

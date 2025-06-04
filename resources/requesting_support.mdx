@@ -1,0 +1,202 @@
+---
+title: Requesting Support
+description: How to Submit a Support Request from the CentML Platform UI
+icon: headset
+---
+
+CentML provides enterprise support for the CentML platform and a ticket system where you can submit a support ticket directly via the CentML platform's user interface.
+You can also email `support@centml.ai` directly should you so choose. 
+
+
+## Submitting a Request Through the CentML Platform's User Interface
+
+In order to submit a CentML support request follow the steps below. 
+
+### 1. Access the CentML UI
+
+To submit a request ticket from the CentML platform UI, you must have an active CentML account. If you don't, please follow the [Creating an Account](/resources/account_creation) doucmentation before submitting a request. If you cannot create an account, please contact `support@centml.ai`.
+
+Once logged in, you can submit a request by selecting `Support` located near the bottom of the sidebar menu.
+
+<Frame>
+    <img src="/images/general-request.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+
+### 2. Select the Appropriate Catagory
+
+Once you begin submitting your ticket, you will need to select a relevant catagory.
+
+As show above, you can select a catagory from the drop down menu on the `Submit a Request` window.
+
+The category definitions and types of inquiries are as follows:
+
+**General Questions**  
+Question about how CentML works and  what it can do.
+
+**Sales Questions**  
+Questions on Pricing, enterprise plans, and tailored solutions.
+
+**Billing and Finance**  
+Support for invoices, payment methods, and usage details.
+
+**Performance Questions**  
+Support with unexpected latency, throughput issues and other optimization questions.
+
+**Data Privacy and Account Deletion**   
+Questions on how we user your data as well as account deletion requests. 
+
+**Add a New Cluster**  
+Requests for adding a new region or zone for your workloads.
+
+**Request a Serverless Model**  
+Requests for a specific model available via serverless.
+
+**Other**  
+Any requests that don't fit the above catagory. Send it here and we will route it to the appropriate team. 
+
+### 3. Select the Appropriate Priority
+
+
+Use the dropdown menu pictured below to select the appropriate priority for your request. The CentML team will triage submissions internally, using the selected `Priority` as a guideline.
+
+<Frame>
+    <img src="/images/priority.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+
+Refer to the chart below to help determine the best priority level.
+For `Urgent` or `High` requests, we recommend emailing `support@centml.ai` and contacting your dedicated sales representative for faster assistance. 
+
+| Urgency | Impact       | Description                                      | Example                                | Response Expectation                                 |
+|---------|--------------|--------------------------------------------------|----------------------------------------|------------------------------------------------------|
+| Urgent  | Critical     | Broad impact across systems or users             | Complete service outage                | Immediate action; highest priority                   |
+| High    | Significant  | Major functionality broken or severely limited   | Core feature failure                   | Fast response; prioritized within regular work hours |
+| Medium  | Moderate     | Noticeable disruption, but workarounds exist     | Minor feature behaving unexpectedly    | Addressed in order of priority                       |
+| Low     | Minimal      | Minor inconvenience or cosmetic issue            | Typo or UI glitch                      | Added to backlog for future review                   |
+
+
+### 4. Fill Out the Support Request Form
+Fill out the text box on the `Submit a Request` window. For best results, follow the guidelines below. 
+
+A good support ticket should include:
+
+* **A clear summary of the issue**, including any error messages or symptoms.
+
+* **The urgency and impact level**, based on how many users or systems are affected.
+
+* **Steps to reproduce the issue**, if applicable.
+
+* **Expected vs. actual behavior**, to help us understand what went wrong.
+
+* **Relevant context**, such as model name, endpoint, region, or time of occurrence.
+
+*  **Screenshots or logs**, if available, to speed up triage.
+  
+#### Example Request 
+
+> Subject: Unable to Access Private Endpoint Using Downloaded Certificate with httpx
+>
+>Description:
+>We're attempting to access a private CentML endpoint using a certificate downloaded from the private endpoint configuration. However, requests using httpx are failing with a certificate-related error.
+>
+>Steps Taken:
+>
+>   Downloaded the provided certificate from the CentML UI
+>
+>   Attempted to connect using httpx.Client(cert=...)
+>
+>   Received SSL error: certificate verify failed
+>
+> Impact:
+> This is blocking access to a private serverless endpoint required for feasibility testing.
+>
+> Urgency: High
+>
+> Additional Info:
+>
+>   Model: llama2-70b-chat
+>
+>   Region: us-west2
+>
+>   Sample code snippet and logs are attached.
+
+### 5. Attach Any Relevant Code Snippets, Screenshots, or Logs
+As alluded to in our example request ticekt above, users can also attach relevant documents, images, or other media to help the CentML team gather information and resolve the request faster. 
+To do so, you can simply must click the box labeled `Click to upload or drag and drop files here`. From there, they can select a file based on its location on your local machine.
+
+<Frame>
+    <img src="/images/upload.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+
+For multiple images and/or documents, please add the documents to a single folder and compress the folder before uploading it. 
+
+To compress a file, you can follow some example guides below:
+
+[Compress a file on Mac OS](https://support.apple.com/guide/mac-help/zip-and-unzip-files-and-folders-on-mac-mchlp2528/mac)  
+[Compress a file on Windows](https://support.microsoft.com/en-us/windows/zip-and-unzip-files-8d28fa72-f2f9-712f-67df-f80cf89fd4e5)  
+[Compress a file on Linux](https://www.freecodecamp.org/news/how-to-compress-files-in-linux-with-tar-command/)  
+
+### 6. Submit the Request 
+Once you've gone through the above steps and processes, you can click the green `Submit` button. You should then see a notification on your screen confirming you submitted the support ticket.
+You will also receive an email to your CentML login email account from `user.support@centml.ai` notifying you that a ticket was created on your behalf. 
+You can respond to that email thread to add additional details as well as respond to any questions the CentML team has.
+
+## Emailing Support Directly 
+You can email `support@centml.ai` directly in order to create a ticket. We highly recommend you still follow the guidelines from the above section titled `4. Fill Out the Support Request Form`. 
+These best practices ensure the CentML team can promptly triage and respond to your request(s).
+
+## You've done it! 
+Congratulations! You've now know how to submit your first support request!
+
+
+# What's Next
+
+
+<CardGroup cols={2}>
+  <Card
+    title="LLM Serving"
+    icon="messages"
+    href="/apps/llm"
+  >
+    Explore dedicated public and private endpoints for production model deployments.
+ </Card>
+  <Card
+    title="Clients"
+    icon="terminal"
+    href="/clients/setup"
+  >
+    Learn how to interact with the CentML platform programmatically
+  </Card>
+  <Card
+    title="Resources and Pricing"
+    icon="coins"
+    href="/resources/pricing"
+  >
+    Learn more about the CentML platform's pricing.
+  </Card>
+  <Card
+    title="Deploying Custom Models"
+    icon="screwdriver-wrench"
+    href="/resources/custom_image"
+  >
+Learn how to build your own containerized inference engines and deploy them on the CentML platform.
+ </Card>
+  <Card
+    title="Private Endpoints"
+    icon="lock"
+    href="/resources/private"
+  >
+    Learn about how you can configure private endpoints on the CentML platform.
+ </Card>
+  <Card
+    title="Agents on CentML"
+    icon="user-secret"
+    href="/resources/json_and_tool"
+  >
+    Learn how agents can interact with CentML services.
+  </Card>
+</CardGroup>
+
+
