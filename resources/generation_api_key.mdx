@@ -1,0 +1,193 @@
+---
+title: 'Generating Serverless API Tokens and Vault Objects'
+description: 'How to generate and store CentML API tokens and other vault objects'
+icon: 'key-skeleton-left-right'
+---
+
+The CentML platform lets you create API tokens for both Serverless endpoints and other CentML solutions. The CentML platform also allows you to generate other `Vault`
+It is worth noting that `Serverless API Keys` do not work on general CentML solutions and `Bearer Tokens` do not work on serverless endpoints.
+You will need to create one of each if you'd like to use CentML LLM endpoints as well as CentML serverless endpoints. 
+This guide will walk you through creating both `Bearer Tokens`, `Serverless API Keys`, and other Vault objects you can use to configure or access CentML services.
+
+## Step 1: Login to the CentML Platform
+Regardless of if you are creating `Serverless API Keys`, `Bearer Tokens`,or other Vault objects you will need to login to the CentML platform. If you do not know how to login or do not have an account, please follow the [Creating an Account](/resources/account_creation) documentation before proceeding. 
+
+Once logged in, you will need to select `Account` from sidebar menu, and then click on the `Vault` tab from the `Your Account` window. 
+
+<Frame>
+    <img src="/images/vault.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+
+Once completed, move onto the second step below based on the type of Vault objects you are creating. 
+
+## Step 2A: Creating Serverless API Keys
+`Serverless API Keys` are used for accessing the [CentML serverless endpoints](/apps/serverless) either via the UI or API calls directly.
+To create a key, click on the green `Generate` button on the `Your Account` screen.  
+
+<Frame>
+    <img src="/images/generate.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+
+Your newly generated key should appear above your vault.
+
+<Frame>
+    <img src="/images/.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+
+You can now use your Serverless API Key, to make progrmmatic requests or access the serverless chat UI.  
+
+
+
+
+## Step 2B: Creating Bearer Tokens
+
+Bearer tokens can be used to access CentML services except for serverless endpoints. 
+
+To generate a bearer token, select green `Add Vault Item`. A dropdown menu will appear. From that menu, select the `Bearer Tokens` option.
+
+
+<Frame>
+    <img src="/images/vault-bearer-tokens.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+A windows will pop up name `Add Bearer Token to Your Vault`. From there, you can either name and automatically generate a token with the `Generate new Bearer Token` option or you can enter a previous token using the `Use an existing Bearer Token` option.
+
+<Frame>
+    <img src="/images/add-bearer-token.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+Once you either enter your token in the text box or opt into generating your token, click the green `Add to Vault` option and your Bearer Token should appear in your vault.
+
+<Frame>
+    <img src="/images/added-bearer-token.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+
+
+
+## Step 2C: Adding Certificates to Your Vault 
+CentML uses client certificates for [mutual TLS (mTLS)](https://www.cloudflare.com/learning/access-management/what-is-mutual-tls/)
+You can generate or add public certificates for mTLS just like you can with Bearer Tokens. Once you generate the certificate, it will appear in the vault. 
+
+<Frame>
+    <img src="/images/add-certificates.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+<Frame>
+    <img src="/images/gen-cert.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+<Frame>
+    <img src="/images/added-certificate.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+When generated,`Vault Certificates` generate a `.pem` file that is downloaded to your local browser.  That `.pem` file is named after the generated cert.  You can then use that `.pem` file to access one of CentML's [private endpoints](/resources/private) as long as they are associated with the appropriate certificate and `.pem` pair.
+
+
+<Frame>
+    <img src="/images/downloaded-pem.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+
+### Example usage
+
+```bash
+curl -X POST 'https://centml-private-2.fe178792.c-09.centml.com/openai/v1/chat/completions' \
+  --cert gen-cert.pem \
+  -H 'Accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "messages": [
+      {
+        "role": "user",
+        "content": "what is the meaning of life?"
+      }
+    ],
+    "model": "meta-llama/Llama-3.2-3B-Instruct",
+    "max_tokens": 512,
+    "n": 1,
+    "presence_penalty": 0,
+    "stream": true,
+    "stream_options": {
+      "include_usage": true
+    },
+    "temperature": 0.7,
+    "top_p": 1
+  }'
+
+```
+
+### Adding Your Own Certificates
+This section is currently under construction as we work to improve the UX around adding certificates to endpoints on the CentML platform. Please check back soon! 
+
+
+
+## Step 2D: Adding Environment Variables
+
+
+<Frame>
+    <img src="/images/add-env.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+<Frame>
+    <img src="/images/env-vault.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+ 
+
+
+# What's Next
+
+<CardGroup cols={2}>
+  <Card
+    title="LLM Serving"
+    icon="messages"
+    href="/apps/llm"
+  >
+    Explore dedicated public and private endpoints for production model deployments.
+ </Card>
+  <Card
+    title="Clients"
+    icon="terminal"
+    href="/clients/setup"
+  >
+    Learn how to interact with the CentML platform programmatically
+  </Card>
+  <Card
+    title="Resources and Pricing"
+    icon="coins"
+    href="/resources/pricing"
+  >
+    Learn more about the CentML platform's pricing.
+  </Card>
+  <Card
+    title="Private Inference Endpoints"
+    icon="lock"
+    href="/resources/private"
+  >
+Learn how to create private inference endpoints
+ </Card>
+  <Card
+    title="Submit a Support Request"
+    icon="headset"
+    href="/resources/requesting_support"
+  >
+    Submit a Support Request.
+ </Card>
+  <Card
+    title="Agents on CentML"
+    icon="user-secret"
+    href="/resources/json_and_tool"
+  >
+    Learn how agents can interact with CentML services.
+  </Card>
+</CardGroup>
+
+
+
+
+
+

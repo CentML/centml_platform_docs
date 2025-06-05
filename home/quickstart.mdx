@@ -1,61 +1,117 @@
 ---
 title: Quickstart
-description: Harness the power of AI in a few minutes
-icon: rocket
+description: Access CentML's Managed Models in Less Than a Minute. 
+icon: rocket-launch
 ---
 
-This quickstart shows you how to integrate large langauge models (LLMs) in to your applications using CentML Platform in three easy steps.
+CentML's serverless endpoints provide programmatic and browser-based access to popular models.
 
-## 1. Create an account and login
-Go to https://app.centml.com and create your CentML user account. Afterwards, login to the CentML Platform console.
+No need to worry about the underlying infrastructure, scaling deployments, or maintenance - just log in to start testing and evaluating models to determine how they fit your business needs.
+
+When you're ready to move to production, you can deploy dedicated LLM endpoints that fit your performance requirements and budget, with CentML's [LLM Serving](/apps/llm).
+
+
+## 1. Log into the CentML Platform
+To access a CentML serverless endpoint, you need to log in to the CentML platform. To do so, navigate to https://app.centml.com in your browser and create a CentML user account or log in with your account's credentials if you already have one.
+
+
+<Frame>
+    <img src="/images/centml-signin.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+
+If you need guidance on how to create an account, please visit the [Creating an Accoount](/resources/account_creation) documentation and follow the guide to create an account and login.
+
+
+Once logged in, you will see the CentML Platform console home page, as shown below.
 
 <Frame>
     <img src="/images/homepage.png" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
+
 ## 2. Create an API key
-Go to Account -> Vault and generate an API key.
+When accessing a CentML Serverless endpoint, you must authenticate using a Serverless API key **even if you are using the chat UI.**
+By default, you should have a serverless API key already generated for you on account creation. If not, you may see errors similar to below.
 
 <Frame>
-    <img src="/images/api_token.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/chat-error.png" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-## 3. Start using the LLM through our serverless endpoints
+To generate an API key, please follow the [Generating Serverless API Tokens and Vault Objects](/resources/generation_api_key) documentation and move onto the next section. Worth noting that these API keys are **long lived**, so you may want to rotate them occasionally.
 
-Select the Serverless option from the menu and start conversing with your preferred model through the chat UI.
+## 3. Begin Querying Your Desired Large Language Models
+### Accessing the Chat UI
+
+To access the chat UI, select the `Serverless` option from the sidebar menu.
+
+### Configure, Prompt, and Submit
+Once you are on the appropriate `Your Serverless Endpoint` page, follow the instructions below to submit a request to the model.
+
+1. Configure the endpoint settings (right side of the screen) to fit your testing needs.  The configuration menu is where you can select the model you'd like to leverage via the chat interface.
+2. Enter a prompt into the textbox at the bottom of the screen.
+3. Select the arrow (pointing up) to submit the prompt to the model.
 
 <Frame>
     <img src="/images/chat.png" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-In addition to the chat UI, serverless endpoint can also be accessed programmatically through Python, Javascript, and cURL command. Switch to the API tab to find the corresponding code snippets to get started.
+Congratulations! You've begun your journey with CentML and submitted your first serverless request! 
 
-<Frame>
-    <img src="/images/api.png" style={{ borderRadius: '0.5rem' }} />
-</Frame>
+## Advanced Serverless Usage and Considerations 
+For more advanced Serverless topics such how to access the API programmatically and request an additional model, please view our [Serverless Endpoints](/apps/serverless) documentation.
 
-### What next?
+## Additional Support: Billing, Sales, and/or Technical 
+
+For billing or sales support reach out to `sales@centml.ai`. 
+
+You can also fill out a support request by following our [Requesting Support](/resources/requesting_support) guide. Support requests are not limited to sales and billing. They can include technical support, new model requests, and more. Please do not hesitate to reach out! We're here to help! 
+
+
+
+## What's Next
 
 <CardGroup cols={2}>
   <Card
-    title="Our Services"
-    icon="box-open-full"
-    href="/apps/llm"
+    title="Agents on CentML"
+    icon="user-secret"
+    href="/resources/json_and_tool"
   >
-    Learn how to build your AI application using CentML Platform
+    Learn how agents can interact with CentML services.
   </Card>
   <Card
     title="Clients"
     icon="terminal"
     href="/clients/setup"
   >
-    How to interact with Platform programmatically
+    Learn how to interact with the CentML platform programmatically
   </Card>
   <Card
-    title="Resouces and Pricing"
+    title="Resources and Pricing"
     icon="coins"
     href="/resources/pricing"
   >
-    Learn more about CentML Platform
+    Learn more about CentML Pricing
   </Card>
+    <Card
+    title="Get Support"
+    icon="headset"
+    href="/resources/requesting_support"
+  >
+    Submit a Support Request
+ </Card>
+  <Card
+    title="CentML Serverless Endpoints"
+    icon="cloud-binary"
+    href="/apps/serverless"
+  >
+    Dive deeper into advanced serverless configurations and patterns.
+ </Card>
+  <Card
+    title="LLM Serving"
+    icon="messages"
+    href="/apps/llm"
+  >
+    Explore dedicated public and private endpoints for production model deployments.
+ </Card>
 </CardGroup>

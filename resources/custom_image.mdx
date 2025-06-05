@@ -1,6 +1,6 @@
 ---
-title: 'Deploying custom models'
-description: 'How to build your own containerized inference engine and deploy'
+title: 'Deploying Custom Models'
+description: 'How to build your own containerized inference engines and deploy'
 icon: 'screwdriver-wrench'
 ---
 
@@ -28,3 +28,51 @@ docker build --platform linux/amd64 -t stable-diffusion:latest .
 </Note>
 
 After building the container, push it to a public container registry, such as [Docker Hub](https://hub.docker.com/). Then, navigate to the General Inference option in the CentML Platform and enter the image name, tag, and container port to deploy your application.
+
+
+## What's Next
+
+<CardGroup cols={2}>
+  <Card
+    title="Agents on CentML"
+    icon="user-secret"
+    href="/resources/json_and_tool"
+  >
+    Learn how agents can interact with CentML services.
+  </Card>
+  <Card
+    title="Clients"
+    icon="terminal"
+    href="/clients/setup"
+  >
+    Learn how to interact with platform programmatically
+  </Card>
+  <Card
+    title="Resources and Pricing"
+    icon="coins"
+    href="/resources/pricing"
+  >
+    Learn more about CentML Pricing
+  </Card>
+    <Card
+    title="Get Support"
+    icon="headset"
+    href="/resources/requesting_support"
+  >
+    Submit a Support Request
+ </Card>
+  <Card
+    title="CentML Serverless Endpoints"
+    icon="cloud-binary"
+    href="/apps/serverless"
+  >
+    Dive deeper into advanced Serverless configurations and patterns.
+ </Card>
+  <Card
+    title="LLM Serving"
+    icon="messages"
+    href="/apps/llm"
+  >
+    Explore dedicated public and private endpoints for production model and model infrastructure management.
+ </Card>
+</CardGroup>
