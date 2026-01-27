@@ -20,7 +20,8 @@ To make the endpoint private, select the "Make it a private endpoint?" option. T
 
 For further customization, you can configure the optional fields as well.
 
-- **healthcheck:** HTTP health check endpoint to check if the inference engine is ready to accept requests. Default is None.
+- **backend protocol:** Select the protocol for your deployment - `HTTP` (default) or `GRPC`. Choose gRPC if your inference engine exposes a gRPC service.
+- **healthcheck:** Health check endpoint to verify the inference engine is ready. For HTTP deployments, this is an HTTP endpoint (default is `/`). For gRPC deployments, the platform uses TCP socket checks automatically, so this field is ignored. Native gRPC health checks are planned for future releases.
 - **command and arguments:** Entrypoint command and arguments to run when the container starts. Default is entrypoints specified in the container image.
 - **autoscaling:** Set the min and max scale for your deployment. We scale up and down your deployment to match the traffic based on the max concurrency set. Max concurrency refers to the maximum number of in-flight requests per replica. Default is infinity.
 - **environment variables:** Pass in any additional environment variables to the container. e.g, HF_TOKEN
@@ -56,7 +57,30 @@ Click on the deployment to view the details page, logs and monitoring informatio
     <img src="/images/inf_4.png" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-Once the deployment status is ready, the container port is going to be exposed under the endpoint url shown in the details page and can be accessed through `https://<endpoint_url>`.
+Once the deployment status is ready, the container port is going to be exposed under the endpoint url shown in the details page.
+
+### Accessing your endpoint
+
+All deployments are exposed externally on **port 443** with **TLS enforced**. The platform automatically provisions TLS certificates for your endpoint - no additional configuration is required.
+
+| Protocol | Access URL | Description |
+|----------|-----------|-------------|
+| HTTP | `https://<endpoint_url>` | Standard HTTPS access (port 443 is implicit) |
+| gRPC | `<endpoint_url>:443` | gRPC with TLS enabled |
+
+<Note>
+The **container port** you configure is used internally within the cluster. The platform's ingress layer handles TLS termination on port 443 and forwards requests to your container's internal port.
+</Note>
+
+**Example usage:**
+
+```bash
+# HTTP deployment
+curl https://my-deployment.some-hash.cluster-alias.centml.com/v1/models
+
+# gRPC deployment (using grpcurl)
+grpcurl -d '{"prompt": "Hello"}' my-deployment.some-hash.cluster-alias.centml.com:443 inference.Service/Predict
+```
 
 
 
