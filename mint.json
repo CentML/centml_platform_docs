@@ -41,9 +41,7 @@
       "pages": [
         "apps/llm",
         "apps/inference",
-        "apps/compute",
-        "apps/rag",
-        "apps/serverless"
+        "apps/compute"
       ]
     },
     {

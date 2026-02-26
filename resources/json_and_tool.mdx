@@ -4,7 +4,7 @@ description: 'How to build AI agents using structured outputs such as JSON and f
 icon: 'user-secret'
 ---
 
-Both **Serverless** and **Dedicated** LLM APIs from CentML support structured outputs using the same OpenAI-compatible API. These features are crucial for agentic workloads that require reliable data parsing and function calling. The CentML platform also provides reasoning-enabled models (e.g., `DeepSeek-AI/deepseek-r1`) that can perform reasoning before generating structured outputs.
+CentML's **Dedicated** LLM APIs support structured outputs using the same OpenAI-compatible API. These features are crucial for agentic workloads that require reliable data parsing and function calling. The CentML platform also provides reasoning-enabled models (e.g., `DeepSeek-AI/deepseek-r1`) that can perform reasoning before generating structured outputs.
 
 ## JSON Schema Output
 
@@ -316,15 +316,11 @@ for model in models:
 - **Use Reasoning Models**: For complex tasks requiring reasoning steps, consider using `deepseek-ai/DeepSeek-R1`. It provides chain-of-thought style reasoning capabilities.
 - **Production Hardening**: If you’re building an agentic or workflow-driven application, ensure you handle potential parsing errors and fallback scenarios gracefully.
 
-<Note>
-Both Serverless and Dedicated LLM APIs share the same interface and usage pattern. You only need to change the **base URL** (and any relevant credentials) if you switch between them.
-</Note>
-
 ---
 
 ## Conclusion
 
-Using JSON schema enforcement and function calling (tools) with CentML LLM APIs lets you build more reliable, agentic, and automated workflows. With minimal changes to your existing OpenAI-compatible code, you can take advantage of these features on the CentML platform—whether you’re deploying on **Serverless** or **Dedicated**.
+Using JSON schema enforcement and function calling (tools) with CentML LLM APIs lets you build more reliable, agentic, and automated workflows. With minimal changes to your existing OpenAI-compatible code, you can take advantage of these features on the CentML platform.
 
 For more details, visit our [CentML Documentation](https://docs.centml.ai) or reach out on [Slack](https://join.slack.com/t/centmlcommunity/shared_invite/zt-2vmo66c1i-G7YzIUwXUvLTUXLZ~wR4Ww) if you have any questions!
 
@@ -351,12 +347,11 @@ For more details, visit our [CentML Documentation](https://docs.centml.ai) or re
     Learn more about pricing for the CentML Platform
   </Card>
   <Card
-    title="Serverless CentML"
-    icon="cloud-binary"
+    title="Quickstart"
+    icon="rocket-launch"
     href="/home/quickstart"
   >
-    Start Using CentML Managed Modeles in Minutes
-
+    Get started with the CentML platform in minutes.
  </Card>
   <Card
     title="Submit a Support Request"
