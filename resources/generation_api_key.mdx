@@ -102,7 +102,16 @@ This section is currently under construction as we work to improve the UX around
 
 
 
-## Step 2C: Adding Environment Variables
+## Step 2C: Adding Registry Credentials
+
+Registry credentials allow the CentML Platform to pull container images from private registries when creating [General Inference](/apps/inference) deployments.
+
+To add registry credentials, select the green `Add Vault Item` button and choose `Registry Credentials` from the dropdown. Enter a name, along with the registry username and password (or access token). The credentials are stored securely in your Vault and can be selected during deployment configuration.
+
+Supported registries include Docker Hub, Amazon ECR, Google Artifact Registry, Azure Container Registry, and any Docker-compatible private registry. The platform automatically detects the registry from the image URL at deployment time.
+
+
+## Step 2D: Adding Environment Variables
 
 
 <Frame>

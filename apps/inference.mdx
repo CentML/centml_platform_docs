@@ -24,6 +24,7 @@ For further customization, you can configure the optional fields as well.
 - **healthcheck:** Health check endpoint to verify the inference engine is ready. For HTTP deployments, this is an HTTP endpoint (default is `/`). For gRPC deployments, the platform uses TCP socket checks automatically, so this field is ignored. Native gRPC health checks are planned for future releases.
 - **command and arguments:** Entrypoint command and arguments to run when the container starts. Default is entrypoints specified in the container image.
 - **autoscaling:** Set the min and max scale for your deployment. We scale up and down your deployment to match the traffic based on the max concurrency set. Max concurrency refers to the maximum number of in-flight requests per replica. Default is infinity.
+- **registry credentials:** If your container image is hosted on a private registry, provide credentials to allow the platform to pull the image. You can select stored credentials from your [Vault](/resources/generation_api_key) or enter a registry username and password directly. The registry is automatically detected from the image URL.
 - **environment variables:** Pass in any additional environment variables to the container. e.g, HF_TOKEN
 
 <Tip>

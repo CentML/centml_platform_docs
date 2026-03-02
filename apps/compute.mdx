@@ -8,20 +8,36 @@ On-demand GPU instances with SSH access to run any GPU-accelerated workloads and
 
 ## 1. Select a base image
 
-Spin up a compute instance with your preferred base image (e.g. PyTorch). Enter your ssh public key to configure access to the instance.
+Spin up a compute instance by choosing one of the available base images:
+
+- **PyTorch** — the latest NVIDIA NGC PyTorch image, preloaded with PyTorch and CUDA libraries.
+- **Ubuntu** — a vanilla Ubuntu image for a minimal starting point.
+
+Enter your SSH public key to configure access to the instance, select a GPU instance type, and click Deploy.
 
 <Frame>
     <img src="/images/comp_1.png" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-Finally, select a GPU instance type and click Deploy.
-
 ## 2. SSH into the instance
 
-Once the instance is ready, ssh into the endpoint url provided in the deployment details page with username `centml`.
+Once the instance is ready, navigate to the deployment details page. The **Endpoint Configuration** section displays:
+
+- **Endpoint URL** — the hostname for your instance. Next to it are a copy button (copies the URL) and an SSH button (copies `root@<endpoint_url>` so you can paste it directly into your terminal).
+- **SSH Public Key** — the public key associated with the instance, with a copy button.
 
 <Frame>
     <img src="/images/comp_2.png" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+To connect, use the SSH command with the `root` user:
+
+```bash
+ssh root@<endpoint_url>
+```
+
+<Frame>
+    <img src="/images/comp_3.png" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 The instance comes preinstalled with NVIDIA drivers and libraries, as well as those included in your selected base image. Additional packages and libraries can be installed via pip.
