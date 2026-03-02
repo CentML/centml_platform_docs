@@ -4,11 +4,26 @@ description: 'Deploy and scale any model'
 icon: 'circle-nodes'
 ---
 
-We make it easy for you to containerize and deploy any custom models on our platform. In addition, we also provide popular inference engines like vLLM and Ollama.
+We make it easy for you to containerize and deploy any custom models on our platform. Containers can run as **any user, including root** — see [Deploying Custom Models](/resources/custom_image) for platform security details. We also provide popular inference engine recipes such as vLLM, Ollama, SGLang, and LMDeploy.
 
 ## 1. Configure your inference deployment
 
-Select or enter a container inference engine image, tag and container port.
+Use the **Add or Select Image** dropdown to choose a pre-configured recipe or manually enter a custom image URL. Similarly, use the **Container Tag** dropdown to pick an available tag or type one in directly. If you select a recipe, all fields except **Add command** are auto-filled (some may be empty). You will still need to provide the entrypoint command under **Optional Details → Add command**.
+
+At a minimum, you need to specify:
+
+- **Add or Select Image** — the container image URL (select from dropdown or enter manually).
+- **Container Tag** — the image tag (select from dropdown or enter manually).
+- **Container Port** — the port your container exposes its HTTP or gRPC service on.
+- **Protocol** — select `HTTP` (default) or `gRPC`.
+- **Health check path** — the endpoint used to verify readiness (e.g., `/health`, `/`). For gRPC deployments, the platform uses TCP socket checks automatically, so this field is ignored.
+- **Image Registry Username / Password** — required only if the image is hosted on a private registry (e.g., Docker Hub private repo). You can also use credentials stored in your [Vault](/resources/generation_api_key).
+
+Under the **Optional Details** tab:
+
+- **Add command** — entrypoint command and arguments. If left empty, the image's default entrypoint is used.
+- **Autoscaling** — set the min and max scale for your deployment. The platform scales replicas based on max concurrency (maximum in-flight requests per replica). Default is infinity.
+- **Environment variables** — pass additional environment variables to the container (e.g., `HF_TOKEN`).
 
 <Frame>
     <img src="/images/inf_1.png" style={{ borderRadius: '0.5rem' }} />
@@ -18,18 +33,24 @@ Select or enter a container inference engine image, tag and container port.
 To make the endpoint private, select the "Make it a private endpoint?" option. This will automatically generate a TLS certificate, which you can download as a .pem file after the deployment is complete. Only those with this TLS certificate will have access to the endpoint. For more details, please refer to this [resource](/resources/private).
 </Tip>
 
-For further customization, you can configure the optional fields as well.
-
-- **backend protocol:** Select the protocol for your deployment - `HTTP` (default) or `GRPC`. Choose gRPC if your inference engine exposes a gRPC service.
-- **healthcheck:** Health check endpoint to verify the inference engine is ready. For HTTP deployments, this is an HTTP endpoint (default is `/`). For gRPC deployments, the platform uses TCP socket checks automatically, so this field is ignored. Native gRPC health checks are planned for future releases.
-- **command and arguments:** Entrypoint command and arguments to run when the container starts. Default is entrypoints specified in the container image.
-- **autoscaling:** Set the min and max scale for your deployment. We scale up and down your deployment to match the traffic based on the max concurrency set. Max concurrency refers to the maximum number of in-flight requests per replica. Default is infinity.
-- **registry credentials:** If your container image is hosted on a private registry, provide credentials to allow the platform to pull the image. You can select stored credentials from your [Vault](/resources/generation_api_key) or enter a registry username and password directly. The registry is automatically detected from the image URL.
-- **environment variables:** Pass in any additional environment variables to the container. e.g, HF_TOKEN
-
 <Tip>
 For building your own custom container image and deploying on CentML Platform, please refer to this [resource](/resources/custom_image).
 </Tip>
+
+### Supported inference engine recipes
+
+The platform provides pre-configured recipes for popular inference engines in the **Add or Select Image** dropdown. Selecting a recipe auto-fills all fields except the entrypoint command. Below are the **Add command** values you need to provide for each engine:
+
+- **vLLM** — `python3 -m vllm.entrypoints.openai.api_server --model <HF_REPO_NAME>`
+- **SGLang** — `python3 -m sglang.launch_server --model-path <HF_MODEL_REPO> --host 0.0.0.0`
+- **LMDeploy** — `lmdeploy serve api_server <HF_REPO_NAME> --server-name 0.0.0.0`
+- **Ollama** — leave **Add command** empty. After the deployment is ready, pull a model before querying:
+
+```bash
+curl -X POST https://<endpoint_url>/api/pull -d '{"name": "qwen2:1.5b"}'
+
+curl -X POST https://<endpoint_url>/api/chat -d '{"model": "qwen2:1.5b", "messages": [{"role": "user", "content": "Hello"}]}'
+```
 
 ## 2. Select the cluster and hardware to deploy
 By default, CentML Platform provides several managed clusters and GPU instances for you to deploy your inference containers. 
