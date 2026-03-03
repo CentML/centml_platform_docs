@@ -9,11 +9,7 @@ The CentML Platform simplifies deploying your custom models and AI applications.
 Here’s an example of how to build a stable diffusion model served by a FastAPI-based inference server: https://github.com/CentML/codex/tree/main/general-apps/general-inference/stable-diffusion/centml-endpoint
 
 <Note>
-The CentML Platform enforces [Pod Security Admission (PSA) baseline](https://kubernetes.io/docs/concepts/security/pod-security-standards/) controls at the namespace level. Containers can run as **any user, including root**. The following security restrictions are applied to all deployments:
-
-- **Privilege escalation** is disabled (`allowPrivilegeEscalation: false`)
-- **All Linux capabilities** are dropped (`drop: ["ALL"]`)
-- **Seccomp profile** is set to `RuntimeDefault`
+The CentML Platform enforces [Pod Security Admission (PSA) baseline](https://kubernetes.io/docs/concepts/security/pod-security-standards/) controls at the namespace level. Containers can run as **any user, including root**.
 </Note>
 
 <Note>

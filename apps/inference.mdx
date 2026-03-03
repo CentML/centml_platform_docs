@@ -44,13 +44,19 @@ The platform provides pre-configured recipes for popular inference engines in th
 - **vLLM** — `python3 -m vllm.entrypoints.openai.api_server --model <HF_REPO_NAME>`
 - **SGLang** — `python3 -m sglang.launch_server --model-path <HF_MODEL_REPO> --host 0.0.0.0`
 - **LMDeploy** — `lmdeploy serve api_server <HF_REPO_NAME> --server-name 0.0.0.0`
-- **Ollama** — leave **Add command** empty. After the deployment is ready, pull a model before querying:
+- **Ollama** — leave **Add command** empty. See the Ollama-specific note below.
+
+<Note>
+**Ollama** does not require a custom entrypoint. After the deployment is ready, you need to pull a model before it can serve requests:
 
 ```bash
+# Pull a model (Ollama only)
 curl -X POST https://<endpoint_url>/api/pull -d '{"name": "qwen2:1.5b"}'
 
+# Once the pull completes, query the model (Ollama only)
 curl -X POST https://<endpoint_url>/api/chat -d '{"model": "qwen2:1.5b", "messages": [{"role": "user", "content": "Hello"}]}'
 ```
+</Note>
 
 ## 2. Select the cluster and hardware to deploy
 By default, CentML Platform provides several managed clusters and GPU instances for you to deploy your inference containers. 
