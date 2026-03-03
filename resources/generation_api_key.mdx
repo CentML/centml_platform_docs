@@ -4,11 +4,11 @@ description: 'How to generate and store CentML tokens and other vault objects'
 icon: 'key-skeleton-left-right'
 ---
 
-The CentML CCluster allows you to generate and manage `Vault` objects such as `Bearer Tokens`, `Certificates`, `Registry Credentials`, `Environment Variables`, `Hugging Face Tokens`, and `SSH Keys`.
+The NVIDIA CCluster allows you to generate and manage `Vault` objects such as `Bearer Tokens`, `Certificates`, `Registry Credentials`, `Environment Variables`, `Hugging Face Tokens`, and `SSH Keys`.
 This guide will walk you through creating `Bearer Tokens` and other Vault objects you can use to configure or access CentML services.
 
-## Step 1: Login to the CentML CCluster
-You will need to login to the CentML CCluster to manage Vault objects. If you do not know how to login or do not have an account, please follow the [Creating an Account](/resources/account_creation) documentation before proceeding. 
+## Step 1: Login to the NVIDIA CCluster
+You will need to login to the NVIDIA CCluster to manage Vault objects. If you do not know how to login or do not have an account, please follow the [Creating an Account](/resources/account_creation) documentation before proceeding. 
 
 Once logged in, you will need to select `Account` from sidebar menu, and then click on the `Vault` tab from the `Your Account` window. 
 
@@ -98,13 +98,13 @@ curl -X POST 'https://centml-private-2.fe178792.c-09.centml.com/openai/v1/chat/c
 ```
 
 ### Adding Your Own Certificates
-This section is currently under construction as we work to improve the UX around adding certificates to endpoints on the CentML CCluster. Please check back soon! 
+This section is currently under construction as we work to improve the UX around adding certificates to endpoints on the NVIDIA CCluster. Please check back soon! 
 
 
 
 ## Step 2C: Adding Registry Credentials
 
-Registry credentials allow the CentML CCluster to pull container images from private registries when creating [General Inference](/apps/inference) deployments.
+Registry credentials allow the NVIDIA CCluster to pull container images from private registries when creating [General Inference](/apps/inference) deployments.
 
 To add registry credentials, select the green `Add Vault Item` button and choose `Registry Credentials` from the dropdown. Enter a name, along with the registry username and password (or access token). The credentials are stored securely in your Vault and can be selected during deployment configuration.
 
@@ -140,14 +140,14 @@ Supported registries include Docker Hub, Amazon ECR, Google Artifact Registry, A
     icon="terminal"
     href="/clients/setup"
   >
-    Learn how to interact with the CentML CCluster programmatically
+    Learn how to interact with the NVIDIA CCluster programmatically
   </Card>
   <Card
     title="Resources and Pricing"
     icon="coins"
     href="/resources/pricing"
   >
-    Learn more about the CentML CCluster's pricing.
+    Learn more about the NVIDIA CCluster's pricing.
   </Card>
   <Card
     title="Private Inference Endpoints"

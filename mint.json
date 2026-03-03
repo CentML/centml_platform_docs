@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "CentML CCluster",
+  "name": "NVIDIA CCluster",
   "theme": "prism",
   "layout": "solidSidenav",
   "logo": {
