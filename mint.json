@@ -78,8 +78,6 @@
               "icon": "comments",
               "pages": [
                 "examples/chat_apps/bash",
-                "examples/chat_apps/gradio",
-                "examples/chat_apps/streamlit",
                 "examples/chat_apps/swift"
               ]
             },
