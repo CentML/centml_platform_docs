@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "CentML Platform",
+  "name": "NVIDIA CCluster",
   "theme": "prism",
   "layout": "solidSidenav",
   "logo": {
@@ -41,9 +41,7 @@
       "pages": [
         "apps/llm",
         "apps/inference",
-        "apps/compute",
-        "apps/rag",
-        "apps/serverless"
+        "apps/compute"
       ]
     },
     {
@@ -62,7 +60,7 @@
         "resources/pricing",
         "resources/account_creation",
         "resources/requesting_support",
-        "resources/generation_api_key",
+        "resources/vault",
         "resources/model_integration_lifecycle"
       ]
     },
@@ -75,16 +73,6 @@
           "icon": "code",
           "pages": [
             "examples/codex",
-            {
-              "group": "Chat Apps",
-              "icon": "comments",
-              "pages": [
-                "examples/chat_apps/bash",
-                "examples/chat_apps/gradio",
-                "examples/chat_apps/streamlit",
-                "examples/chat_apps/swift"
-              ]
-            },
             {
               "group": "General Inference",
               "icon": "robot",
