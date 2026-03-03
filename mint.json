@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "CentML Platform",
+  "name": "CentML CCluster",
   "theme": "prism",
   "layout": "solidSidenav",
   "logo": {

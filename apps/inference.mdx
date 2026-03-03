@@ -4,7 +4,7 @@ description: 'Deploy and scale any model'
 icon: 'circle-nodes'
 ---
 
-We make it easy for you to containerize and deploy any custom models on our platform. Containers can run as **any user, including root** — see [Deploying Custom Models](/resources/custom_image) for platform security details. We also provide popular inference engine recipes such as vLLM, Ollama, SGLang, and LMDeploy.
+We make it easy for you to containerize and deploy any custom models on CCluster. Containers can run as **any user, including root** — see [Deploying Custom Models](/resources/custom_image) for CCluster security details. We also provide popular inference engine recipes such as vLLM, Ollama, SGLang, and LMDeploy.
 
 ## 1. Configure your inference deployment
 
@@ -16,13 +16,13 @@ At a minimum, you need to specify:
 - **Container Tag** — the image tag (select from dropdown or enter manually).
 - **Container Port** — the port your container exposes its HTTP or gRPC service on.
 - **Protocol** — select `HTTP` (default) or `gRPC`.
-- **Health check path** — the endpoint used to verify readiness (e.g., `/health`, `/`). For gRPC deployments, the platform uses TCP socket checks automatically, so this field is ignored.
+- **Health check path** — the endpoint used to verify readiness (e.g., `/health`, `/`). For gRPC deployments, CCluster uses TCP socket checks automatically, so this field is ignored.
 - **Image Registry Username / Password** — required only if the image is hosted on a private registry (e.g., Docker Hub private repo). You can also use credentials stored in your [Vault](/resources/generation_api_key).
 
 Under the **Optional Details** tab:
 
 - **Add command** — entrypoint command and arguments. If left empty, the image's default entrypoint is used.
-- **Autoscaling** — set the min and max scale for your deployment. The platform scales replicas based on max concurrency (maximum in-flight requests per replica). Default is infinity.
+- **Autoscaling** — set the min and max scale for your deployment. CCluster scales replicas based on max concurrency (maximum in-flight requests per replica). Default is infinity.
 - **Environment variables** — pass additional environment variables to the container (e.g., `HF_TOKEN`).
 
 <Frame>
@@ -34,12 +34,12 @@ To make the endpoint private, select the "Make it a private endpoint?" option. T
 </Tip>
 
 <Tip>
-For building your own custom container image and deploying on CentML Platform, please refer to this [resource](/resources/custom_image).
+For building your own custom container image and deploying on CentML CCluster, please refer to this [resource](/resources/custom_image).
 </Tip>
 
 ### Supported inference engine recipes
 
-The platform provides pre-configured recipes for popular inference engines in the **Add or Select Image** dropdown. Selecting a recipe auto-fills all fields except the entrypoint command. Below are the **Add command** values you need to provide for each engine:
+CCluster provides pre-configured recipes for popular inference engines in the **Add or Select Image** dropdown. Selecting a recipe auto-fills all fields except the entrypoint command. Below are the **Add command** values you need to provide for each engine:
 
 - **vLLM** — `python3 -m vllm.entrypoints.openai.api_server --model <HF_REPO_NAME>`
 - **SGLang** — `python3 -m sglang.launch_server --model-path <HF_MODEL_REPO> --host 0.0.0.0`
@@ -59,7 +59,7 @@ curl -X POST https://<endpoint_url>/api/chat -d '{"model": "qwen2:1.5b", "messag
 </Note>
 
 ## 2. Select the cluster and hardware to deploy
-By default, CentML Platform provides several managed clusters and GPU instances for you to deploy your inference containers. 
+By default, CentML CCluster provides several managed clusters and GPU instances for you to deploy your inference containers. 
 
 <Frame>
     <img src="/images/inf_2.png" style={{ borderRadius: '0.5rem' }} />
@@ -68,7 +68,7 @@ By default, CentML Platform provides several managed clusters and GPU instances 
 Select the regional cluster and hardware instance that best fits your need and click Deploy.
 
 <Tip>
-You can integrate your own private cluster into the Platform through our bring-your-own-infrastructure support. To get started, please get in touch with us at support@centml.ai.
+You can integrate your own private cluster into CCluster through our bring-your-own-infrastructure support. To get started, please get in touch with us at support@centml.ai.
 </Tip>
 
 
@@ -89,7 +89,7 @@ Once the deployment status is ready, the container port is going to be exposed u
 
 ### Accessing your endpoint
 
-All deployments are exposed externally on **port 443** with **TLS enforced**. The platform automatically provisions TLS certificates for your endpoint - no additional configuration is required.
+All deployments are exposed externally on **port 443** with **TLS enforced**. CCluster automatically provisions TLS certificates for your endpoint - no additional configuration is required.
 
 | Protocol | Access URL | Description |
 |----------|-----------|-------------|
@@ -97,7 +97,7 @@ All deployments are exposed externally on **port 443** with **TLS enforced**. Th
 | gRPC | `<endpoint_url>:443` | gRPC with TLS enabled |
 
 <Note>
-The **container port** you configure is used internally within the cluster. The platform's ingress layer handles TLS termination on port 443 and forwards requests to your container's internal port.
+The **container port** you configure is used internally within the cluster. CCluster's ingress layer handles TLS termination on port 443 and forwards requests to your container's internal port.
 </Note>
 
 **Example usage:**
@@ -127,14 +127,14 @@ grpcurl -d '{"prompt": "Hello"}' my-deployment.some-hash.cluster-alias.centml.co
     icon="terminal"
     href="/clients/setup"
   >
-    Learn how to interact with the CentML platform programmatically
+    Learn how to interact with the CentML CCluster programmatically
   </Card>
   <Card
     title="Resources and Pricing"
     icon="coins"
     href="/resources/pricing"
   >
-    Learn more about the CentML platform's pricing.
+    Learn more about the CentML CCluster's pricing.
   </Card>
   <Card
     title="Private Inference Endpoints"

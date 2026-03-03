@@ -4,12 +4,12 @@ description: 'How to build your own containerized inference engines and deploy'
 icon: 'screwdriver-wrench'
 ---
 
-The CentML Platform simplifies deploying your custom models and AI applications. Package your model or application as a containerized HTTP server, then deploy it on CentML using the General Inference deployment option.
+The CentML CCluster simplifies deploying your custom models and AI applications. Package your model or application as a containerized HTTP server, then deploy it on CentML using the General Inference deployment option.
 
 Here’s an example of how to build a stable diffusion model served by a FastAPI-based inference server: https://github.com/CentML/codex/tree/main/general-apps/general-inference/stable-diffusion/centml-endpoint
 
 <Note>
-The CentML Platform enforces [Pod Security Admission (PSA) baseline](https://kubernetes.io/docs/concepts/security/pod-security-standards/) controls at the namespace level. Containers can run as **any user, including root**.
+The CentML CCluster enforces [Pod Security Admission (PSA) baseline](https://kubernetes.io/docs/concepts/security/pod-security-standards/) controls at the namespace level. Containers can run as **any user, including root**.
 </Note>
 
 <Note>
@@ -19,11 +19,11 @@ docker build --platform linux/amd64 -t stable-diffusion:latest .
 ```
 </Note>
 
-After building the container, push it to a container registry. The CentML Platform supports both public registries (e.g., [Docker Hub](https://hub.docker.com/)) and private registries (e.g., Amazon ECR, Google Artifact Registry, Azure Container Registry, or self-hosted registries).
+After building the container, push it to a container registry. The CentML CCluster supports both public registries (e.g., [Docker Hub](https://hub.docker.com/)) and private registries (e.g., Amazon ECR, Google Artifact Registry, Azure Container Registry, or self-hosted registries).
 
-For **public images**, navigate to the General Inference option in the CentML Platform and enter the image name, tag, and container port to deploy your application.
+For **public images**, navigate to the General Inference option in the CentML CCluster and enter the image name, tag, and container port to deploy your application.
 
-For **private images**, you will need to provide registry credentials so the platform can pull the image. You can either store credentials in your [Vault](/resources/generation_api_key) as a `Registry Credentials` item and select them during deployment, or enter the registry username and password directly when configuring the deployment. The platform automatically detects the registry from the image URL.
+For **private images**, you will need to provide registry credentials so CCluster can pull the image. You can either store credentials in your [Vault](/resources/generation_api_key) as a `Registry Credentials` item and select them during deployment, or enter the registry username and password directly when configuring the deployment. CCluster automatically detects the registry from the image URL.
 
 
 ## What's Next
@@ -41,7 +41,7 @@ For **private images**, you will need to provide registry credentials so the pla
     icon="terminal"
     href="/clients/setup"
   >
-    Learn how to interact with platform programmatically
+    Learn how to interact with CCluster programmatically
   </Card>
   <Card
     title="Resources and Pricing"
@@ -62,7 +62,7 @@ For **private images**, you will need to provide registry credentials so the pla
     icon="rocket-launch"
     href="/home/quickstart"
   >
-    Get started with the CentML platform in minutes.
+    Get started with the CentML CCluster in minutes.
  </Card>
   <Card
     title="LLM Serving"
