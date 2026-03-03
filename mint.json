@@ -74,14 +74,6 @@
           "pages": [
             "examples/codex",
             {
-              "group": "Chat Apps",
-              "icon": "comments",
-              "pages": [
-                "examples/chat_apps/bash",
-                "examples/chat_apps/swift"
-              ]
-            },
-            {
               "group": "General Inference",
               "icon": "robot",
               "pages": [
