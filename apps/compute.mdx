@@ -11,7 +11,7 @@ On-demand GPU instances with SSH access to run any GPU-accelerated workloads and
 Spin up a compute instance by choosing one of the available base images:
 
 - **PyTorch** — the latest NVIDIA NGC PyTorch image, preloaded with PyTorch and CUDA libraries.
-- **Ubuntu** — a vanilla Ubuntu image for a minimal starting point.
+- **Ubuntu** — a vanilla Ubuntu image for a minimal starting point. On full GPU instances, NVIDIA drivers are included via driver passthrough. On MIG instances, NVIDIA drivers are **not** available yet.
 
 Enter your SSH public key to configure access to the instance, select a GPU instance type, and click Deploy.
 
@@ -39,11 +39,7 @@ ssh root@<endpoint_url>
     <img src="/images/comp_3.png" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-The instance comes preinstalled with NVIDIA drivers and libraries, as well as those included in your selected base image. Additional packages and libraries can be installed via pip.
-
-```bash
-pip install vllm
-```
+The instance comes preloaded with the libraries included in your selected base image. For **PyTorch** instances, CUDA libraries are bundled in the NGC image. For **Ubuntu** instances on full GPU hardware, NVIDIA drivers are available; on MIG instances, NVIDIA drivers are not available. Additional packages and libraries can be installed with your preferred package manager.
 
 
 # What's Next
