@@ -60,7 +60,7 @@
         "resources/pricing",
         "resources/account_creation",
         "resources/requesting_support",
-        "resources/generation_api_key",
+        "resources/vault",
         "resources/model_integration_lifecycle"
       ]
     },

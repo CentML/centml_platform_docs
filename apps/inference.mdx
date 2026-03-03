@@ -17,7 +17,7 @@ At a minimum, you need to specify:
 - **Container Port** — the port your container exposes its HTTP or gRPC service on.
 - **Protocol** — select `HTTP` (default) or `gRPC`.
 - **Health check path** — the endpoint used to verify readiness (e.g., `/health`, `/`). For gRPC deployments, CCluster uses TCP socket checks automatically, so this field is ignored.
-- **Image Registry Username / Password** — required only if the image is hosted on a private registry (e.g., Docker Hub private repo). You can also use credentials stored in your [Vault](/resources/generation_api_key).
+- **Image Registry Username / Password** — required only if the image is hosted on a private registry (e.g., Docker Hub private repo). You can also use credentials stored in your [Vault](/resources/vault).
 
 Under the **Optional Details** tab:
 
