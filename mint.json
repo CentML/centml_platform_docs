@@ -4,9 +4,9 @@
   "theme": "prism",
   "layout": "solidSidenav",
   "logo": {
-    "dark": "https://wp-backend.centml.ai/wp-content/themes/centml/inc/assets/img/centml-logo-light.svg",
-    "light": "https://wp-backend.centml.ai/wp-content/themes/centml/inc/assets/img/centml-logo-dark.svg",
-    "href": "https://centml.ai/"
+    "dark": "/images/nvidia_ccluster_dark.svg",
+    "light": "/images/nvidia_ccluster_light.svg",
+    "href": "https://www.nvidia.com/"
   },
   "favicon": "/favicon.png",
   "colors": {
@@ -20,13 +20,13 @@
   },
   "topbarLinks": [
     {
-      "name": "Get in Touch",
-      "url": "mailto:support@centml.ai"
+      "name": "Get Support",
+      "url": "/resources/requesting_support"
     }
   ],
   "topbarCtaButton": {
-    "name": "Go to Console",
-    "url": "https://app.centml.com"
+    "name": "Get Started",
+    "url": "/home/quickstart"
   },
   "navigation": [
     {
@@ -57,8 +57,6 @@
         "resources/custom_image",
         "resources/private",
 	"resources/json_and_tool",
-        "resources/pricing",
-        "resources/account_creation",
         "resources/requesting_support",
         "resources/vault",
         "resources/model_integration_lifecycle"
@@ -90,8 +88,8 @@
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/CentML_Inc",
-    "linkedin": "https://www.linkedin.com/company/centml/",
-    "github": "https://github.com/CentML"
+    "twitter": "https://twitter.com/nvidia",
+    "linkedin": "https://www.linkedin.com/company/nvidia/",
+    "github": "https://github.com/NVIDIA"
   }
 }

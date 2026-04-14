@@ -1,14 +1,14 @@
 ---
 title: 'Managing Vault Objects'
-description: 'How to generate and store CentML tokens and other vault objects'
+description: 'How to generate and store NVIDIA CCluster tokens and other vault objects'
 icon: 'key-skeleton-left-right'
 ---
 
 The NVIDIA CCluster allows you to generate and manage `Vault` objects such as `Bearer Tokens`, `Certificates`, `Registry Credentials`, `Environment Variables`, `Hugging Face Tokens`, and `SSH Keys`.
-This guide will walk you through creating `Bearer Tokens` and other Vault objects you can use to configure or access CentML services.
+This guide will walk you through creating `Bearer Tokens` and other Vault objects you can use to configure or access NVIDIA CCluster services.
 
 ## Step 1: Login to the NVIDIA CCluster
-You will need to login to the NVIDIA CCluster to manage Vault objects. If you do not know how to login or do not have an account, please follow the [Creating an Account](/resources/account_creation) documentation before proceeding. 
+You will need to log in to the NVIDIA CCluster to manage Vault objects. If you do not yet have access, contact your NVIDIA representative or your organization's designated support contact before proceeding.
 
 Once logged in, you will need to select `Account` from sidebar menu, and then click on the `Vault` tab from the `Your Account` window. 
 
@@ -21,7 +21,7 @@ Once completed, move onto the second step below based on the type of Vault objec
 
 ## Step 2A: Creating Bearer Tokens
 
-Bearer tokens can be used to access CentML services.
+Bearer tokens can be used to access NVIDIA CCluster services.
 
 To generate a bearer token, select green `Add Vault Item`. A dropdown menu will appear. From that menu, select the `Bearer Tokens` option.
 
@@ -46,7 +46,7 @@ Once you either enter your token in the text box or opt into generating your tok
 
 
 ## Step 2B: Adding Certificates to Your Vault 
-CentML uses client certificates for [mutual TLS (mTLS)](https://www.cloudflare.com/learning/access-management/what-is-mutual-tls/)
+NVIDIA CCluster uses client certificates for [mutual TLS (mTLS)](https://www.cloudflare.com/learning/access-management/what-is-mutual-tls/)
 You can generate or add public certificates for mTLS just like you can with Bearer Tokens. Once you generate the certificate, it will appear in the vault. 
 
 <Frame>
@@ -61,7 +61,7 @@ You can generate or add public certificates for mTLS just like you can with Bear
     <img src="/images/added-certificate.png" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-When generated,`Vault Certificates` generate a `.pem` file that is downloaded to your local browser.  That `.pem` file is named after the generated cert.  You can then use that `.pem` file to access one of CentML's [private endpoints](/resources/private) as long as they are associated with the appropriate certificate and `.pem` pair.
+When generated, `Vault Certificates` download a `.pem` file to your local browser. That `.pem` file is named after the generated cert. You can then use that `.pem` file to access one of NVIDIA CCluster's [private endpoints](/resources/private) as long as they are associated with the appropriate certificate and `.pem` pair.
 
 
 <Frame>
@@ -143,13 +143,6 @@ Supported registries include Docker Hub, Amazon ECR, Google Artifact Registry, A
     Learn how to interact with the NVIDIA CCluster programmatically
   </Card>
   <Card
-    title="Resources and Pricing"
-    icon="coins"
-    href="/resources/pricing"
-  >
-    Learn more about the NVIDIA CCluster's pricing.
-  </Card>
-  <Card
     title="Private Inference Endpoints"
     icon="lock"
     href="/resources/private"
@@ -164,14 +157,13 @@ Learn how to create private inference endpoints
     Submit a Support Request.
  </Card>
   <Card
-    title="Agents on CentML"
+    title="Agents on NVIDIA CCluster"
     icon="user-secret"
     href="/resources/json_and_tool"
   >
-    Learn how agents can interact with CentML services.
+    Learn how agents can interact with NVIDIA CCluster services.
   </Card>
 </CardGroup>
-
 
 
 

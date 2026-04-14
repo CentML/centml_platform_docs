@@ -1,6 +1,6 @@
 ---
 title: 'Client Setup'
-description: 'Installation steps for CentML client'
+description: 'Installation steps for the NVIDIA CCluster client'
 icon: 'square-terminal'
 ---
 
@@ -12,13 +12,13 @@ Use the following command to install centml client.
 pip install centml
 ```
 
-Run the following command to login to CentML using the client credentials.
+Run the following command to log in using your NVIDIA CCluster client credentials.
 
 ```bash
 centml login
 ```
 
-The first time, you'll be prompted to login to your CCluster account through a browser. Once logged in, you are all set to use CentML client. You can use centml CLI command to list your deployments.
+The first time, you'll be prompted to log in to your CCluster account through a browser. Once logged in, you are all set to use the client. You can use the `centml` CLI command to list your deployments.
 
 ```bash
 centml cluster ls
@@ -32,7 +32,7 @@ Checkout other supported commands,
 ccluster --help
 Usage: ccluster [OPTIONS] COMMAND [ARGS]...
 
-  CentML cluster CLI tool
+  NVIDIA CCluster CLI tool
 
 Options:
   --help  Show this message and exit.
@@ -60,7 +60,7 @@ centml logout
     icon="key-skeleton-left-right"
     href="/resources/vault"
   >
-    Learn how to generate and store CentML tokens and other vault objects.
+    Learn how to generate and store NVIDIA CCluster tokens and other vault objects.
   </Card>
   <Card
     title="Clients"
@@ -68,13 +68,6 @@ centml logout
     href="/clients/setup"
   >
     Learn how to interact with the NVIDIA CCluster programmatically
-  </Card>
-  <Card
-    title="Resources and Pricing"
-    icon="coins"
-    href="/resources/pricing"
-  >
-    Learn more about CentML Pricing
   </Card>
     <Card
     title="Get Support"
@@ -95,6 +88,6 @@ centml logout
     icon="arrows-spin"
     href="/resources/model_integration_lifecycle"
   >
-    Dive into how CentML can help optimize your Model Integration Lifecycle (MILC). 
+    Dive into how NVIDIA CCluster can help optimize your Model Integration Lifecycle (MILC).
  </Card>
 </CardGroup>

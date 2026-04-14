@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="40" viewBox="0 0 240 40" role="img" aria-label="NVIDIA CCluster">
+  <rect width="240" height="40" fill="white"/>
+  <text x="0" y="17" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#76B900">NVIDIA</text>
+  <text x="0" y="34" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#111111">CCluster</text>
+</svg>
