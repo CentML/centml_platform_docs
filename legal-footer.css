@@ -1,0 +1,32 @@
+.nvidia-legal-footer-links {
+  border-top: 1px solid rgba(127, 127, 127, 0.22);
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.nvidia-legal-footer-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.nvidia-legal-footer-items {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  line-height: 1.6;
+}
+
+.nvidia-legal-footer-items a {
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.nvidia-legal-footer-items a:hover {
+  text-decoration: underline;
+}
+
+.nvidia-legal-footer-separator {
+  opacity: 0.6;
+}
