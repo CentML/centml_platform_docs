@@ -5,7 +5,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Install Mintlify CLI globally
-RUN npm install -g mintlify@4.2.28
+RUN npm install -g mintlify@latest
 
 # Create a user and group with specific UID and GID so kubernetes knows
 # it's not a root user
