@@ -91,6 +91,51 @@
     ]
   },
   "footer": {
+    "links": [
+      {
+        "header": "Privacy",
+        "items": [
+          {
+            "label": "Privacy Policy",
+            "href": "https://www.nvidia.com/en-us/about-nvidia/privacy-policy/"
+          },
+          {
+            "label": "Your Privacy Choices",
+            "href": "https://www.nvidia.com/en-us/about-nvidia/privacy-center/"
+          }
+        ]
+      },
+      {
+        "header": "Legal",
+        "items": [
+          {
+            "label": "Terms of Service",
+            "href": "https://www.nvidia.com/en-us/about-nvidia/terms-of-service/"
+          },
+          {
+            "label": "Accessibility",
+            "href": "https://www.nvidia.com/en-us/about-nvidia/accessibility/"
+          },
+          {
+            "label": "Corporate Policies",
+            "href": "https://www.nvidia.com/en-us/about-nvidia/company-policies/"
+          }
+        ]
+      },
+      {
+        "header": "Support",
+        "items": [
+          {
+            "label": "Product Security",
+            "href": "https://www.nvidia.com/en-us/product-security/"
+          },
+          {
+            "label": "Contact",
+            "href": "https://www.nvidia.com/en-us/contact/"
+          }
+        ]
+      }
+    ],
     "socials": {
       "twitter": "https://twitter.com/nvidia",
       "linkedin": "https://www.linkedin.com/company/nvidia/",
