@@ -2,19 +2,19 @@
 
 This repository contains the Mintlify source for the NVIDIA CCluster documentation site.
 
-This repository now tracks the latest Mintlify CLI in the [Dockerfile](/Users/anurlybayev/Developer/codex/centml_platform_docs/Dockerfile). The site’s layout, branding, and color palette remain defined in [docs.json](/Users/anurlybayev/Developer/codex/centml_platform_docs/docs.json).
+The Mintlify CLI is pinned to `mint@4.2.516` in the [Dockerfile](Dockerfile). If you use Mintlify locally outside Docker, use the same version unless you are intentionally validating an upgrade. The site's layout, branding, and color palette are defined in [docs.json](docs.json).
 
 ## Repository Layout
 
-- [docs.json](/Users/anurlybayev/Developer/codex/centml_platform_docs/docs.json): site configuration, branding, and left-nav structure
-- [home/](/Users/anurlybayev/Developer/codex/centml_platform_docs/home): landing pages such as introduction and quickstart
-- [apps/](/Users/anurlybayev/Developer/codex/centml_platform_docs/apps): deployment product docs
-- [clients/](/Users/anurlybayev/Developer/codex/centml_platform_docs/clients): SDK and client setup docs
-- [resources/](/Users/anurlybayev/Developer/codex/centml_platform_docs/resources): supporting guides such as pricing, support, vault, and custom images
-- [examples/](/Users/anurlybayev/Developer/codex/centml_platform_docs/examples): example-driven docs
-- [snippets/components.mdx](/Users/anurlybayev/Developer/codex/centml_platform_docs/snippets/components.mdx): shared custom MDX components used across pages
-- [images/](/Users/anurlybayev/Developer/codex/centml_platform_docs/images): local static assets referenced by MDX pages
-- [endpoints/](/Users/anurlybayev/Developer/codex/centml_platform_docs/endpoints): API-related assets that are present in the repo but are not currently wired into navigation
+- [docs.json](docs.json): site configuration, branding, and left-nav structure
+- [home/](home): landing pages such as introduction and quickstart
+- [apps/](apps): deployment product docs
+- [clients/](clients): SDK and client setup docs
+- [resources/](resources): supporting guides such as pricing, support, vault, and custom images
+- [examples/](examples): example-driven docs
+- [snippets/components.mdx](snippets/components.mdx): shared custom MDX components used across pages
+- [images/](images): local static assets referenced by MDX pages
+- [endpoints/](endpoints): API-related assets that are present in the repo but are not currently wired into navigation
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ For local development you need:
 
 ### Preferred: Docker
 
-The repo already includes a Docker-based workflow that installs the latest Mintlify CLI.
+The repo already includes a Docker-based workflow that installs the pinned Mintlify CLI version.
 
 ```bash
 docker compose up --build
@@ -38,15 +38,15 @@ Then open [http://localhost:3000](http://localhost:3000).
 Notes:
 
 - The repo is mounted into the container, so local file edits are reflected in the preview.
-- The image installs `mint@latest` globally.
+- The image installs `mint@4.2.516` globally.
 - Port `3000` is exposed by default.
 
 ### Alternative: Run Mintlify locally
 
-If you prefer running the CLI directly, install the current Mintlify CLI:
+If you prefer running the CLI directly, install the same version pinned in Docker:
 
 ```bash
-npm install -g mint@latest
+npm install -g mint@4.2.516
 ```
 
 From the repository root, run:
@@ -64,9 +64,9 @@ mint update
 ## Editing Workflow
 
 1. Update or add `.mdx` pages under the appropriate section directory.
-2. If a page should appear in the docs navigation, add it to [docs.json](/Users/anurlybayev/Developer/codex/centml_platform_docs/docs.json).
-3. Put screenshots and local images in [images/](/Users/anurlybayev/Developer/codex/centml_platform_docs/images) and reference them with `/images/...` paths.
-4. Reuse helpers from [snippets/components.mdx](/Users/anurlybayev/Developer/codex/centml_platform_docs/snippets/components.mdx) when a page needs the shared hero card or banner components.
+2. If a page should appear in the docs navigation, add it to [docs.json](docs.json).
+3. Put screenshots and local images in [images/](images) and reference them with `/images/...` paths.
+4. Reuse helpers from [snippets/components.mdx](snippets/components.mdx) when a page needs the shared hero card or banner components.
 5. Preview locally before opening a PR, especially for image paths, imports, and navigation changes.
 
 ## How Publishing Works

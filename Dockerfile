@@ -4,8 +4,8 @@ FROM node:20-alpine
 # Set working directory
 WORKDIR /app
 
-# Install the current Mintlify CLI globally
-RUN npm install -g mint@latest
+# Install Mintlify CLI (pinned to a verified working version)
+RUN npm install -g mint@4.2.516
 
 # Create a user and group with specific UID and GID so kubernetes knows
 # it's not a root user. Alpine images ship with /bin/sh by default.

@@ -2,7 +2,6 @@
   "$schema": "https://mintlify.com/docs.json",
   "name": "NVIDIA CCluster",
   "theme": "mint",
-  "layout": "solidSidenav",
   "logo": {
     "dark": "/images/nvidia_ccluster_dark.svg",
     "light": "/images/nvidia_ccluster_light.svg",
@@ -29,8 +28,8 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Go to Console",
-      "href": "https://app.centml.com"
+      "label": "Get Started",
+      "href": "/home/quickstart"
     }
   },
   "navigation": {
