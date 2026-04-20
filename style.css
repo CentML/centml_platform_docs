@@ -1,0 +1,10 @@
+/* Hide the sidebar's internal scrollbar and reserved gutter so no vertical
+   "slider" line shows along the sidebar edge. Scrolling still works via
+   wheel, touch, and keyboard. */
+#sidebar-content {
+  scrollbar-gutter: auto;
+  scrollbar-width: none;
+}
+#sidebar-content::-webkit-scrollbar {
+  display: none;
+}
