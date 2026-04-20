@@ -13,7 +13,7 @@ You will need to log in to the NVIDIA CCluster to manage Vault objects. If you d
 Once logged in, you will need to select `Account` from sidebar menu, and then click on the `Vault` tab from the `Your Account` window. 
 
 <Frame>
-    <img src="/images/vault.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/vault.png" alt="Vault section of the account page" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 
@@ -27,19 +27,19 @@ To generate a bearer token, select green `Add Vault Item`. A dropdown menu will 
 
 
 <Frame>
-    <img src="/images/vault-bearer-tokens.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/vault-bearer-tokens.png" alt="Add Vault Item menu showing Bearer Tokens option" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 A windows will pop up name `Add Bearer Token to Your Vault`. From there, you can either name and automatically generate a token with the `Generate new Bearer Token` option or you can enter a previous token using the `Use an existing Bearer Token` option.
 
 <Frame>
-    <img src="/images/add-bearer-token.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/add-bearer-token.png" alt="Form for adding a new bearer token to the vault" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 Once you either enter your token in the text box or opt into generating your token, click the green `Add to Vault` option and your Bearer Token should appear in your vault.
 
 <Frame>
-    <img src="/images/added-bearer-token.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/added-bearer-token.png" alt="Bearer token listed in the vault after creation" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 
@@ -50,22 +50,22 @@ NVIDIA CCluster uses client certificates for [mutual TLS (mTLS)](https://www.clo
 You can generate or add public certificates for mTLS just like you can with Bearer Tokens. Once you generate the certificate, it will appear in the vault. 
 
 <Frame>
-    <img src="/images/add-certificates.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/add-certificates.png" alt="Add Vault Item menu showing Certificates option" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 <Frame>
-    <img src="/images/gen-cert.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/gen-cert.png" alt="Certificate generation form in the vault" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 <Frame>
-    <img src="/images/added-certificate.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/added-certificate.png" alt="Generated certificate listed in the vault" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 When generated, `Vault Certificates` download a `.pem` file to your local browser. That `.pem` file is named after the generated cert. You can then use that `.pem` file to access one of NVIDIA CCluster's [private endpoints](/resources/private) as long as they are associated with the appropriate certificate and `.pem` pair.
 
 
 <Frame>
-    <img src="/images/downloaded-pem.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/downloaded-pem.png" alt="Browser download prompt for the generated .pem file" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 
@@ -115,17 +115,17 @@ Supported registries include Docker Hub, Amazon ECR, Google Artifact Registry, A
 
 
 <Frame>
-    <img src="/images/add-env.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/add-env.png" alt="Form for adding an environment variable to the vault" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 <Frame>
-    <img src="/images/env-vault.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/env-vault.png" alt="Environment variable listed in the vault" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
  
 
 
-# What's Next
+## What's next
 
 <CardGroup cols={2}>
   <Card
