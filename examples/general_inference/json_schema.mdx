@@ -18,14 +18,14 @@ git clone https://github.com/CentML/codex.git
 cd codex/general-apps/llm-inference/json_schema
 ```
 
-### Python Environment:
+### Python environment
 - Ensure you have Python 3.7 or later installed.
 - Install the required Python packages:
     ```bash
     pip install -r requirements.txt
     ```
 
-### Environment Variables:
+### Environment variables
 Set the following environment variables before running the script:
 ```bash
 export CENTML_API_KEY="no_key"  # Replace with your API key if available
@@ -33,7 +33,7 @@ export CENTML_API_HOSTNAME="llama3-8b.user-1404.gcp.centml.org" # replace with y
 export CENTML_MODEL_NAME="meta-llama/Meta-Llama-3-8B-Instruct" # replace with your model
 ```
 
-## How It Works
+## How it works
 
 1. **Schema Definition:**
      - The script defines a JSON schema for employee profiles, including fields like name, age, skills, and work_history.
@@ -46,7 +46,7 @@ export CENTML_MODEL_NAME="meta-llama/Meta-Llama-3-8B-Instruct" # replace with yo
 4. **Environment Variables:**
      - The script dynamically reads configuration details (API key, hostname, and model name) from environment variables for flexibility.
 
-## Usage Instructions
+## Usage instructions
 
 1. **Set Environment Variables:**
      Export the required environment variables:
@@ -90,7 +90,7 @@ export CENTML_MODEL_NAME="meta-llama/Meta-Llama-3-8B-Instruct" # replace with yo
          ```
      Both profiles are valid and unique!
 
-## Key Features
+## Key features
 
 - **Schema Validation:** Ensures all generated JSON profiles adhere to the predefined schema.
 - **Guided Decoding:** Uses guided decoding to enforce structure in the generated data.

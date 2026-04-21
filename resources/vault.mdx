@@ -7,7 +7,7 @@ icon: 'key-skeleton-left-right'
 The NVIDIA CCluster allows you to generate and manage `Vault` objects such as `Bearer Tokens`, `Certificates`, `Registry Credentials`, `Environment Variables`, `Hugging Face Tokens`, and `SSH Keys`.
 This guide will walk you through creating `Bearer Tokens` and other Vault objects you can use to configure or access NVIDIA CCluster services.
 
-## Step 1: Login to the NVIDIA CCluster
+## Step 1: Log in to the NVIDIA CCluster
 You will need to log in to the NVIDIA CCluster to manage Vault objects. If you do not yet have access, contact your NVIDIA representative or your organization's designated support contact before proceeding.
 
 Once logged in, you will need to select `Account` from sidebar menu, and then click on the `Vault` tab from the `Your Account` window. 
@@ -19,7 +19,7 @@ Once logged in, you will need to select `Account` from sidebar menu, and then cl
 
 Once completed, move onto the second step below based on the type of Vault objects you are creating. 
 
-## Step 2A: Creating Bearer Tokens
+## Step 2A: Creating bearer tokens
 
 Bearer tokens can be used to access NVIDIA CCluster services.
 
@@ -45,7 +45,7 @@ Once you either enter your token in the text box or opt into generating your tok
 
 
 
-## Step 2B: Adding Certificates to Your Vault 
+## Step 2B: Adding certificates to your vault
 NVIDIA CCluster uses client certificates for [mutual TLS (mTLS)](https://www.cloudflare.com/learning/access-management/what-is-mutual-tls/)
 You can generate or add public certificates for mTLS just like you can with Bearer Tokens. Once you generate the certificate, it will appear in the vault. 
 
@@ -97,12 +97,12 @@ curl -X POST 'https://centml-private-2.fe178792.c-09.centml.com/openai/v1/chat/c
 
 ```
 
-### Adding Your Own Certificates
+### Adding your own certificates
 This section is currently under construction as we work to improve the UX around adding certificates to endpoints on the NVIDIA CCluster. Please check back soon! 
 
 
 
-## Step 2C: Adding Registry Credentials
+## Step 2C: Adding registry credentials
 
 Registry credentials allow the NVIDIA CCluster to pull container images from private registries when creating [General Inference](/apps/inference) deployments.
 
@@ -111,7 +111,7 @@ To add registry credentials, select the green `Add Vault Item` button and choose
 Supported registries include Docker Hub, Amazon ECR, Google Artifact Registry, Azure Container Registry, and any Docker-compatible private registry. CCluster automatically detects the registry from the image URL at deployment time.
 
 
-## Step 2D: Adding Environment Variables
+## Step 2D: Adding environment variables
 
 
 <Frame>

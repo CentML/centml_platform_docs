@@ -6,7 +6,7 @@ icon: 'user-secret'
 
 NVIDIA CCluster's **Dedicated** LLM APIs support structured outputs using the same OpenAI-compatible API. These features are crucial for agentic workloads that require reliable data parsing and function calling. The NVIDIA CCluster also provides reasoning-enabled models (e.g., `DeepSeek-AI/deepseek-r1`) that can perform reasoning before generating structured outputs.
 
-## JSON Schema Output
+## JSON schema output
 
 When you need a response strictly formatted as JSON, you can use JSON schema constraints. This is particularly useful in scenarios where your system or other downstream processes rely on valid JSON.
 
@@ -85,7 +85,7 @@ print("Chat Completion Response:", chat_completion)
 print("Generated JSON Object:", chat_completion.choices[0].message.content)
 ```
 
-### How it Works
+### How it works
 
 1. **Prompt Construction**: Provide a system message telling the model to respond in JSON, along with the JSON schema itself.
 2. **Schema Enforcement**: In the `response_format` parameter, specify `"type": "json_schema"` and include your JSON schema definition.
@@ -93,7 +93,7 @@ print("Generated JSON Object:", chat_completion.choices[0].message.content)
 
 ---
 
-## Tool (Function) Calling
+## Tool (function) calling
 
 NVIDIA CCluster’s LLM APIs support function calling similarly to OpenAI’s “function calling” feature. This allows you to define “tools” that the model can call with structured parameters. For example, you might have a `get_weather` function your model can invoke based on user requests.
 
@@ -297,7 +297,7 @@ for model in models:
 
 ```
 
-### How it Works
+### How it works
 
 1. **Tool Definition**: In the `tools` parameter, define a function with a `name`, `description`, and a JSON schema for parameters.
 2. **Function Invocation**: The model may decide to call the function (tool), returning the parameters it deems relevant based on user input.
@@ -309,7 +309,7 @@ for model in models:
 
 ---
 
-## Best Practices and Tips
+## Best practices and tips
 
 - **Schema Validation**: The model will try to adhere to your schema, but always perform server-side validation before using the data (especially important in production).
 - **Temperature Setting**: When generating structured data, lower the temperature to reduce the likelihood of extraneous or incorrect fields.
