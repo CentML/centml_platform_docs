@@ -92,7 +92,7 @@
   "footer": {
     "links": [
       {
-        "header": "Legal",
+        "header": "Privacy",
         "items": [
           {
             "label": "Privacy Policy",
@@ -101,7 +101,12 @@
           {
             "label": "Your Privacy Choices",
             "href": "https://www.nvidia.com/en-us/about-nvidia/privacy-center/"
-          },
+          }
+        ]
+      },
+      {
+        "header": "Legal",
+        "items": [
           {
             "label": "Terms of Service",
             "href": "https://www.nvidia.com/en-us/about-nvidia/terms-of-service/"
@@ -113,6 +118,19 @@
           {
             "label": "Corporate Policies",
             "href": "https://www.nvidia.com/en-us/about-nvidia/company-policies/"
+          }
+        ]
+      },
+      {
+        "header": "Support",
+        "items": [
+          {
+            "label": "Product Security",
+            "href": "https://www.nvidia.com/en-us/product-security/"
+          },
+          {
+            "label": "Contact",
+            "href": "https://www.nvidia.com/en-us/contact/"
           }
         ]
       }
