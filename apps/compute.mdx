@@ -16,7 +16,7 @@ Spin up a compute instance by choosing one of the available base images:
 Enter your SSH public key to configure access to the instance, select a GPU instance type, and click Deploy.
 
 <Frame>
-    <img src="/images/comp_1.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/comp_1.png" alt="Compute instance launch page" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 ## 2. SSH into the instance
@@ -26,7 +26,7 @@ Once the instance is ready, navigate to the deployment details page. The **Endpo
 - **Endpoint URL** — the hostname for your instance. Next to it are the copy button (copies the URL) and the SSH button (copies `ssh root@<endpoint_url>` so you can paste it directly into your terminal).
 
 <Frame>
-    <img src="/images/comp_2.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/comp_2.png" alt="SSH key configuration for a compute instance" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 To connect, use the SSH command with the `root` user:
@@ -36,22 +36,15 @@ ssh root@<endpoint_url>
 ```
 
 <Frame>
-    <img src="/images/comp_3.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/comp_3.png" alt="Running compute instance showing its endpoint URL" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 The instance comes preloaded with the libraries included in your selected base image. For **PyTorch** instances, CUDA libraries are bundled in the NGC image. For **Ubuntu** instances on full GPU hardware, NVIDIA drivers are available; on MIG instances, NVIDIA drivers are not available. Additional packages and libraries can be installed with your preferred package manager.
 
 
-# What's Next
+## What's next
 
-<CardGroup cols={2}>
-  <Card
-    title="LLM Serving"
-    icon="messages"
-    href="/apps/llm"
-  >
-    Explore dedicated public and private endpoints for production model deployments.
- </Card>
+<CardGroup cols={3}>
   <Card
     title="Clients"
     icon="terminal"
@@ -67,17 +60,10 @@ The instance comes preloaded with the libraries included in your selected base i
 Learn how to create private inference endpoints
  </Card>
   <Card
-    title="Submit a Support Request"
-    icon="headset"
-    href="/resources/requesting_support"
+    title="LLM Serving"
+    icon="messages"
+    href="/apps/llm"
   >
-    Submit a Support Request.
+    Explore dedicated public and private endpoints for production model deployments.
  </Card>
-  <Card
-    title="Agents on NVIDIA CCluster"
-    icon="user-secret"
-    href="/resources/json_and_tool"
-  >
-    Learn how agents can interact with NVIDIA CCluster services.
-  </Card>
 </CardGroup>

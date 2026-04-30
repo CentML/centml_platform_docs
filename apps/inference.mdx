@@ -26,7 +26,7 @@ Under the **Optional Details** tab:
 - **Environment variables** — pass additional environment variables to the container (e.g., `HF_TOKEN`).
 
 <Frame>
-    <img src="/images/inf_1.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/inf_1.png" alt="General Inference deployment page" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 <Tip>
@@ -62,7 +62,7 @@ curl -X POST https://<endpoint_url>/api/chat -d '{"model": "qwen2:1.5b", "messag
 By default, NVIDIA CCluster provides several managed clusters and GPU instances for you to deploy your inference containers. 
 
 <Frame>
-    <img src="/images/inf_2.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/inf_2.png" alt="Hardware instance selection for general inference" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 Select the regional cluster and hardware instance that best fits your need and click Deploy.
@@ -76,13 +76,13 @@ You can integrate your own private cluster into CCluster through bring-your-own-
 Once deployed, you can see all your deployments under the listing view along with their current status.
 
 <Frame>
-    <img src="/images/inf_3.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/inf_3.png" alt="Container image configuration for general inference" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 Click on the deployment to view the details page, logs and monitoring information.
 
 <Frame>
-    <img src="/images/inf_4.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/inf_4.png" alt="Deployment details panel after launching a general inference endpoint" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 Once the deployment status is ready, the container port is going to be exposed under the endpoint url shown in the details page.
@@ -112,15 +112,15 @@ grpcurl -d '{"prompt": "Hello"}' my-deployment.some-hash.cluster-alias.centml.co
 
 
 
-# What's Next
+## What's next
 
-<CardGroup cols={2}>
+<CardGroup cols={3}>
   <Card
-    title="LLM Serving"
-    icon="messages"
-    href="/apps/llm"
+    title="Private Inference Endpoints"
+    icon="lock"
+    href="/resources/private"
   >
-    Explore dedicated public and private endpoints for production model deployments.
+Learn how to create private inference endpoints
  </Card>
   <Card
     title="Clients"
@@ -130,24 +130,10 @@ grpcurl -d '{"prompt": "Hello"}' my-deployment.some-hash.cluster-alias.centml.co
     Learn how to interact with the NVIDIA CCluster programmatically
   </Card>
   <Card
-    title="Private Inference Endpoints"
-    icon="lock"
-    href="/resources/private"
+    title="LLM Serving"
+    icon="messages"
+    href="/apps/llm"
   >
-Learn how to create private inference endpoints
+    Explore dedicated public and private endpoints for production model deployments.
  </Card>
-  <Card
-    title="Submit a Support Request"
-    icon="headset"
-    href="/resources/requesting_support"
-  >
-    Submit a Support Request.
- </Card>
-  <Card
-    title="Agents on NVIDIA CCluster"
-    icon="user-secret"
-    href="/resources/json_and_tool"
-  >
-    Learn how agents can interact with NVIDIA CCluster services.
-  </Card>
 </CardGroup>

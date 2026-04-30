@@ -22,10 +22,10 @@ MILC aligns closely with the [Model Development Lifecycle (MDLC)](https://www.fr
 | Model Retirement / Replacement | Retire underperforming models or roll in upgraded versions | Decommission v1 endpoint after v2 adoption; archive prompts and logs for compliance         |
 
 
-## Where Does NVIDIA CCluster Fit In?
+## Where does NVIDIA CCluster fit in?
 NVIDIA CCluster can support teams during multiple phases of the Model Integration Lifecycle. See below for details
 
-### Model Integration Life Cycle Phases and How NVIDIA CCluster Supports Them
+### Model integration lifecycle phases and how NVIDIA CCluster supports them
 1. **Requirements Gathering:** Teams can evaluate NVIDIA CCluster API features such as latency, scalability, and deployment flexibility alongside model quality to inform LLM feasibility.
 2. **Feasibility Analysis:** NVIDIA CCluster allows fast access to high-performance LLM endpoints, enabling latency, throughput, and cost testing early on.
 3. **Design & Architecture:** NVIDIA CCluster exposes standardized `/v1/chat/completions` endpoints with token-based auth, simplifying architecture planning.
@@ -37,27 +37,20 @@ NVIDIA CCluster can support teams during multiple phases of the Model Integratio
 9. **Monitoring & Optimization:** Users can track token usage, latency, and service behavior through NVIDIA CCluster reporting and tune prompt performance accordingly.
 10. **Model Retirement / Replacement:** Teams can switch NVIDIA CCluster endpoints to newer models or deploy multiple endpoints with different model versions without re-architecting infrastructure.
 
-## Want to Learn More?
+## Want to learn more?
 For more implementation guidance, review the [Codex examples](/examples/codex) and the rest of this documentation set.
 
 
 
-## What's Next
+## What's next
 
-<CardGroup cols={2}>
+<CardGroup cols={3}>
   <Card
     title="LLM Serving"
     icon="messages"
     href="/apps/llm"
   >
     Explore dedicated public and private endpoints for production model deployments.
-  </Card>
-  <Card
-    title="Clients"
-    icon="terminal"
-    href="/clients/setup"
-  >
-    Learn how to interact with the NVIDIA CCluster programmatically.
   </Card>
   <Card
     title="Deploying Custom Models"
@@ -67,17 +60,10 @@ For more implementation guidance, review the [Codex examples](/examples/codex) a
     Learn how to build your own containerized inference engines and deploy them on the NVIDIA CCluster.
   </Card>
   <Card
-    title="Submit a Support Request"
-    icon="headset"
-    href="/resources/requesting_support"
+    title="Clients"
+    icon="terminal"
+    href="/clients/setup"
   >
-    Submit a support request.
-  </Card>
-  <Card
-    title="Agents on NVIDIA CCluster"
-    icon="user-secret"
-    href="/resources/json_and_tool"
-  >
-    Learn how agents can interact with NVIDIA CCluster services.
+    Learn how to interact with the NVIDIA CCluster programmatically.
   </Card>
 </CardGroup>

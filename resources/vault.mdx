@@ -7,19 +7,19 @@ icon: 'key-skeleton-left-right'
 The NVIDIA CCluster allows you to generate and manage `Vault` objects such as `Bearer Tokens`, `Certificates`, `Registry Credentials`, `Environment Variables`, `Hugging Face Tokens`, and `SSH Keys`.
 This guide will walk you through creating `Bearer Tokens` and other Vault objects you can use to configure or access NVIDIA CCluster services.
 
-## Step 1: Login to the NVIDIA CCluster
+## Step 1: Log in to the NVIDIA CCluster
 You will need to log in to the NVIDIA CCluster to manage Vault objects. If you do not yet have access, contact your NVIDIA representative or your organization's designated support contact before proceeding.
 
 Once logged in, you will need to select `Account` from sidebar menu, and then click on the `Vault` tab from the `Your Account` window. 
 
 <Frame>
-    <img src="/images/vault.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/vault.png" alt="Vault section of the account page" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 
 Once completed, move onto the second step below based on the type of Vault objects you are creating. 
 
-## Step 2A: Creating Bearer Tokens
+## Step 2A: Creating bearer tokens
 
 Bearer tokens can be used to access NVIDIA CCluster services.
 
@@ -27,45 +27,45 @@ To generate a bearer token, select green `Add Vault Item`. A dropdown menu will 
 
 
 <Frame>
-    <img src="/images/vault-bearer-tokens.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/vault-bearer-tokens.png" alt="Add Vault Item menu showing Bearer Tokens option" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 A windows will pop up name `Add Bearer Token to Your Vault`. From there, you can either name and automatically generate a token with the `Generate new Bearer Token` option or you can enter a previous token using the `Use an existing Bearer Token` option.
 
 <Frame>
-    <img src="/images/add-bearer-token.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/add-bearer-token.png" alt="Form for adding a new bearer token to the vault" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 Once you either enter your token in the text box or opt into generating your token, click the green `Add to Vault` option and your Bearer Token should appear in your vault.
 
 <Frame>
-    <img src="/images/added-bearer-token.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/added-bearer-token.png" alt="Bearer token listed in the vault after creation" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 
 
 
-## Step 2B: Adding Certificates to Your Vault 
+## Step 2B: Adding certificates to your vault
 NVIDIA CCluster uses client certificates for [mutual TLS (mTLS)](https://www.cloudflare.com/learning/access-management/what-is-mutual-tls/)
 You can generate or add public certificates for mTLS just like you can with Bearer Tokens. Once you generate the certificate, it will appear in the vault. 
 
 <Frame>
-    <img src="/images/add-certificates.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/add-certificates.png" alt="Add Vault Item menu showing Certificates option" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 <Frame>
-    <img src="/images/gen-cert.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/gen-cert.png" alt="Certificate generation form in the vault" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 <Frame>
-    <img src="/images/added-certificate.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/added-certificate.png" alt="Generated certificate listed in the vault" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 When generated, `Vault Certificates` download a `.pem` file to your local browser. That `.pem` file is named after the generated cert. You can then use that `.pem` file to access one of NVIDIA CCluster's [private endpoints](/resources/private) as long as they are associated with the appropriate certificate and `.pem` pair.
 
 
 <Frame>
-    <img src="/images/downloaded-pem.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/downloaded-pem.png" alt="Browser download prompt for the generated .pem file" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 
@@ -97,12 +97,12 @@ curl -X POST 'https://centml-private-2.fe178792.c-09.centml.com/openai/v1/chat/c
 
 ```
 
-### Adding Your Own Certificates
+### Adding your own certificates
 This section is currently under construction as we work to improve the UX around adding certificates to endpoints on the NVIDIA CCluster. Please check back soon! 
 
 
 
-## Step 2C: Adding Registry Credentials
+## Step 2C: Adding registry credentials
 
 Registry credentials allow the NVIDIA CCluster to pull container images from private registries when creating [General Inference](/apps/inference) deployments.
 
@@ -111,23 +111,23 @@ To add registry credentials, select the green `Add Vault Item` button and choose
 Supported registries include Docker Hub, Amazon ECR, Google Artifact Registry, Azure Container Registry, and any Docker-compatible private registry. CCluster automatically detects the registry from the image URL at deployment time.
 
 
-## Step 2D: Adding Environment Variables
+## Step 2D: Adding environment variables
 
 
 <Frame>
-    <img src="/images/add-env.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/add-env.png" alt="Form for adding an environment variable to the vault" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 <Frame>
-    <img src="/images/env-vault.png" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/env-vault.png" alt="Environment variable listed in the vault" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
  
 
 
-# What's Next
+## What's next
 
-<CardGroup cols={2}>
+<CardGroup cols={3}>
   <Card
     title="LLM Serving"
     icon="messages"
@@ -136,13 +136,6 @@ Supported registries include Docker Hub, Amazon ECR, Google Artifact Registry, A
     Explore dedicated public and private endpoints for production model deployments.
  </Card>
   <Card
-    title="Clients"
-    icon="terminal"
-    href="/clients/setup"
-  >
-    Learn how to interact with the NVIDIA CCluster programmatically
-  </Card>
-  <Card
     title="Private Inference Endpoints"
     icon="lock"
     href="/resources/private"
@@ -150,18 +143,11 @@ Supported registries include Docker Hub, Amazon ECR, Google Artifact Registry, A
 Learn how to create private inference endpoints
  </Card>
   <Card
-    title="Submit a Support Request"
-    icon="headset"
-    href="/resources/requesting_support"
+    title="Clients"
+    icon="terminal"
+    href="/clients/setup"
   >
-    Submit a Support Request.
- </Card>
-  <Card
-    title="Agents on NVIDIA CCluster"
-    icon="user-secret"
-    href="/resources/json_and_tool"
-  >
-    Learn how agents can interact with NVIDIA CCluster services.
+    Learn how to interact with the NVIDIA CCluster programmatically
   </Card>
 </CardGroup>
 
