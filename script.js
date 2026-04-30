@@ -1,27 +1,57 @@
-// Match Mintlify's current-production layout by moving the footer into
-// #content-area (the right column). Our pinned version puts the footer in
-// a parallel flex column at page level, which causes the fixed left
-// sidebar to overlap the footer when scrolled to the bottom.
-//
-// Mintlify's own docs (mintlify.com/docs) render the footer inside
-// #content-area so the sidebar never interacts with it. This script
-// reproduces that structure at runtime.
+// Match Mintlify's current-production layout by rendering the footer inside
+// #content-area (the right column). Keep the original #footer in place so
+// Mintlify/Next can still manage it across client-side route changes.
 (function () {
-  function relocate() {
-    const footer = document.getElementById('footer');
+  const cloneAttribute = 'data-ccluster-footer-clone';
+  const sourceAttribute = 'data-ccluster-footer-source';
+
+  function renderFooterClone() {
+    const sourceFooter = document.querySelector(`#footer:not([${cloneAttribute}])`);
     const contentArea = document.getElementById('content-area');
-    if (!footer || !contentArea) return;
-    if (contentArea.contains(footer)) return;
-    contentArea.appendChild(footer);
+    if (!sourceFooter || !contentArea) return;
+
+    sourceFooter.setAttribute(sourceAttribute, 'true');
+
+    let footerClone = contentArea.querySelector(`[${cloneAttribute}]`);
+    if (!footerClone) {
+      footerClone = sourceFooter.cloneNode(true);
+      footerClone.removeAttribute('id');
+      footerClone.removeAttribute(sourceAttribute);
+      footerClone.setAttribute(cloneAttribute, 'true');
+      contentArea.appendChild(footerClone);
+    }
+
+    document.querySelectorAll(`[${cloneAttribute}]`).forEach((clone) => {
+      if (clone !== footerClone) clone.remove();
+    });
+  }
+
+  function scheduleRender() {
+    renderFooterClone();
+    window.requestAnimationFrame(renderFooterClone);
+    window.setTimeout(renderFooterClone, 100);
+    window.setTimeout(renderFooterClone, 400);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', relocate);
+    document.addEventListener('DOMContentLoaded', scheduleRender);
   } else {
-    relocate();
+    scheduleRender();
   }
 
-  // Mintlify is a Next.js SPA; re-apply after route changes or re-renders
-  // that may reset the DOM.
-  new MutationObserver(relocate).observe(document.body, { childList: true, subtree: true });
+  ['pushState', 'replaceState'].forEach((method) => {
+    const original = history[method];
+    history[method] = function patchedHistoryMethod() {
+      const result = original.apply(this, arguments);
+      scheduleRender();
+      return result;
+    };
+  });
+
+  window.addEventListener('popstate', scheduleRender);
+
+  new MutationObserver(scheduleRender).observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
 })();
