@@ -96,7 +96,7 @@
         "items": [
           {
             "label": "Privacy Policy",
-            "href": "https://www.nvidia.com/en-us/about-nvidia/privacy-policy/"
+            "href": "https://app.centml.com/privacy-policy/"
           },
           {
             "label": "Your Privacy Choices",
@@ -109,7 +109,7 @@
         "items": [
           {
             "label": "Terms of Service",
-            "href": "https://www.nvidia.com/en-us/about-nvidia/terms-of-service/"
+            "href": "https://app.centml.com/terms-of-service/"
           },
           {
             "label": "Accessibility",
