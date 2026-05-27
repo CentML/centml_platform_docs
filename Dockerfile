@@ -1,15 +1,14 @@
 # Use Node.js official image
 FROM node:20-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Install Mintlify CLI (pinned to a verified working version)
-RUN npm install -g mint@4.2.516
-
-# Create a user and group with specific UID and GID so kubernetes knows
-# it's not a root user. Alpine images ship with /bin/sh by default.
+# Create a non-root user
 RUN addgroup -g 1001 centml && adduser -D -s /bin/sh -u 1001 -G centml centml
+
+# Copy dependency files and install
+COPY package.json ./
+RUN npm install
 
 # Copy all documentation files
 COPY . .
@@ -20,8 +19,8 @@ RUN chown -R centml:centml /app
 # Switch to non-root user
 USER 1001:1001
 
-# Expose port 3000 (default Mintlify dev port)
+# Expose Docusaurus dev port
 EXPOSE 3000
 
-# Command to run Mintlify dev server
-CMD ["mint", "dev"]
+# Start Docusaurus dev server bound to all interfaces
+CMD ["npm", "start"]
