@@ -74,16 +74,16 @@ html[data-theme='dark'] body,
 }
 
 /* ── Centered docs layout ────────────────────────────────────────────────── */
-.main-wrapper {
+.main-wrapper,
+.navbar__inner {
+  width: 100%; /* required: parent is flex with shrink:0; without this, content sets the wrapper's width */
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 2rem;
 }
 
-.navbar__inner {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 2rem;
+:root {
+  --doc-sidebar-width: 252px;
 }
 
 [class*='docSidebarContainer'] {
@@ -111,8 +111,15 @@ nav.menu {
 }
 
 /* ── Navbar ──────────────────────────────────────────────────────────────── */
+/* Infima's `.navbar` has its own horizontal padding (`--ifm-navbar-padding-
+   horizontal`, default 1rem) which stacks on top of `.navbar__inner`'s
+   2rem padding. Zero it so `.navbar__inner` is the single source of
+   horizontal positioning, matching `.main-wrapper`'s 2rem gutter exactly —
+   the brand logo then aligns with the sidebar's left edge. */
 .navbar {
   box-shadow: 0 1px 0 var(--nv-border);
+  padding-left: 0;
+  padding-right: 0;
 }
 
 [data-theme='dark'] .navbar {
@@ -143,6 +150,21 @@ nav.menu {
   line-height: 1.5;
   padding: 0.35rem 0.75rem;
   border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ccluster-docs-sidebar-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.menu__link--active .ccluster-docs-sidebar-icon {
+  opacity: 1;
+  color: var(--nv-green);
 }
 
 .menu__link:hover {
@@ -170,32 +192,6 @@ nav.menu {
   height: 1.1rem;
 }
 
-/* ── Right TOC ───────────────────────────────────────────────────────────── */
-[class*='tableOfContents'] {
-  margin-left: 1.5rem;
-}
-
-.table-of-contents {
-  font-size: 0.85rem;
-  line-height: 1.5;
-  border-left: 1px solid var(--nv-border-light);
-  padding-left: 0.75rem;
-}
-
-.table-of-contents__link--active {
-  color: var(--nv-green);
-  font-weight: 600;
-}
-
-/* Hide TOC content when there's only one heading, but keep column space */
-.table-of-contents:has(> li:only-child) {
-  visibility: hidden;
-}
-
-[class*='tocCollapsible']:has(.table-of-contents > li:only-child) {
-  visibility: hidden;
-}
-
 /* ── Breadcrumbs ─────────────────────────────────────────────────────────── */
 .theme-doc-breadcrumbs {
   margin-bottom: 0.5rem;
@@ -215,6 +211,11 @@ nav.theme-doc-breadcrumbs ul.breadcrumbs {
   align-items: center;
 }
 
+/* Hide TOC content when there's only one heading, but keep column space */
+.table-of-contents:has(> li:only-child) {
+  visibility: hidden;
+}
+
 /* ── Doc content alignment ───────────────────────────────────────────────── */
 [class*='docItemContainer'] {
   padding: 0 1rem;
@@ -222,6 +223,24 @@ nav.theme-doc-breadcrumbs ul.breadcrumbs {
 
 [class*='docItemCol'] {
   padding-left: 0;
+}
+
+.markdown {
+  overflow-wrap: anywhere;
+}
+
+.markdown img {
+  max-width: 100%;
+  height: auto;
+}
+
+.markdown pre {
+  overflow-x: auto;
+}
+
+.markdown table {
+  display: block;
+  overflow-x: auto;
 }
 
 /* ── Cards ───────────────────────────────────────────────────────────────── */
@@ -277,7 +296,7 @@ nav.theme-doc-breadcrumbs ul.breadcrumbs {
 
 .ccluster-docs-hero-card__img {
   width: 100%;
-  aspect-ratio: 16/9;
+  aspect-ratio: 5/2;
   object-fit: cover;
   display: block;
 }

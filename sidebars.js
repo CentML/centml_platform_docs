@@ -6,8 +6,8 @@ const sidebars = {
       label: 'Getting Started',
       collapsed: false,
       items: [
-        'home/introduction',
-        'home/quickstart',
+        { type: 'doc', id: 'home/introduction', customProps: { icon: 'house' } },
+        { type: 'doc', id: 'home/quickstart', customProps: { icon: 'rocket-launch' } },
       ],
     },
     {
@@ -15,9 +15,9 @@ const sidebars = {
       label: 'Deployments',
       collapsed: false,
       items: [
-        'apps/llm',
-        'apps/inference',
-        'apps/compute',
+        { type: 'doc', id: 'apps/llm', customProps: { icon: 'messages' } },
+        { type: 'doc', id: 'apps/inference', customProps: { icon: 'circle-nodes' } },
+        { type: 'doc', id: 'apps/compute', customProps: { icon: 'microchip' } },
       ],
     },
     {
@@ -25,8 +25,8 @@ const sidebars = {
       label: 'Clients',
       collapsed: false,
       items: [
-        'clients/setup',
-        'clients/sdk',
+        { type: 'doc', id: 'clients/setup', customProps: { icon: 'square-terminal' } },
+        { type: 'doc', id: 'clients/sdk', customProps: { icon: 'python' } },
       ],
     },
     {
@@ -34,12 +34,12 @@ const sidebars = {
       label: 'Resources',
       collapsed: false,
       items: [
-        'resources/custom_image',
-        'resources/private',
-        'resources/json_and_tool',
-        'resources/requesting_support',
-        'resources/vault',
-        'resources/model_integration_lifecycle',
+        { type: 'doc', id: 'resources/custom_image', customProps: { icon: 'screwdriver-wrench' } },
+        { type: 'doc', id: 'resources/private', customProps: { icon: 'lock' } },
+        { type: 'doc', id: 'resources/json_and_tool', customProps: { icon: 'user-secret' } },
+        { type: 'doc', id: 'resources/requesting_support', customProps: { icon: 'headset' } },
+        { type: 'doc', id: 'resources/vault', customProps: { icon: 'key-skeleton-left-right' } },
+        { type: 'doc', id: 'resources/model_integration_lifecycle', customProps: { icon: 'arrows-spin' } },
       ],
     },
     {
@@ -47,9 +47,9 @@ const sidebars = {
       label: 'Examples',
       collapsed: false,
       items: [
-        'examples/codex',
-        'examples/flux',
-        'examples/json_schema',
+        { type: 'doc', id: 'examples/codex', customProps: { icon: 'book-atlas' } },
+        { type: 'doc', id: 'examples/flux', customProps: { icon: 'images' } },
+        { type: 'doc', id: 'examples/json_schema', customProps: { icon: 'code-simple' } },
       ],
     },
   ],
