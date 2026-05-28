@@ -8,7 +8,7 @@ const config = {
   tagline: 'AI deployment made simple',
   favicon: 'favicon.svg',
 
-  url: 'https://docs.centml.com',
+  url: 'https://docs.centml.ai',
   baseUrl: '/',
 
   staticDirectories: ['static'],
