@@ -13,8 +13,13 @@ const config = {
 
   staticDirectories: ['static'],
 
-  onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: 'throw',
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
+  },
 
   i18n: {
     defaultLocale: 'en',

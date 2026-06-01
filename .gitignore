@@ -9,6 +9,9 @@
 # Node dependencies
 node_modules/
 
+# This project uses npm (package-lock.json); reject yarn lockfiles
+yarn.lock
+
 # Docusaurus generated files
 .docusaurus/
 build/

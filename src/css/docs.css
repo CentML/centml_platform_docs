@@ -19,6 +19,9 @@
   --nv-text-muted: #4b5563;
   --nv-text-muted-dark: #9ca3af;
 
+  /* Tip callout surface, derived from the brand green (#76b900) */
+  --nv-tip-bg: rgba(118, 185, 0, 0.08);
+
   /* Docusaurus theme mappings */
   --ifm-color-primary: var(--nv-green);
   --ifm-color-primary-dark: var(--nv-green-dark);
@@ -49,6 +52,9 @@
   --ifm-background-color: var(--nv-bg-dark);
   --ifm-navbar-background-color: var(--nv-bg-dark);
   --ifm-footer-background-color: var(--nv-bg-footer-dark);
+
+  /* Brand green needs more presence on the dark surface */
+  --nv-tip-bg: rgba(118, 185, 0, 0.16);
 }
 
 /* ── Global background ───────────────────────────────────────────────────── */
@@ -269,6 +275,13 @@ nav.theme-doc-breadcrumbs ul.breadcrumbs {
   color: inherit;
 }
 
+.ccluster-docs-card__icon {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.6rem;
+  color: var(--nv-green);
+}
+
 .ccluster-docs-card__title {
   font-weight: 600;
   font-size: 0.95rem;
@@ -303,6 +316,74 @@ nav.theme-doc-breadcrumbs ul.breadcrumbs {
 
 .ccluster-docs-hero-card__body {
   padding: 0.75rem 1rem;
+}
+
+/* ── Callouts (Note / Tip) ───────────────────────────────────────────────── */
+.ccluster-docs-callout {
+  border-left: 4px solid;
+  border-radius: 0 8px 8px 0;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+}
+
+.ccluster-docs-callout > :first-child {
+  margin-top: 0;
+}
+
+.ccluster-docs-callout > :last-child {
+  margin-bottom: 0;
+}
+
+.ccluster-docs-note {
+  border-left-color: var(--ifm-color-emphasis-400);
+  background-color: var(--ifm-color-emphasis-100);
+  color: var(--ifm-font-color-base);
+}
+
+.ccluster-docs-tip {
+  border-left-color: var(--nv-green);
+  background-color: var(--nv-tip-bg);
+  color: var(--ifm-font-color-base);
+}
+
+/* ── Banner ──────────────────────────────────────────────────────────────── */
+.ccluster-docs-banner {
+  background-color: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+
+.ccluster-docs-banner__title {
+  color: var(--ifm-font-color-base);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.ccluster-docs-banner__desc {
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.875rem;
+  margin: 0 0 1rem 0;
+}
+
+.ccluster-docs-banner__cta {
+  display: inline-block;
+  background-color: var(--nv-green);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.ccluster-docs-banner__cta:hover {
+  background-color: var(--nv-green-dark);
+  color: #fff;
+  text-decoration: none;
 }
 
 /* ── Frame wrapper ───────────────────────────────────────────────────────── */
