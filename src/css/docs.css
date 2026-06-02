@@ -1,0 +1,449 @@
+/* NVIDIA CCluster – Docusaurus overrides */
+
+:root {
+  /* Brand tokens */
+  --nv-green: #76b900;
+  --nv-green-dark: #549a00;
+  --nv-green-darker: #3f8500;
+  --nv-green-darkest: #327100;
+  --nv-green-light: #a5de15;
+  --nv-green-lighter: #bff230;
+  --nv-green-lightest: #cfff40;
+
+  /* Neutral tokens */
+  --nv-bg: #ffffff;
+  --nv-bg-dark: #1a1a1a;
+  --nv-bg-footer-dark: #111111;
+  --nv-border: #e5e7eb;
+  --nv-border-light: #eef0ef;
+  --nv-text-muted: #4b5563;
+  --nv-text-muted-dark: #9ca3af;
+
+  /* Tip callout surface, derived from the brand green (#76b900) */
+  --nv-tip-bg: rgba(118, 185, 0, 0.08);
+
+  /* Docusaurus theme mappings */
+  --ifm-color-primary: var(--nv-green);
+  --ifm-color-primary-dark: var(--nv-green-dark);
+  --ifm-color-primary-darker: var(--nv-green-darker);
+  --ifm-color-primary-darkest: var(--nv-green-darkest);
+  --ifm-color-primary-light: var(--nv-green-light);
+  --ifm-color-primary-lighter: var(--nv-green-lighter);
+  --ifm-color-primary-lightest: var(--nv-green-lightest);
+
+  --ifm-font-size-base: 15px;
+  --ifm-line-height-base: 1.65;
+  --ifm-heading-font-weight: 600;
+  --ifm-h1-font-size: 1.85rem;
+  --ifm-h2-font-size: 1.35rem;
+  --ifm-h3-font-size: 1.1rem;
+  --ifm-background-color: var(--nv-bg);
+  --ifm-navbar-background-color: var(--nv-bg);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: var(--nv-green);
+  --ifm-color-primary-dark: var(--nv-green-light);
+  --ifm-color-primary-darker: var(--nv-green-lighter);
+  --ifm-color-primary-darkest: var(--nv-green-lightest);
+  --ifm-color-primary-light: var(--nv-green-dark);
+  --ifm-color-primary-lighter: var(--nv-green-darker);
+  --ifm-color-primary-lightest: var(--nv-green-darkest);
+  --ifm-background-color: var(--nv-bg-dark);
+  --ifm-navbar-background-color: var(--nv-bg-dark);
+  --ifm-footer-background-color: var(--nv-bg-footer-dark);
+
+  /* Brand green needs more presence on the dark surface */
+  --nv-tip-bg: rgba(118, 185, 0, 0.16);
+}
+
+/* ── Global background ───────────────────────────────────────────────────── */
+html,
+body,
+.main-wrapper,
+[class*='docMainContainer'],
+[class*='docItemContainer'],
+[class*='docPage'] {
+  background: var(--nv-bg);
+}
+
+html[data-theme='dark'],
+html[data-theme='dark'] body,
+[data-theme='dark'] .main-wrapper,
+[data-theme='dark'] [class*='docMainContainer'],
+[data-theme='dark'] [class*='docItemContainer'],
+[data-theme='dark'] [class*='docPage'],
+[data-theme='dark'] .footer,
+[data-theme='dark'] [class*='sidebar'],
+[data-theme='dark'] aside {
+  background: var(--nv-bg-dark);
+}
+
+/* ── Centered docs layout ────────────────────────────────────────────────── */
+.main-wrapper,
+.navbar__inner {
+  width: 100%; /* required: parent is flex with shrink:0; without this, content sets the wrapper's width */
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+:root {
+  --doc-sidebar-width: 252px;
+}
+
+[class*='docSidebarContainer'] {
+  width: 220px;
+  min-width: 220px;
+  margin-right: 2rem;
+  border-right: none !important;
+}
+
+aside[class*='docSidebarContainer'] > div {
+  border-right: none !important;
+}
+
+.theme-doc-sidebar-container {
+  border-right: none !important;
+}
+
+[class*='sidebar'] {
+  border-right: none !important;
+}
+
+nav.menu {
+  padding: 1rem 1.25rem 1rem 0.75rem;
+  overflow: hidden;
+}
+
+/* ── Navbar ──────────────────────────────────────────────────────────────── */
+/* Infima's `.navbar` has its own horizontal padding (`--ifm-navbar-padding-
+   horizontal`, default 1rem) which stacks on top of `.navbar__inner`'s
+   2rem padding. Zero it so `.navbar__inner` is the single source of
+   horizontal positioning, matching `.main-wrapper`'s 2rem gutter exactly —
+   the brand logo then aligns with the sidebar's left edge. */
+.navbar {
+  box-shadow: 0 1px 0 var(--nv-border);
+  padding-left: 0;
+  padding-right: 0;
+}
+
+[data-theme='dark'] .navbar {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.navbar__items--right {
+  gap: 0.5rem;
+}
+
+.navbar-get-started {
+  background-color: var(--nv-green);
+  color: #fff;
+  padding: 0.35rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.navbar-get-started:hover {
+  background-color: var(--nv-green-dark);
+  color: #fff;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+.menu__link {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ccluster-docs-sidebar-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.menu__link--active .ccluster-docs-sidebar-icon {
+  opacity: 1;
+  color: var(--nv-green);
+}
+
+.menu__link:hover {
+  color: var(--nv-green);
+}
+
+.menu__link--active {
+  color: var(--nv-green);
+  font-weight: 600;
+}
+
+.menu__list-item-collapsible .menu__link {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ifm-color-emphasis-600);
+  padding: 0.6rem 0.75rem 0.3rem;
+}
+
+.menu__caret::before,
+.menu__link--sublist-caret::after {
+  background-size: 1.1rem 1.1rem;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* ── Breadcrumbs ─────────────────────────────────────────────────────────── */
+.theme-doc-breadcrumbs {
+  margin-bottom: 0.5rem;
+}
+
+nav.theme-doc-breadcrumbs ul.breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-left: 0;
+  gap: 0.25rem;
+}
+
+.breadcrumbs__item {
+  display: flex;
+  align-items: center;
+}
+
+/* Hide TOC content when there's only one heading, but keep column space */
+.table-of-contents:has(> li:only-child) {
+  visibility: hidden;
+}
+
+/* ── Doc content alignment ───────────────────────────────────────────────── */
+[class*='docItemContainer'] {
+  padding: 0 1rem;
+}
+
+[class*='docItemCol'] {
+  padding-left: 0;
+}
+
+.markdown {
+  overflow-wrap: anywhere;
+}
+
+.markdown img {
+  max-width: 100%;
+  height: auto;
+}
+
+.markdown pre {
+  overflow-x: auto;
+}
+
+.markdown table {
+  display: block;
+  overflow-x: auto;
+}
+
+/* ── Cards ───────────────────────────────────────────────────────────────── */
+.ccluster-docs-card {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  padding: 1.25rem;
+  height: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.ccluster-docs-card:hover {
+  border-color: var(--nv-green);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.ccluster-docs-card__link {
+  text-decoration: none;
+  display: block;
+  height: 100%;
+  color: inherit;
+}
+
+.ccluster-docs-card__link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.ccluster-docs-card__icon {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.6rem;
+  color: var(--nv-green);
+}
+
+.ccluster-docs-card__title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0 0 0.25rem 0;
+  color: var(--ifm-font-color-base);
+}
+
+.ccluster-docs-card__desc {
+  font-size: 0.85rem;
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.ccluster-docs-hero-card {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  overflow: hidden;
+  height: 100%;
+  transition: box-shadow 0.15s;
+}
+
+.ccluster-docs-hero-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.ccluster-docs-hero-card__img {
+  width: 100%;
+  aspect-ratio: 5/2;
+  object-fit: cover;
+  display: block;
+}
+
+.ccluster-docs-hero-card__body {
+  padding: 0.75rem 1rem;
+}
+
+/* ── Callouts (Note / Tip) ───────────────────────────────────────────────── */
+.ccluster-docs-callout {
+  border-left: 4px solid;
+  border-radius: 0 8px 8px 0;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+}
+
+.ccluster-docs-callout > :first-child {
+  margin-top: 0;
+}
+
+.ccluster-docs-callout > :last-child {
+  margin-bottom: 0;
+}
+
+.ccluster-docs-note {
+  border-left-color: var(--ifm-color-emphasis-400);
+  background-color: var(--ifm-color-emphasis-100);
+  color: var(--ifm-font-color-base);
+}
+
+.ccluster-docs-tip {
+  border-left-color: var(--nv-green);
+  background-color: var(--nv-tip-bg);
+  color: var(--ifm-font-color-base);
+}
+
+/* ── Banner ──────────────────────────────────────────────────────────────── */
+.ccluster-docs-banner {
+  background-color: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+
+.ccluster-docs-banner__title {
+  color: var(--ifm-font-color-base);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.ccluster-docs-banner__desc {
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.875rem;
+  margin: 0 0 1rem 0;
+}
+
+.ccluster-docs-banner__cta {
+  display: inline-block;
+  background-color: var(--nv-green);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.ccluster-docs-banner__cta:hover {
+  background-color: var(--nv-green-dark);
+  color: #fff;
+  text-decoration: none;
+}
+
+/* ── Frame wrapper ───────────────────────────────────────────────────────── */
+.ccluster-docs-frame {
+  margin: 0.875rem 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.ccluster-docs-frame img {
+  width: 100%;
+  display: block;
+}
+
+/* ── Pagination (Previous/Next) ───────────────────────────────────────────── */
+.pagination-nav__link {
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  transition: border-color 0.15s;
+}
+
+.pagination-nav__link:hover {
+  border-color: var(--nv-green);
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.footer {
+  background: var(--nv-bg);
+  border-top: 1px solid var(--nv-border);
+}
+
+[data-theme='dark'] .footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer__link-item svg {
+  display: none;
+}
+
+.footer-social {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.footer-social a {
+  color: var(--nv-text-muted);
+  transition: color 0.15s;
+}
+
+.footer-social a:hover {
+  color: var(--nv-green);
+}
+
+[data-theme='dark'] .footer-social a {
+  color: var(--nv-text-muted-dark);
+}
+
+[data-theme='dark'] .footer-social a:hover {
+  color: var(--nv-green);
+}

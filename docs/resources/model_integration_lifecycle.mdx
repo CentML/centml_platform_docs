@@ -12,7 +12,7 @@ MILC aligns closely with the [Model Development Lifecycle (MDLC)](https://www.fr
 |------------------------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------------|
 | Requirements Gathering       | Identify business needs and model fit                    | Need a model to summarize tickets in less than 3s with PII redaction                                  |
 | Feasibility Analysis         | Evaluate performance, latency, cost, infra readiness     | LLaMA 2-70B meets quality targets; latency less than 1s possible via NVIDIA CCluster endpoint |
-| Design & Architecture        | Plan API integration, security, auth, observability      | Use NVIDIA CCluster’s `/v1/chat/completions` endpoint (OpenAI-compatible); authenticate using API tokens; log request/response metadata to BigQuery |
+| Design & Architecture        | Plan API integration, security, auth, observability      | Use NVIDIA CCluster's `/v1/chat/completions` endpoint (OpenAI-compatible); authenticate using API tokens; log request/response metadata to BigQuery |
 | Development & Integration    | Build prompt templates, format inputs/outputs, handle tokens, retries | Build API route to send prompt to the NVIDIA CCluster endpoint and return structured response |
 | Fine-tuning (optional)       | Improve model behavior on domain-specific tasks          | Fine-tune LLaMA 2 on internal support ticket dataset                                         |
 | Testing & Validation         | Run unit, functional, latency, and accuracy tests        | Compare LLM summaries to human-written ones; use ROUGE/LFQA scoring                          |
