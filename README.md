@@ -1,89 +1,94 @@
 # NVIDIA CCluster Docs
 
-This repository contains the Mintlify source for the NVIDIA CCluster documentation site.
+This repository contains the [Docusaurus](https://docusaurus.io/) source for the NVIDIA CCluster documentation site, published at [docs.centml.ai](https://docs.centml.ai).
 
-The Mintlify CLI is pinned to `mint@4.2.516` in the [Dockerfile](Dockerfile). If you use Mintlify locally outside Docker, use the same version unless you are intentionally validating an upgrade. The site's layout, branding, and color palette are defined in [docs.json](docs.json).
+The site is built with Docusaurus 3 (`@docusaurus/preset-classic`). Layout, branding, and the color palette are defined in [docusaurus.config.js](docusaurus.config.js) and [src/css/docs.css](src/css/docs.css).
 
 ## Repository Layout
 
-- [docs.json](docs.json): site configuration, branding, and left-nav structure
-- [home/](home): landing pages such as introduction and quickstart
-- [apps/](apps): deployment product docs
-- [clients/](clients): SDK and client setup docs
-- [resources/](resources): supporting guides such as pricing, support, vault, and custom images
-- [examples/](examples): example-driven docs
-- [snippets/components.mdx](snippets/components.mdx): shared custom MDX components used across pages
-- [images/](images): local static assets referenced by MDX pages
-- [endpoints/](endpoints): API-related assets that are present in the repo but are not currently wired into navigation
+- [docusaurus.config.js](docusaurus.config.js): site configuration, navbar, and footer
+- [sidebars.js](sidebars.js): left-nav structure, page order, and sidebar icons
+- [docs/](docs/): all documentation pages, written as `.mdx`
+  - [docs/home/](docs/home/): landing pages (introduction, quickstart)
+  - [docs/apps/](docs/apps/): deployment product docs (LLM serving, inference, compute)
+  - [docs/clients/](docs/clients/): SDK and client setup docs
+  - [docs/resources/](docs/resources/): supporting guides (custom images, vault, support, etc.)
+  - [docs/examples/](docs/examples/): example-driven docs
+- [src/components/](src/components/): shared MDX components (`Card`, `Frame`, `Note`, `Tip`, `Banner`)
+- [src/theme/](src/theme/): swizzled Docusaurus theme components (e.g. sidebar link icons)
+- [src/icons.js](src/icons.js): shared icon map (lucide-react) used by the sidebar and `Card`
+- [src/css/docs.css](src/css/docs.css): custom styling and NVIDIA brand tokens
+- [static/](static/): static assets served at the site root (images, `CNAME`, favicon)
 
 ## Prerequisites
 
-For local development you need:
+For local development you need either:
 
-- Docker and Docker Compose support
-- Or Node.js 20+ and npm if you want to run Mintlify directly on your machine
+- Docker and Docker Compose, or
+- Node.js 20 and npm
+
+> **Note:** Use Node.js 20 to match CI and the Docker image. Newer majors (e.g. Node 24) can cause intermittent Docusaurus build errors locally.
 
 ## Local Development
 
-### Preferred: Docker
+### Option 1: npm
 
-The repo already includes a Docker-based workflow that installs the pinned Mintlify CLI version.
+Install dependencies and start the dev server with hot-reload:
+
+```bash
+npm install
+npm start
+```
+
+Then open [http://localhost:3000](http://localhost:3000).
+
+### Option 2: Docker
 
 ```bash
 docker compose up --build
 ```
 
-Then open [http://localhost:3000](http://localhost:3000).
+Then open [http://localhost:3000](http://localhost:3000). The repo is mounted into the container, so local edits are reflected live.
 
-Notes:
+## Building Locally
 
-- The repo is mounted into the container, so local file edits are reflected in the preview.
-- The image installs `mint@4.2.516` globally.
-- Port `3000` is exposed by default.
-
-### Alternative: Run Mintlify locally
-
-If you prefer running the CLI directly, install the same version pinned in Docker:
+To produce and preview the optimized production build (the same output CI deploys):
 
 ```bash
-npm install -g mint@4.2.516
+npm run build      # generates static files in build/
+npm run serve      # serves the build/ output locally
 ```
 
-From the repository root, run:
+A successful build is the primary validation before opening a PR.
+
+If you hit a stale-cache build error locally, clear and rebuild:
 
 ```bash
-mint dev
-```
-
-If the CLI reports that it is outdated, run:
-
-```bash
-mint update
+npm run clear && npm run build
 ```
 
 ## Editing Workflow
 
-1. Update or add `.mdx` pages under the appropriate section directory.
-2. If a page should appear in the docs navigation, add it to [docs.json](docs.json).
-3. Put screenshots and local images in [images/](images) and reference them with `/images/...` paths.
-4. Reuse helpers from [snippets/components.mdx](snippets/components.mdx) when a page needs the shared hero card or banner components.
-5. Preview locally before opening a PR, especially for image paths, imports, and navigation changes.
+1. Update or add `.mdx` pages under the appropriate directory in [docs/](docs/).
+2. If a page should appear in the left nav, add it to [sidebars.js](sidebars.js) (optionally with a `customProps.icon`).
+3. Put images in [static/images/](static/images/) and reference them with `/images/...` paths.
+4. Reuse shared components from [src/components/](src/components/) (e.g. `Card`, `Frame`, `Note`, `Tip`) instead of duplicating markup.
+5. Run `npm run build` locally before opening a PR to catch broken links and build errors.
 
-## How Publishing Works
+## Release Process
 
-Changes are deployed after they are merged into `main`. The hosted Mintlify site configuration and deployment are managed through Mintlify.
+Deployment is fully automated via GitHub Actions ([.github/workflows/deploy.yml](.github/workflows/deploy.yml)):
 
-If you need admin access to the Mintlify project, follow the internal process referenced by the team and current repository owners.
+1. **Create a PR.** Push your branch and open a pull request against `main`.
+2. **Review and approve.** A reviewer approves the changes.
+3. **Merge to `main`.** Merging triggers the deploy workflow.
+4. **GitHub Action builds and deploys.** The workflow runs `npm ci` and `npm run build`, then publishes the static output to GitHub Pages.
+5. **Live.** Once the workflow completes, the changes are served at [docs.centml.ai](https://docs.centml.ai).
+
+The custom domain is configured via [static/CNAME](static/CNAME), and TLS certificates are provisioned automatically by GitHub Pages.
 
 ## Important Notes
 
-- `docs.json` is the source of truth for what appears in the left navigation.
-- Not every file in the repository is currently linked from navigation.
-- There is no app build, unit test, or lint pipeline defined in this repo today; the most important validation is a successful local Mintlify preview.
-- After a Mintlify upgrade, recheck the local preview to confirm navigation, layout, and brand colors still render as expected.
-
-## Troubleshooting
-
-- If the preview does not start, make sure you are running the command from the repository root where `docs.json` lives.
-- If a page returns `404`, confirm the file exists and that its route is correctly listed in `docs.json` when navigation is expected.
-- If local Mintlify behaves differently from Docker, trust the Docker flow first because it is the repository’s default preview path.
+- [sidebars.js](sidebars.js) is the source of truth for the left navigation. A file existing in `docs/` does not mean it is published in the nav.
+- Broken links fail the build (in CI and locally) instead of shipping as 404s, so fix them before merging.
+- See [AGENTS.md](AGENTS.md) for deeper notes on CSS architecture, icons, and common tasks.
