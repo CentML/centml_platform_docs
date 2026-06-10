@@ -18,6 +18,7 @@ import {
   Images,
   Braces,
   PackageOpen,
+  Waypoints,
 } from 'lucide-react';
 
 // Single source of truth for icon names → Lucide components, shared by the
@@ -46,6 +47,7 @@ const icons = {
   'book-atlas': BookMarked,
   'code-simple': Braces,
   'box-open-full': PackageOpen,
+  waypoints: Waypoints,
 };
 
 export function renderIcon(name, {size = 16, strokeWidth = 1.75} = {}) {

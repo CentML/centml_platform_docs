@@ -37,6 +37,17 @@ To make the endpoint private, select the "Make it a private endpoint?" option. T
 For building your own custom container image and deploying on NVIDIA CCluster, please refer to this [resource](/resources/custom_image).
 </Tip>
 
+### Protocol: HTTP and gRPC
+
+The **Protocol** field tells CCluster how your container speaks:
+
+- **HTTP** (default) — standard request/response over HTTPS. Use this for REST or OpenAI-compatible APIs.
+- **gRPC** — binary RPC over HTTP/2, suited for low-latency or streaming inference. CCluster checks readiness with a TCP socket probe (the **Health check path** is ignored) and exposes the endpoint as `<endpoint_url>:443` with TLS.
+
+<Tip>
+For an end-to-end gRPC walkthrough using vLLM's gRPC server, see [gRPC Inference Endpoints](/resources/grpc).
+</Tip>
+
 ### Supported inference engine recipes
 
 CCluster provides pre-configured recipes for popular inference engines in the **Add or Select Image** dropdown. Selecting a recipe auto-fills all fields except the entrypoint command. Below are the **Add command** values you need to provide for each engine:
@@ -105,10 +116,9 @@ The **container port** you configure is used internally within the cluster. CClu
 ```bash
 # HTTP deployment
 curl https://my-deployment.some-hash.cluster-alias.centml.com/v1/models
-
-# gRPC deployment (using grpcurl)
-grpcurl -d '{"prompt": "Hello"}' my-deployment.some-hash.cluster-alias.centml.com:443 inference.Service/Predict
 ```
+
+For gRPC deployments, see [gRPC Inference Endpoints](/resources/grpc) for connection and request examples.
 
 
 
