@@ -45,7 +45,7 @@ The **Protocol** field tells CCluster how your container speaks:
 - **gRPC** — binary RPC over HTTP/2, suited for low-latency or streaming inference. CCluster checks readiness with a TCP socket probe (the **Health check path** is ignored) and exposes the endpoint as `<endpoint_url>:443` with TLS.
 
 <Tip>
-For an end-to-end gRPC walkthrough using vLLM's gRPC server, see [Deploying gRPC Inference Services](/resources/grpc).
+For an end-to-end gRPC walkthrough using vLLM's gRPC server, see [gRPC Inference Endpoints](/resources/grpc).
 </Tip>
 
 ### Supported inference engine recipes
@@ -118,7 +118,7 @@ The **container port** you configure is used internally within the cluster. CClu
 curl https://my-deployment.some-hash.cluster-alias.centml.com/v1/models
 ```
 
-For gRPC deployments, see [Deploying gRPC Inference Services](/resources/grpc) for connection and request examples.
+For gRPC deployments, see [gRPC Inference Endpoints](/resources/grpc) for connection and request examples.
 
 
 
