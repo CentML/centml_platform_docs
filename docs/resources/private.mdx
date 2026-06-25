@@ -1,12 +1,51 @@
 ---
-title: 'Private Inference Endpoints'
-description: 'How to create private inference endpoints'
+title: 'Securing Endpoints'
+description: 'How to protect your inference endpoints with Bearer tokens and mTLS certificates'
 icon: 'lock'
 ---
 
-By default, endpoints created for both LLM Serving and General Inference deployments are publicly accessible. If you prefer restricted access, you can make the endpoint private by selecting the <em>Make it a private endpoint?</em> option.
+NVIDIA CCluster does not expose public endpoints. Every LLM Serving and General Inference deployment must be protected, and clients must authenticate on each request. You secure a deployment with **at least one** of the following:
 
-This setting generates a TLS certificate upon deployment, which you can download. Access to the endpoint will then require the http client to use this certificate. Here are a few examples:
+- **Bearer token** — an `Authorization: Bearer <token>` header on each request.
+- **mTLS client certificate** — a TLS certificate the client presents on each request.
+
+You choose the protection method when configuring a deployment. You may enable both for defense in depth.
+
+## Bearer token access
+
+Generate a Bearer token from your [Vault](/resources/vault), then include it in the `Authorization` header of every request.
+
+**Using curl command**
+```bash
+curl -X 'POST' 'https://<endpoint_url>/openai/v1/chat/completions' \
+  -H 'Authorization: Bearer <your_bearer_token>' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "messages": [
+    {
+      "role": "user",
+      "content": "what is the meaning of life?"
+    }
+  ],
+  "model": "meta-llama/Llama-3.2-3B-Instruct",
+  "max_tokens": 512
+}'
+```
+
+**Using OpenAI client library**
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="<your_bearer_token>",
+    base_url="https://<endpoint url>/openai/v1",
+)
+```
+
+## mTLS certificate access
+
+Select the <em>Make it a private endpoint?</em> option when configuring a deployment. This generates a TLS certificate upon deployment, which you can download. Access to the endpoint will then require the http client to use this certificate. Here are a few examples:
 
 
 **Using curl command**

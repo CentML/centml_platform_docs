@@ -24,12 +24,12 @@ Once logged in, you will see the NVIDIA CCluster console home page, as shown bel
 
 
 ## 2. Create a bearer token
-To interact with NVIDIA CCluster endpoints programmatically, you need a Bearer Token. Follow the [Managing Vault Objects](/resources/vault) documentation to generate one.
+Endpoints are never public — every request must authenticate with a Bearer token or a client certificate. To interact with NVIDIA CCluster endpoints programmatically, generate a Bearer Token by following the [Managing Vault Objects](/resources/vault) documentation. For all protection options, see [Securing Endpoints](/resources/private).
 
 ## 3. Deploy your first model
 Choose the deployment type that fits your use case:
 
-- **[LLM Serving](/apps/llm)** — Deploy dedicated public or private LLM endpoints tailored to your performance requirements and budget.
+- **[LLM Serving](/apps/llm)** — Deploy dedicated, protected LLM endpoints tailored to your performance requirements and budget.
 - **[General Inference](/apps/inference)** — Deploy custom containerized models on NVIDIA-managed infrastructure.
 - **[Compute](/apps/compute)** — Provision GPU compute for training, fine-tuning, or batch workloads.
 
@@ -47,7 +47,7 @@ For access, billing, sales, or technical assistance, follow our [Requesting Supp
     icon="messages"
     href="/apps/llm"
   >
-    Explore dedicated public and private endpoints for production model deployments.
+    Explore dedicated, protected endpoints for production model deployments.
  </Card>
   <Card
     title="Deploying Custom Models"

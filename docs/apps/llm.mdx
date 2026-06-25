@@ -42,8 +42,11 @@ For advanced users, NVIDIA CCluster also offers an option to customize their mod
 ## 3. Deploy and integrate
 Finally, click "Deploy". Once the deployment is ready in a few minutes, copy the endpoint url and go to `https://<endpoint_url>/docs` to find the list of API endpoints to start using your LLM deployment. We offer API compatibility with CServe, OpenAI, and Cortex, making integration with other applications seamless.
 
+Endpoints are never public, so every request must authenticate with a Bearer token or a client certificate. The example below uses a Bearer token; see [Securing Endpoints](/resources/private) for all options.
+
 ```bash
 curl -X 'POST' 'https://<endpoint_url>/openai/v1/chat/completions' \
+  -H 'Authorization: Bearer <your_bearer_token>' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -81,11 +84,11 @@ For more details on how to use the LLM deployment, please refer to the [examples
     Learn how to interact with the NVIDIA CCluster programmatically
   </Card>
   <Card
-    title="Private Inference Endpoints"
+    title="Securing Endpoints"
     icon="lock"
     href="/resources/private"
   >
-Learn how to create private inference endpoints
+Learn how to protect your endpoints with Bearer tokens and mTLS certificates
  </Card>
   <Card
     title="Agents on NVIDIA CCluster"
