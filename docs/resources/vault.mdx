@@ -61,7 +61,7 @@ You can generate or add public certificates for mTLS just like you can with Bear
     <img src="/images/added-certificate.png" alt="Generated certificate listed in the vault" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-When generated, `Vault Certificates` download a `.pem` file to your local browser. That `.pem` file is named after the generated cert. You can then use that `.pem` file to access one of NVIDIA CCluster's [private endpoints](/resources/private) as long as they are associated with the appropriate certificate and `.pem` pair.
+When generated, `Vault Certificates` download a `.pem` file to your local browser. That `.pem` file is named after the generated cert. You can then use that `.pem` file to access one of NVIDIA CCluster's [secured endpoints](/resources/private) as long as they are associated with the appropriate certificate and `.pem` pair.
 
 
 <Frame>
@@ -133,14 +133,14 @@ Supported registries include Docker Hub, Amazon ECR, Google Artifact Registry, A
     icon="messages"
     href="/apps/llm"
   >
-    Explore dedicated public and private endpoints for production model deployments.
+    Explore dedicated, protected endpoints for production model deployments.
  </Card>
   <Card
-    title="Private Inference Endpoints"
+    title="Securing Endpoints"
     icon="lock"
     href="/resources/private"
   >
-Learn how to create private inference endpoints
+Learn how to protect your endpoints with Bearer tokens and mTLS certificates
  </Card>
   <Card
     title="Clients"

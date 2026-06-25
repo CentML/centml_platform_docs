@@ -64,7 +64,7 @@ The file is mounted at `<mount path>/<filename>`, so set **Add command** to run 
 </Frame>
 
 <Tip>
-To restrict access, select **Make it a private endpoint?**. CCluster then generates a TLS certificate that clients must present. See [Private Inference Endpoints](/resources/private) for details.
+Every endpoint is protected — there are no public endpoints. Secure access with a Bearer token, an mTLS client certificate, or both. For mTLS, select **Make it a private endpoint?** and CCluster generates a TLS certificate that clients must present. See [Securing Endpoints](/resources/private) for details.
 </Tip>
 
 ## 2. Select the cluster and hardware
@@ -112,7 +112,7 @@ grpcurl -d '{"request_id": "1", "text": "The capital of France is", "sampling_pa
 ```
 
 <Note>
-For a private endpoint, pass the downloaded certificate to your client (for `grpcurl`, use `-cert` / `-key`). See [Private Inference Endpoints](/resources/private).
+Endpoints are protected, so authenticate every call — pass a Bearer token, or for an mTLS endpoint pass the downloaded certificate to your client (for `grpcurl`, use `-cert` / `-key`). See [Securing Endpoints](/resources/private).
 </Note>
 
 ## What's next

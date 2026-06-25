@@ -30,7 +30,7 @@ Under the **Optional Details** tab:
 </Frame>
 
 <Tip>
-To make the endpoint private, select the "Make it a private endpoint?" option. This will automatically generate a TLS certificate, which you can download as a .pem file after the deployment is complete. Only those with this TLS certificate will have access to the endpoint. For more details, please refer to this [resource](/resources/private).
+Every deployment must be protected — there are no public endpoints. Secure your endpoint with a Bearer token (an `Authorization: Bearer <token>` header), an mTLS client certificate, or both. To enable mTLS, select the "Make it a private endpoint?" option, which generates a TLS certificate you can download as a .pem file after the deployment is complete. For more details, see [Securing Endpoints](/resources/private).
 </Tip>
 
 <Tip>
@@ -102,6 +102,8 @@ Once the deployment status is ready, the container port is going to be exposed u
 
 All deployments are exposed externally on **port 443** with **TLS enforced**. CCluster automatically provisions TLS certificates for your endpoint - no additional configuration is required.
 
+Endpoints are never public: every request must authenticate with a Bearer token or a client certificate. See [Securing Endpoints](/resources/private) for details.
+
 | Protocol | Access URL | Description |
 |----------|-----------|-------------|
 | HTTP | `https://<endpoint_url>` | Standard HTTPS access (port 443 is implicit) |
@@ -126,11 +128,11 @@ For gRPC deployments, see [gRPC Inference Endpoints](/resources/grpc) for connec
 
 <CardGroup cols={3}>
   <Card
-    title="Private Inference Endpoints"
+    title="Securing Endpoints"
     icon="lock"
     href="/resources/private"
   >
-Learn how to create private inference endpoints
+Learn how to protect your endpoints with Bearer tokens and mTLS certificates
  </Card>
   <Card
     title="Clients"
@@ -144,6 +146,6 @@ Learn how to create private inference endpoints
     icon="messages"
     href="/apps/llm"
   >
-    Explore dedicated public and private endpoints for production model deployments.
+    Explore dedicated, protected endpoints for production model deployments.
  </Card>
 </CardGroup>
