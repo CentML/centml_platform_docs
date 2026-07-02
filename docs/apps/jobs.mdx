@@ -1,0 +1,77 @@
+---
+title: 'Batch Jobs'
+description: 'Run containerized batch workloads to completion'
+icon: 'list-checks'
+---
+
+Jobs let you run any containerized workload as a **batch task** that runs to completion — model training, fine-tuning, data preprocessing, evaluation, or any one-off GPU job. Unlike inference or LLM deployments, jobs are batch workloads with **no endpoint or ingress**: they start, run your container until it finishes (or fails), and then stop. CCluster runs your container as a Kubernetes Job, so you can control how many times it runs, how many run in parallel, and how failures are retried.
+
+## 1. Configure your job
+
+Under the **Job Information** section, provide the core details for your workload:
+
+- **Job Name** — a unique name for the job. It must start with a lowercase letter, contain only lowercase letters, digits, or hyphens (`-`), end with an alphanumeric character, and be at most 20 characters.
+- **Container Image URL** — the container image to run (e.g., `nvcr.io/nvidia/base/ubuntu`).
+- **Container Tag** — the image tag (e.g., `latest`).
+- **Image Pull Secret Username / Password** — required only if the image is hosted on a private registry. Leave both empty for public images; if you provide one, you must provide the other.
+
+## 2. Set optional details
+
+Expand the **Optional Details** section to tune how the job executes. All of these fields are optional and fall back to sensible defaults.
+
+- **Completions** — the number of pods that must complete successfully for the job to be considered done. Defaults to `1`. Use a value greater than `1` for indexed, multi-pod batch work.
+- **Parallelism** — the maximum number of pods that run at the same time. Defaults to `1` and must be **less than or equal to Completions**.
+- **Backoff Limit** — the number of retries before the job is marked as failed. Defaults to `3` and must be `0` or greater.
+- **Active Deadline Seconds** — the maximum time (in seconds) the job may run before it is terminated. Must be `1` or greater. Leave empty for no deadline.
+- **Command** — the entrypoint command and arguments for the container (e.g., `/bin/sh -c python3 "train.py"`). If left empty, the image's default entrypoint is used.
+- **Enable logging** — toggle to collect and view logs from the job's pods.
+- **Environment variables** — pass additional environment variables to the container (e.g., `HF_TOKEN`).
+- **Annotations** — attach custom key/value metadata to the job.
+
+<Note>
+The environment variable names `JOB_COMPLETION_INDEX` and `JOB_COMPLETIONS` are reserved by the platform and cannot be used for your own variables. When you run a multi-completion job, `JOB_COMPLETION_INDEX` identifies each pod's index.
+</Note>
+
+<Tip>
+For building and deploying your own custom container image on NVIDIA CCluster, see [Deploying Custom Models](/resources/custom_image).
+</Tip>
+
+## 3. Select the cluster and hardware
+
+Choose the regional cluster and GPU hardware instance that best fits your workload, then click **Deploy**. NVIDIA CCluster provides several managed clusters and GPU instance types to run your job on.
+
+<Tip>
+You can integrate your own private cluster into CCluster through bring-your-own-infrastructure support. To get started, open a support request through your NVIDIA CCluster support channel.
+</Tip>
+
+## 4. Monitor your job
+
+Once created, your job appears in the deployments listing view alongside its current status. Click into the job to view its details page, including per-pod status and, when **Enable logging** is turned on, the logs from each pod.
+
+Because jobs are batch workloads, there is no endpoint to call — the job runs until your container exits. A job is considered complete once the requested number of **Completions** finish successfully, and failed pods are retried up to the **Backoff Limit** (or until the **Active Deadline Seconds** is reached).
+
+## What's next
+
+<CardGroup cols={3}>
+  <Card
+    title="General Inference"
+    icon="circle-nodes"
+    href="/apps/inference"
+  >
+    Deploy long-running, scalable inference endpoints for your models.
+  </Card>
+  <Card
+    title="Deploying Custom Models"
+    icon="screwdriver-wrench"
+    href="/resources/custom_image"
+  >
+    Learn how to build and deploy your own custom container images.
+  </Card>
+  <Card
+    title="Compute Instance"
+    icon="microchip"
+    href="/apps/compute"
+  >
+    Launch an on-demand GPU instance with SSH access for interactive work.
+  </Card>
+</CardGroup>
