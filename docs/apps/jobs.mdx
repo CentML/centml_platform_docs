@@ -29,7 +29,10 @@ Expand the **Optional Details** section to tune how the job executes. All of the
 - **Annotations** — attach custom key/value metadata to the job.
 
 <Note>
-The environment variable names `JOB_COMPLETION_INDEX` and `JOB_COMPLETIONS` are reserved by the platform and cannot be used for your own variables. When you run a multi-completion job, `JOB_COMPLETION_INDEX` identifies each pod's index.
+The environment variable names `JOB_COMPLETION_INDEX` and `JOB_COMPLETIONS` are reserved by the platform and cannot be used for your own variables. CCluster runs jobs in **indexed** completion mode and automatically injects both variables into every replica so each one can determine which slice of work it owns:
+
+- **`JOB_COMPLETION_INDEX`** — the unique, zero-based index assigned to each replica, ranging from `0` to `Completions - 1`. Use it to partition or shard work across replicas (for example, to pick which data split a replica processes).
+- **`JOB_COMPLETIONS`** — the total number of completions configured for the job (the **Completions** value). It is the same on every replica, letting each one know the total size of the pool.
 </Note>
 
 <Tip>
