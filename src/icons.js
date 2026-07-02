@@ -19,6 +19,7 @@ import {
   Braces,
   PackageOpen,
   Waypoints,
+  ListChecks,
 } from 'lucide-react';
 
 // Single source of truth for icon names → Lucide components, shared by the
@@ -48,6 +49,7 @@ const icons = {
   'code-simple': Braces,
   'box-open-full': PackageOpen,
   waypoints: Waypoints,
+  'list-checks': ListChecks,
 };
 
 export function renderIcon(name, {size = 16, strokeWidth = 1.75} = {}) {
