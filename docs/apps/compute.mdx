@@ -1,17 +1,26 @@
 ---
 title: 'Compute Instance'
-description: 'Launch an on-demand GPU instance and start building'
+description: 'Launch an on-demand GPU instance from any container image and start building'
 icon: 'microchip'
 ---
 
 On-demand GPU instances with SSH access to run any GPU-accelerated workloads and let you run, test, and experiment with any AI application seamlessly.
 
-## 1. Select a base image
+## 1. Choose an image
 
-Spin up a compute instance by choosing one of the available base images:
+Compute instances can run any container image. In the **Add or Select Image** field, type the name of an image from a container registry and set the **Container Tag**. For example, use image `ubuntu` with tag `24.04`, or image `nvcr.io/nvidia/pytorch` with tag `26.01-py3`. If your environment defines suggested images, they appear in the dropdown.
 
-- **PyTorch** — the latest NVIDIA NGC PyTorch image, preloaded with PyTorch and CUDA libraries.
-- **Ubuntu** — a vanilla Ubuntu image for a minimal starting point. On full GPU instances, NVIDIA drivers are included via driver passthrough. On MIG instances, NVIDIA drivers are **not** available yet.
+On full GPU instances, NVIDIA drivers are included via driver passthrough, so the GPU is accessible even from a minimal image like `ubuntu`. On MIG instances, NVIDIA drivers are **not** available yet. CUDA and framework libraries are not injected and must come from the image itself, so for GPU workloads pick an image that bundles them, like the [NVIDIA NGC](https://catalog.ngc.nvidia.com/containers) PyTorch image.
+
+<Note>
+Your image does not need an SSH server preinstalled. CCluster injects one at deploy time without modifying the image. The SSH server runs as the container's main process, so the image's own `ENTRYPOINT`/`CMD` is not executed. Connect over SSH to start your workloads.
+</Note>
+
+### Private registry images
+
+To deploy an image from a private registry (e.g., Amazon ECR, Google Artifact Registry, Azure Container Registry, or a self-hosted registry), provide credentials in the **Image Registry Username** and **Image Registry Password** fields. You can enter them directly or select a `Registry Credentials` item stored in your [Vault](/resources/vault). CCluster automatically detects the registry from the image URL. For public images, leave both fields empty.
+
+## 2. Configure access and deploy
 
 Enter your SSH public key to configure access to the instance, select a GPU instance type, and click Deploy.
 
@@ -19,14 +28,14 @@ Enter your SSH public key to configure access to the instance, select a GPU inst
     <img src="/images/comp_1.png" alt="Compute instance launch page" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-## 2. SSH into the instance
+## 3. SSH into the instance
 
 Once the instance is ready, navigate to the deployment details page. The **Endpoint Configuration** section displays:
 
 - **Endpoint URL** — the hostname for your instance. Next to it are the copy button (copies the URL) and the SSH button (copies `ssh root@<endpoint_url>` so you can paste it directly into your terminal).
 
 <Frame>
-    <img src="/images/comp_2.png" alt="SSH key configuration for a compute instance" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/comp_2.png" alt="Endpoint Configuration section showing the endpoint URL and SSH public key" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
 To connect, use the SSH command with the `root` user:
@@ -39,7 +48,31 @@ ssh root@<endpoint_url>
     <img src="/images/comp_3.png" alt="Running compute instance showing its endpoint URL" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-The instance comes preloaded with the libraries included in your selected base image. For **PyTorch** instances, CUDA libraries are bundled in the NGC image. For **Ubuntu** instances on full GPU hardware, NVIDIA drivers are available; on MIG instances, NVIDIA drivers are not available. Additional packages and libraries can be installed with your preferred package manager.
+The instance authenticates you with the SSH public key you provided at deployment. You can also run one-off commands, transfer files, and forward TCP ports:
+
+```bash
+# Run a one-off command
+ssh root@<endpoint_url> 'nvidia-smi'
+
+# Copy files to and from the instance with scp or SFTP
+scp ./train.py root@<endpoint_url>:/home/
+scp root@<endpoint_url>:/home/results.csv .
+
+# Forward a port from the instance to your local machine (TensorBoard in this example)
+ssh -L 6006:localhost:6006 root@<endpoint_url>
+```
+
+X11 forwarding and SSH agent forwarding are not supported.
+
+The interactive shell depends on what your image provides:
+
+| Image | Shell over SSH |
+| --- | --- |
+| Images with `bash` (e.g., Ubuntu, Debian, NGC images) | `bash` login shell |
+| Images with only `sh` (e.g., Alpine) | `/bin/sh` |
+| Images without a shell (e.g., distroless) | No interactive shell. SFTP file transfer still works |
+
+The instance includes the libraries from your image. Additional packages can be installed with your preferred package manager.
 
 
 ## What's next
@@ -53,11 +86,11 @@ The instance comes preloaded with the libraries included in your selected base i
     Learn how to interact with the NVIDIA CCluster programmatically
   </Card>
   <Card
-    title="Securing Endpoints"
-    icon="lock"
-    href="/resources/private"
+    title="Managing Vault Objects"
+    icon="key-skeleton-left-right"
+    href="/resources/vault"
   >
-Learn how to protect your endpoints with Bearer tokens and mTLS certificates
+Store SSH keys and registry credentials for reuse across deployments
  </Card>
   <Card
     title="LLM Serving"
