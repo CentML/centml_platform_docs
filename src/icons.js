@@ -20,6 +20,7 @@ import {
   PackageOpen,
   Waypoints,
   ListChecks,
+  Bot,
 } from 'lucide-react';
 
 // Single source of truth for icon names → Lucide components, shared by the
@@ -50,6 +51,7 @@ const icons = {
   'box-open-full': PackageOpen,
   waypoints: Waypoints,
   'list-checks': ListChecks,
+  bot: Bot,
 };
 
 export function renderIcon(name, {size = 16, strokeWidth = 1.75} = {}) {

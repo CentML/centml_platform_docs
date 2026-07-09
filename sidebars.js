@@ -38,6 +38,7 @@ const sidebars = {
         { type: 'doc', id: 'resources/custom_image', customProps: { icon: 'screwdriver-wrench' } },
         { type: 'doc', id: 'resources/grpc', customProps: { icon: 'waypoints' } },
         { type: 'doc', id: 'resources/private', customProps: { icon: 'lock' } },
+        { type: 'doc', id: 'resources/service_accounts', customProps: { icon: 'bot' } },
         { type: 'doc', id: 'resources/json_and_tool', customProps: { icon: 'user-secret' } },
         { type: 'doc', id: 'resources/requesting_support', customProps: { icon: 'headset' } },
         { type: 'doc', id: 'resources/vault', customProps: { icon: 'key-skeleton-left-right' } },

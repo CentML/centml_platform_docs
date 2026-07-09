@@ -6,6 +6,8 @@ icon: 'python'
 
 We provide a Python SDK to programmatically access NVIDIA CCluster backend APIs to manage your deployments.
 
+For unattended use in CI or automation, authenticate with a [service account](/resources/service_accounts) by setting `CENTML_SERVICE_ACCOUNT_ID` and `CENTML_SERVICE_ACCOUNT_SECRET` before calling the SDK. Interactive development can use `centml login` instead — see [Client Setup](/clients/setup).
+
 Following is a sample code to list all the inference deployments under your account.
 
 ```python

@@ -20,6 +20,8 @@ centml login
 
 The first time, you'll be prompted to log in to your CCluster account through a browser. Once logged in, you are all set to use the client. You can use the `centml` CLI command to list your deployments.
 
+For **unattended automation** (CI pipelines, scheduled jobs, or integrations), use a [service account](/resources/service_accounts) instead of browser login. Set `CENTML_SERVICE_ACCOUNT_ID` and `CENTML_SERVICE_ACCOUNT_SECRET` from the Client ID and Client Secret shown in the UI.
+
 ```bash
 centml cluster ls
 
