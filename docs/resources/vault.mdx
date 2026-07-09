@@ -7,6 +7,10 @@ icon: 'key-skeleton-left-right'
 The NVIDIA CCluster allows you to generate and manage `Vault` objects such as `Bearer Tokens`, `Certificates`, `Registry Credentials`, `Environment Variables`, `Hugging Face Tokens`, and `SSH Keys`.
 This guide will walk you through creating `Bearer Tokens` and other Vault objects you can use to configure or access NVIDIA CCluster services.
 
+<Note>
+Vault **bearer tokens** protect your deployed inference endpoints — clients include them in requests to LLM Serving and General Inference URLs. For **platform API automation** (SDK, CLI, deployment management without browser login), use [Service Accounts](/resources/service_accounts) instead.
+</Note>
+
 ## Step 1: Log in to the NVIDIA CCluster
 You will need to log in to the NVIDIA CCluster to manage Vault objects. If you do not yet have access, contact your NVIDIA representative or your organization's designated support contact before proceeding.
 

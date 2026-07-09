@@ -9,6 +9,10 @@ NVIDIA CCluster does not expose public endpoints. Every LLM Serving and General 
 - **Bearer token** — an `Authorization: Bearer <token>` header on each request.
 - **mTLS client certificate** — a TLS certificate the client presents on each request.
 
+<Note>
+Endpoint bearer tokens (from your [Vault](/resources/vault)) are not the same as [service account](/resources/service_accounts) credentials. Service accounts authenticate automation to NVIDIA CCluster platform APIs; Vault bearer tokens protect calls to your deployed endpoints.
+</Note>
+
 You choose the protection method when configuring a deployment. You may enable both for defense in depth.
 
 ## Bearer token access
