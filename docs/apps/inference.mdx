@@ -4,7 +4,7 @@ description: 'Deploy and scale any model'
 icon: 'circle-nodes'
 ---
 
-We make it easy for you to containerize and deploy any custom models on CCluster. Containers can run as **any user, including root** — see [Deploying Custom Models](/resources/custom_image) for CCluster security details. We also provide popular inference engine recipes such as vLLM, Ollama, SGLang, and LMDeploy.
+We make it easy for you to containerize and deploy any custom models on CCluster. Containers can run as **any user, including root** — see [Deploying Custom Models](/resources/custom_image) for CCluster security details. We also provide popular inference engine recipes such as vLLM, Ollama, SGLang, LMDeploy, and NVIDIA NIM.
 
 ## 1. Configure your inference deployment
 
@@ -56,6 +56,7 @@ CCluster provides pre-configured recipes for popular inference engines in the **
 - **SGLang** — `python3 -m sglang.launch_server --model-path <HF_MODEL_REPO> --host 0.0.0.0`
 - **LMDeploy** — `lmdeploy serve api_server <HF_REPO_NAME> --server-name 0.0.0.0`
 - **Ollama** — leave **Add command** empty. See the Ollama-specific note below.
+- **NVIDIA NIM** — leave **Add command** empty. See the NIM-specific note below.
 
 <Note>
 **Ollama** does not require a custom entrypoint. After the deployment is ready, you need to pull a model before it can serve requests:
@@ -66,6 +67,43 @@ curl -X POST https://<endpoint_url>/api/pull -d '{"name": "qwen2:1.5b"}'
 
 # Once the pull completes, query the model (Ollama only)
 curl -X POST https://<endpoint_url>/api/chat -d '{"model": "qwen2:1.5b", "messages": [{"role": "user", "content": "Hello"}]}'
+```
+</Note>
+
+<Note>
+**NVIDIA NIM** containers bundle a model-optimized inference engine and download weights automatically at startup. No entrypoint command is needed, but NIM requires three specific settings:
+
+| Field | Value |
+|---|---|
+| **Container Port** | `8000` |
+| **Health check path** | `/v1/health/ready` |
+| **Image Registry Username** | `$oauthtoken` (literal string) |
+| **Image Registry Password** | Your [NGC API Key](https://ngc.nvidia.com) |
+
+Under **Optional Details → Environment Variables**, also set:
+
+| Key | Value |
+|---|---|
+| `NGC_API_KEY` | Your NGC API Key |
+
+The container uses `NGC_API_KEY` to download model weights on first boot — without it the deployment will start but fail to load the model. NIM images are hosted on `nvcr.io`, for example:
+
+```
+nvcr.io/nim/deepseek-ai/deepseek-r1-distill-qwen-32b:latest
+nvcr.io/nim/meta/llama-3.1-8b-instruct:latest
+```
+
+Browse the full NIM catalog at [build.nvidia.com](https://build.nvidia.com/explore/discover). Once the deployment is `ACTIVE`, NIM exposes an OpenAI-compatible API:
+
+```bash
+curl https://<endpoint_url>/v1/chat/completions \
+  -H "Authorization: Bearer <your_bearer_token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "deepseek-ai/deepseek-r1-distill-qwen-32b",
+    "messages": [{"role": "user", "content": "Hello"}],
+    "max_tokens": 256
+  }'
 ```
 </Note>
 

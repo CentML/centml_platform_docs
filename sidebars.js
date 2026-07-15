@@ -17,7 +17,6 @@ const sidebars = {
       items: [
         { type: 'doc', id: 'apps/llm', customProps: { icon: 'messages' } },
         { type: 'doc', id: 'apps/inference', customProps: { icon: 'circle-nodes' } },
-        { type: 'doc', id: 'apps/nim', customProps: { icon: 'microchip-ai' } },
         { type: 'doc', id: 'apps/compute', customProps: { icon: 'microchip' } },
         { type: 'doc', id: 'apps/jobs', customProps: { icon: 'list-checks' } },
       ],
