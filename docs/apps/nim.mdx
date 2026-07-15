@@ -1,0 +1,145 @@
+---
+title: 'NVIDIA NIM'
+description: 'Deploy optimized NVIDIA inference microservices'
+icon: 'microchip-ai'
+---
+
+[NVIDIA NIM](https://developer.nvidia.com/nim) packages optimized, production-ready inference engines for popular models as self-contained containers. Each NIM container bundles the runtime, model weights, and a TensorRT-LLM or vLLM backend, so you get an OpenAI-compatible API endpoint without any model-serving boilerplate.
+
+## Prerequisites
+
+You need an **NGC API Key** to pull NIM containers and to let the container download model weights at startup.
+
+1. Sign in at [build.nvidia.com](https://build.nvidia.com) or [ngc.nvidia.com](https://ngc.nvidia.com).
+2. Navigate to **Account → API Keys** and generate a key.
+3. Keep the key handy — you will enter it in two places during deployment configuration.
+
+## 1. Configure your NIM deployment
+
+Open the **General Inference** deployment page and fill in the following fields.
+
+### Image and port
+
+| Field | Value |
+|---|---|
+| **Image URL** | The full `nvcr.io` path for the NIM you want to run, e.g. `nvcr.io/nim/deepseek-ai/deepseek-r1-distill-qwen-32b:latest` |
+| **Container Port** | `8000` |
+| **Protocol** | `HTTP` |
+| **Health check path** | `/v1/health/ready` |
+
+NIM containers always listen on port `8000` and expose a `/v1/health/ready` readiness probe. Changing these values will cause the deployment to fail.
+
+<Tip>
+Browse the full NIM catalog at [build.nvidia.com/explore/discover](https://build.nvidia.com/explore/discover). Click any model, select the **Deploy** tab, and copy the image path shown under **Docker**.
+</Tip>
+
+### Image registry credentials
+
+NIM images are hosted on the private registry `nvcr.io` and require authentication. Enter these values under **Image Registry Credentials**:
+
+| Field | Value |
+|---|---|
+| **Username** | `$oauthtoken` (literal string, including the `$`) |
+| **Password** | Your NGC API Key |
+
+<Note>
+The username `$oauthtoken` is the fixed token-based authentication user required by the NGC container registry — it is not an environment variable. Enter it exactly as shown.
+</Note>
+
+### Environment variables
+
+Under **Optional Details → Environment Variables**, add:
+
+| Key | Value |
+|---|---|
+| `NGC_API_KEY` | Your NGC API Key |
+
+The NIM container uses this variable at startup to authenticate with NVIDIA's model registry and download the correct model weights. Without it, the container will start but fail to load the model.
+
+<Frame>
+    <img src="/images/inf_1.png" alt="General Inference configuration page with NIM settings" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+<Tip>
+Every deployment must be protected — there are no public endpoints. Secure your endpoint with a Bearer token (an `Authorization: Bearer <token>` header), an mTLS client certificate, or both. See [Securing Endpoints](/resources/private) for details.
+</Tip>
+
+## 2. Select the cluster and hardware
+
+NIM containers are GPU-only workloads. Select a hardware instance with enough VRAM to hold the model's weights. As a rough guide:
+
+| Model size | Minimum GPU VRAM |
+|---|---|
+| Up to 8B parameters | 24 GB (e.g., L40S) |
+| 32B parameters | 80 GB (e.g., A100 80GB) or multi-GPU |
+| 70B+ parameters | Multi-GPU recommended |
+
+<Frame>
+    <img src="/images/inf_2.png" alt="Hardware selection for NIM deployment" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+Click **Deploy** once you have selected the cluster and hardware instance.
+
+<Tip>
+NIM containers download model weights on first start. Expect startup to take several minutes on large models. The deployment will remain in a `PENDING` state until the weights are fully loaded and the `/v1/health/ready` probe returns `200`.
+</Tip>
+
+## 3. Monitor your deployment
+
+Once deployed, the listing view shows the current status of your NIM. Click into the deployment to view logs and resource metrics.
+
+<Frame>
+    <img src="/images/inf_3.png" alt="Deployment listing view" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+Watch the logs for a line similar to `Uvicorn running on http://0.0.0.0:8000` — this confirms the NIM is ready to serve requests.
+
+## 4. Query the endpoint
+
+NIM containers expose an OpenAI-compatible API. Once the deployment status is `ACTIVE`, copy the endpoint URL from the details page and query it the same way you would query the OpenAI API.
+
+```bash
+curl https://<endpoint_url>/v1/chat/completions \
+  -H "Authorization: Bearer <your_bearer_token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "deepseek-ai/deepseek-r1-distill-qwen-32b",
+    "messages": [{"role": "user", "content": "Explain backpropagation in one paragraph."}],
+    "max_tokens": 512
+  }'
+```
+
+<Note>
+The `model` field in the request body must match the model identifier used by that specific NIM — typically `<org>/<model-name>` without the registry prefix. Check the NIM's `/v1/models` endpoint to confirm the exact identifier:
+
+```bash
+curl https://<endpoint_url>/v1/models \
+  -H "Authorization: Bearer <your_bearer_token>"
+```
+</Note>
+
+## What's next
+
+<CardGroup cols={3}>
+  <Card
+    title="General Inference"
+    icon="circle-nodes"
+    href="/apps/inference"
+  >
+    Deploy any custom container — vLLM, SGLang, Ollama, and more
+  </Card>
+  <Card
+    title="Securing Endpoints"
+    icon="lock"
+    href="/resources/private"
+  >
+    Protect your endpoint with Bearer tokens and mTLS certificates
+  </Card>
+  <Card
+    title="Clients"
+    icon="terminal"
+    href="/clients/setup"
+  >
+    Interact with NVIDIA CCluster programmatically via CLI or SDK
+  </Card>
+</CardGroup>
