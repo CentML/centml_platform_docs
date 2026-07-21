@@ -45,16 +45,6 @@ const sidebars = {
         { type: 'doc', id: 'resources/model_integration_lifecycle', customProps: { icon: 'arrows-spin' } },
       ],
     },
-    {
-      type: 'category',
-      label: 'Examples',
-      collapsed: false,
-      items: [
-        { type: 'doc', id: 'examples/codex', customProps: { icon: 'book-atlas' } },
-        { type: 'doc', id: 'examples/flux', customProps: { icon: 'images' } },
-        { type: 'doc', id: 'examples/json_schema', customProps: { icon: 'code-simple' } },
-      ],
-    },
   ],
 };
 
