@@ -37,6 +37,7 @@ const sidebars = {
       items: [
         { type: 'doc', id: 'resources/custom_image', customProps: { icon: 'screwdriver-wrench' } },
         { type: 'doc', id: 'resources/grpc', customProps: { icon: 'waypoints' } },
+        { type: 'doc', id: 'resources/nim', customProps: { icon: 'box-open-full' } },
         { type: 'doc', id: 'resources/private', customProps: { icon: 'lock' } },
         { type: 'doc', id: 'resources/service_accounts', customProps: { icon: 'bot' } },
         { type: 'doc', id: 'resources/json_and_tool', customProps: { icon: 'user-secret' } },
