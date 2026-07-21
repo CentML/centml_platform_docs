@@ -71,55 +71,11 @@ curl -X POST https://<endpoint_url>/api/chat -d '{"model": "qwen2:1.5b", "messag
 
 ### Deploying NVIDIA NIM containers
 
-[NVIDIA NIM](https://developer.nvidia.com/nim) microservices are self-contained containers that bundle a model-optimized inference engine and download model weights automatically at startup, exposing an OpenAI-compatible API. NIM is not a pre-configured recipe — enter the image manually with the settings below.
+[NVIDIA NIM](https://developer.nvidia.com/nim) microservices are self-contained containers that bundle a model-optimized inference engine and download model weights automatically at startup, exposing an OpenAI-compatible API. NIM is not a pre-configured recipe — enter the image manually.
 
-NIM images are hosted on `nvcr.io`. Browse the catalog at [build.nvidia.com](https://build.nvidia.com/explore/discover) and copy the image path from the model's **Deploy** tab, for example:
-
-```
-nvcr.io/nim/deepseek-ai/deepseek-r1-distill-qwen-32b:latest
-nvcr.io/nim/meta/llama-3.1-8b-instruct:latest
-```
-
-Every NIM uses the same configuration:
-
-| Field | Value |
-|---|---|
-| **Add or Select Image** | The `nvcr.io/nim/...` image path (entered manually) |
-| **Container Port** | `8000` |
-| **Protocol** | `HTTP` |
-| **Health check path** | `/v1/health/ready` |
-| **Image Registry Username** | `$oauthtoken` (literal string — not a variable) |
-| **Image Registry Password** | Your [NGC API Key](https://ngc.nvidia.com) |
-
-Leave **Add command** empty — the image's default entrypoint starts the server. Under **Optional Details → Environment Variables**, also add:
-
-| Key | Value |
-|---|---|
-| `NGC_API_KEY` | Your NGC API Key |
-
-The NGC API Key is needed twice: the registry credentials let CCluster pull the image from `nvcr.io`, and the `NGC_API_KEY` environment variable lets the container download model weights on first boot. Without the environment variable, the container starts but fails to load the model.
-
-<Note>
-NIM downloads model weights at startup, so the first boot can take several minutes for large models. The deployment stays in a pending state until the `/v1/health/ready` probe passes.
-</Note>
-
-Once the deployment is ready, query it like any OpenAI-compatible endpoint. List the served model identifier first, then send requests:
-
-```bash
-# Find the model identifier served by this NIM
-curl https://<endpoint_url>/v1/models \
-  -H "Authorization: Bearer <your_bearer_token>"
-
-# Chat completion
-curl https://<endpoint_url>/v1/chat/completions \
-  -H "Authorization: Bearer <your_bearer_token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "meta/llama-3.1-8b-instruct",
-    "messages": [{"role": "user", "content": "Hello"}],
-    "max_tokens": 256
-  }'
-```
+<Tip>
+For the full NIM configuration and an end-to-end walkthrough, see [Deploying NVIDIA NIM](/resources/nim).
+</Tip>
 
 ## 2. Select the cluster and hardware to deploy
 By default, NVIDIA CCluster provides several managed clusters and GPU instances for you to deploy your inference containers. 
