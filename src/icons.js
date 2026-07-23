@@ -21,6 +21,7 @@ import {
   Waypoints,
   ListChecks,
   Bot,
+  Server,
 } from 'lucide-react';
 
 // Single source of truth for icon names → Lucide components, shared by the
@@ -52,6 +53,7 @@ const icons = {
   waypoints: Waypoints,
   'list-checks': ListChecks,
   bot: Bot,
+  server: Server,
 };
 
 export function renderIcon(name, {size = 16, strokeWidth = 1.75} = {}) {

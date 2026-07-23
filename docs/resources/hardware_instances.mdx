@@ -1,0 +1,116 @@
+---
+title: 'Managing Hardware Instances'
+description: 'Create, list, and delete hardware instances under a cluster with the Python SDK'
+icon: 'server'
+---
+
+A **hardware instance** describes a class of hardware — GPU type, GPU count, CPU, and memory — that is available for deployments within a [cluster](/apps/compute). The [Python SDK](/clients/sdk) lets you list the hardware instances you have access to, and (with the right permissions) create and delete them.
+
+<Note>
+Creating and deleting hardware instances requires admin privileges (`PERM_ADMIN_MANAGE_HARDWARE`) on your NVIDIA CCluster organization. Listing hardware instances does not require admin privileges.
+</Note>
+
+## Prerequisites
+
+Install the SDK and authenticate before running any of the examples below. For unattended use in CI or automation, authenticate with a [service account](/resources/service_accounts) by setting `CENTML_SERVICE_ACCOUNT_ID` and `CENTML_SERVICE_ACCOUNT_SECRET`. Interactive development can use `centml login` instead — see [Client Setup](/clients/setup).
+
+## List hardware instances
+
+`get_hardware_instances` returns the hardware instances you have access to. Pass an optional `cluster_id` to restrict the results to a single cluster.
+
+```python
+from centml.sdk.api import get_centml_client
+
+with get_centml_client() as client:
+    clusters = {c.id: c for c in client.get_clusters().results}
+    instances = client.get_hardware_instances()
+
+for hw in instances:
+    cluster = clusters.get(hw.cluster_id)
+    cluster_name = cluster.display_name if cluster else f"cluster {hw.cluster_id}"
+    print(f"{hw.name} ({cluster_name}): {hw.num_gpu}x {hw.gpu_type}, "
+          f"{hw.cpu} CPU, {hw.memory} memory")
+```
+
+Each returned hardware instance exposes fields such as `id`, `name`, `cluster_id`, `gpu_type`, `num_gpu`, `cpu`, and `memory`.
+
+## Create a hardware instance
+
+Use `create_hardware_instance` with a `CreateHardwareInstanceRequest` to register a new hardware instance under a cluster.
+
+```python
+from centml.sdk import CreateHardwareInstanceRequest
+from centml.sdk.api import get_centml_client
+
+request = CreateHardwareInstanceRequest(
+    cluster_id=1,
+    name="h100-8x",
+    gpu_type="H100",
+    num_gpu=8,
+    cpu=64000,
+    memory=128000,
+    accelerator_resource_key="nvidia.com/gpu",
+    node_affinity_labels={"gpu": "h100"},
+    accelerator_memory=80000,
+)
+
+with get_centml_client() as client:
+    instance = client.create_hardware_instance(request)
+
+print(f"Created hardware instance '{instance.name}' with ID {instance.id}")
+```
+
+The `CreateHardwareInstanceRequest` accepts the following fields:
+
+| Field | Description |
+|-------|-------------|
+| `cluster_id` | ID of the cluster the hardware instance belongs to. |
+| `name` | Human-readable name for the hardware instance. |
+| `gpu_type` | GPU model, e.g. `"H100"`. |
+| `num_gpu` | Number of GPUs per instance. |
+| `cpu` | CPU allocation (in millicores). |
+| `memory` | Memory allocation (in MB). |
+| `accelerator_resource_key` | Kubernetes resource key for the accelerator, e.g. `"nvidia.com/gpu"`. |
+| `node_affinity_labels` | Node affinity labels used to schedule onto the correct nodes, e.g. `{"gpu": "h100"}`. |
+| `accelerator_memory` | GPU memory per accelerator (in MB). |
+
+## Delete a hardware instance
+
+Use `delete_hardware_instance` with the hardware instance's ID to remove it.
+
+```python
+from centml.sdk.api import get_centml_client
+
+with get_centml_client() as client:
+    client.delete_hardware_instance(123)
+```
+
+<Tip>
+A full runnable example is available at [`examples/sdk/manage_hardware_instances.py`](https://github.com/CentML/centml-python-client/blob/main/examples/sdk/manage_hardware_instances.py).
+</Tip>
+
+## What's next
+
+<CardGroup cols={3}>
+  <Card
+    title="Python SDK Reference"
+    icon="python"
+    href="/clients/sdk"
+  >
+    Programmatically manage your deployments with the NVIDIA CCluster SDK.
+  </Card>
+  <Card
+    title="Compute Deployments"
+    icon="microchip"
+    href="/apps/compute"
+  >
+    Deploy workloads onto the clusters your hardware instances belong to.
+  </Card>
+  <Card
+    title="Get Support"
+    icon="headset"
+    href="/resources/requesting_support"
+  >
+    Submit a Support Request.
+  </Card>
+</CardGroup>
