@@ -42,6 +42,10 @@ From **New Deployment**, choose **Dynamo**. The **Endpoint** step contains the r
 For Bearer token and mTLS setup, see [Securing Endpoints](/resources/private). Do not place endpoint credentials in environment variables.
 </Tip>
 
+<Frame>
+    <img src="/images/dynamo_endpoint_configuration.png" alt="NVIDIA Dynamo Endpoint step with model, protocol, private endpoint, and annotation fields" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
 ## 2. Configure runtime options
 
 The **Advanced** step includes optional runtime and observability settings:
@@ -50,6 +54,10 @@ The **Advanced** step includes optional runtime and observability settings:
 - **Enable Model Caching** — stores model files in a node-local persistent cache. Restarts and replicas scheduled on the same node can reuse the files instead of downloading them again.
 - **Extra Arguments** — additional vLLM worker arguments. During the beta, use this field only when directed by NVIDIA CCluster support; an unsupported value can prevent the worker from starting.
 - **Environment Variables** — additional variables passed to the Frontend and workers. Use shell-compatible names containing letters, numbers, and underscores, beginning with a letter or underscore.
+
+<Frame>
+    <img src="/images/dynamo_advanced_configuration.png" alt="NVIDIA Dynamo Advanced step with logging, model caching, extra arguments, and environment variables" style={{ borderRadius: '0.5rem' }} />
+</Frame>
 
 ## 3. Select hardware and scaling
 
@@ -67,6 +75,10 @@ Configure the worker count with these fields:
 <Note>
 Use a fixed-size deployment with **Min Replicas** equal to **Max Replicas**. Dynamic autoscaling is not currently supported for customer workloads.
 </Note>
+
+<Frame>
+    <img src="/images/dynamo_hardware_scaling.png" alt="NVIDIA Dynamo Hardware step with GPU hardware choices and fixed worker replica settings" style={{ borderRadius: '0.5rem' }} />
+</Frame>
 
 NVIDIA CCluster evaluates GPU quota against **Max Replicas**. For a supported fixed-size deployment, set **Min Replicas** and **Max Replicas** to the same value, and make sure the cluster has enough capacity for every worker to consume the complete selected hardware instance.
 
