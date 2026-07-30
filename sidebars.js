@@ -40,6 +40,7 @@ const sidebars = {
         { type: 'doc', id: 'resources/hardware_instances', customProps: { icon: 'server' } },
         { type: 'doc', id: 'resources/grpc', customProps: { icon: 'waypoints' } },
         { type: 'doc', id: 'resources/nim', customProps: { icon: 'box-open-full' } },
+        { type: 'doc', id: 'resources/trtllm', customProps: { icon: 'gauge' } },
         { type: 'doc', id: 'resources/private', customProps: { icon: 'lock' } },
         { type: 'doc', id: 'resources/service_accounts', customProps: { icon: 'bot' } },
         { type: 'doc', id: 'resources/json_and_tool', customProps: { icon: 'user-secret' } },
