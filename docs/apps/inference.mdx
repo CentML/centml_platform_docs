@@ -56,6 +56,7 @@ CCluster provides pre-configured recipes for popular inference engines in the **
 - **SGLang** — `python3 -m sglang.launch_server --model-path <HF_MODEL_REPO> --host 0.0.0.0`
 - **LMDeploy** — `lmdeploy serve api_server <HF_REPO_NAME> --server-name 0.0.0.0`
 - **Ollama** — leave **Add command** empty. See the Ollama-specific note below.
+- **TensorRT-LLM** — `trtllm-serve <HF_REPO_NAME> --host 0.0.0.0 --port 8000`. See the TensorRT-LLM note below.
 
 <Note>
 **Ollama** does not require a custom entrypoint. After the deployment is ready, you need to pull a model before it can serve requests:
@@ -68,6 +69,10 @@ curl -X POST https://<endpoint_url>/api/pull -d '{"name": "qwen2:1.5b"}'
 curl -X POST https://<endpoint_url>/api/chat -d '{"model": "qwen2:1.5b", "messages": [{"role": "user", "content": "Hello"}]}'
 ```
 </Note>
+
+<Tip>
+For a full TensorRT-LLM walkthrough, including config file mounts and endpoint testing, see [Deploying TensorRT-LLM](/resources/trtllm).
+</Tip>
 
 ### Deploying NVIDIA NIM containers
 
