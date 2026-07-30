@@ -1,0 +1,166 @@
+---
+title: 'NVIDIA Dynamo'
+description: 'Deploy and operate NVIDIA Dynamo inference endpoints'
+icon: 'waypoints'
+---
+
+NVIDIA Dynamo deployments are backed by a Dynamo Frontend and one or more GPU-powered vLLM workers. HTTP deployments expose an OpenAI-compatible API, while gRPC deployments expose the KServe v2 inference protocol. NVIDIA CCluster manages the Dynamo runtime, deployment lifecycle, TLS ingress, revisions, scaling configuration, status, and logs.
+
+<Note>
+NVIDIA Dynamo support is currently in beta. It is available only on clusters where the Dynamo operator is enabled. If **Dynamo** is not available when you create a deployment, [request support](/resources/requesting_support).
+</Note>
+
+The current integration uses an **aggregated** serving topology:
+
+- One CPU-only **Frontend** accepts requests and routes them to the workers.
+- One or more **Worker** replicas run vLLM on the selected GPU hardware.
+- Every worker replica consumes one complete instance of the hardware type you select.
+- NVIDIA CCluster supplies the Dynamo runtime image. You select the model and hardware instead of providing a container image.
+
+## Before you begin
+
+Prepare the following:
+
+- A Hugging Face model identifier, such as `Qwen/Qwen3-0.6B`.
+- Access to the model on Hugging Face. For gated or private models, accept the model license and provide a Hugging Face token that can download it.
+- A Bearer token or client certificate for endpoint authentication. Public, unauthenticated endpoints are not supported.
+- Enough GPU quota and cluster capacity for your maximum worker replica count.
+
+## 1. Configure the endpoint
+
+From **New Deployment**, choose **Dynamo**. The **Endpoint** step contains the required serving settings:
+
+- **Endpoint Name** — a unique name containing lowercase letters, numbers, and hyphens. It must begin with a lowercase letter, end with a letter or number, and be no more than 20 characters.
+- **Model** — the Hugging Face model identifier loaded by the vLLM workers.
+- **Served Model Name** — an optional alias clients can send in the OpenAI `model` field. If you leave it empty, use the Hugging Face model identifier.
+- **Hugging Face Token** — required for gated and private models.
+- **Protocol** — `HTTP` for the OpenAI-compatible API or `gRPC` for the KServe v2 inference protocol.
+- **Private Endpoint** — select or create a Bearer token or client certificate.
+- **Annotations** — optional key/value metadata applied to the deployment components.
+
+<Tip>
+For Bearer token and mTLS setup, see [Securing Endpoints](/resources/private). Do not place endpoint credentials in environment variables.
+</Tip>
+
+<Frame>
+    <img src="/images/dynamo_endpoint_configuration.png" alt="NVIDIA Dynamo Endpoint step with model, protocol, private endpoint, and annotation fields" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+## 2. Configure runtime options
+
+The **Advanced** step includes optional runtime and observability settings:
+
+- **Enable logging** — enabled by default. Container output is collected and displayed in the deployment's **Logs** tab.
+- **Enable Model Caching** — stores model files in a node-local persistent cache. Restarts and replicas scheduled on the same node can reuse the files instead of downloading them again.
+- **Extra Arguments** — additional vLLM worker arguments. During the beta, use this field only when directed by NVIDIA CCluster support; an unsupported value can prevent the worker from starting.
+- **Environment Variables** — additional variables passed to the Frontend and workers. Use shell-compatible names containing letters, numbers, and underscores, beginning with a letter or underscore.
+
+<Frame>
+    <img src="/images/dynamo_advanced_configuration.png" alt="NVIDIA Dynamo Advanced step with logging, model caching, extra arguments, and environment variables" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+## 3. Select hardware and scaling
+
+In the **Hardware** step, choose a cluster and GPU hardware type. The selection applies to each worker replica: for example, if the selected hardware is `8 x H100`, every worker uses one `8 x H100` instance.
+
+Configure the worker count with these fields:
+
+| Setting | Description |
+| --- | --- |
+| **Min Replicas** | Minimum number of GPU worker replicas. Must be at least `1`; Dynamo deployments cannot scale to zero. |
+| **Max Replicas** | Maximum number of GPU worker replicas. Set it equal to **Min Replicas** for a fixed-size deployment. |
+| **Concurrency** | Target number of in-flight requests per worker. Required when **Max Replicas** is greater than **Min Replicas**. |
+| **Cooldown Period** | Scale-down stabilization time in seconds, from `0` to `3600`. |
+
+<Note>
+Use a fixed-size deployment with **Min Replicas** equal to **Max Replicas**. Dynamic autoscaling is not currently supported for customer workloads.
+</Note>
+
+<Frame>
+    <img src="/images/dynamo_hardware_scaling.png" alt="NVIDIA Dynamo Hardware step with GPU hardware choices and fixed worker replica settings" style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+NVIDIA CCluster evaluates GPU quota against **Max Replicas**. For a supported fixed-size deployment, set **Min Replicas** and **Max Replicas** to the same value, and make sure the cluster has enough capacity for every worker to consume the complete selected hardware instance.
+
+Click **Deploy**. Model download and worker startup can take several minutes, especially for large models that are not already cached.
+
+## 4. Monitor the deployment
+
+The deployments list and revision table report Dynamo pods by component instead of combining them into one replica count:
+
+- **Frontend** — the request-routing component. A standard deployment has one Frontend pod.
+- **Worker** — the GPU-backed vLLM replicas controlled by the scaling settings.
+
+For example, `Frontend (1 / 1 replicas)` and `Worker (2 / 2 replicas)` mean that the routing component and both GPU workers are ready. The overall deployment can remain not ready when the Frontend is unhealthy, even if all workers are running, because the endpoint cannot accept traffic without it.
+
+Open the deployment to access:
+
+- **Detail** — endpoint, model, hardware, scaling configuration, component health, and revision history.
+- **Logs** — logs for a selected Frontend or Worker pod and revision. Logs are available only for revisions with logging enabled.
+- **Terminal** — an interactive shell for an active deployment.
+- **Usage** — deployment resource usage.
+
+Editing a Dynamo deployment creates a new revision and starts an operator-managed rolling update. You can inspect historical revision status and logs, clone a deployment, or roll back to an earlier revision. Pausing or resuming the whole deployment is supported; pausing only an in-progress Dynamo rollout is not.
+
+## 5. Call the endpoint
+
+For a Bearer-protected HTTP deployment, copy the endpoint hostname and Bearer token from the **Detail** tab. Send requests to the OpenAI-compatible chat completions endpoint:
+
+```bash
+curl "https://<endpoint_url>/v1/chat/completions" \
+  -H "Authorization: Bearer <your_bearer_token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "<model-or-served-model-name>",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Explain why low-latency inference matters."
+      }
+    ],
+    "max_tokens": 128,
+    "stream": false
+  }'
+```
+
+For a certificate-protected endpoint, configure your HTTP client with the downloaded client certificate instead of the `Authorization` header. See [Securing Endpoints](/resources/private).
+
+If you selected `gRPC`, connect to `<endpoint_url>:443` with TLS and use Dynamo's KServe v2 `ModelInfer` or `ModelStreamInfer` API. This is different from the direct vLLM gRPC API used by General Inference deployments. See the [NVIDIA Dynamo KServe gRPC frontend guide](https://docs.nvidia.com/dynamo/latest/components/frontend/frontend-guide) for the protocol and [Securing Endpoints](/resources/private) for authentication.
+
+## Current scope
+
+The beta integration currently supports:
+
+- Aggregated serving with a Dynamo Frontend and vLLM workers.
+- Fixed-size worker deployments. Dynamic autoscaling is not currently supported for customer workloads.
+- HTTP OpenAI-compatible and KServe gRPC endpoints.
+- Bearer token or mTLS endpoint protection.
+- Revision-aware status, logs, editing, cloning, and rollback.
+
+The current integration has a single Frontend and does not expose Frontend high availability, disaggregated prefill/decode serving, custom Dynamo runtime images, config-file mounts, or scale-to-zero. For Dynamo architecture and features outside the NVIDIA CCluster integration, see the [NVIDIA Dynamo documentation](https://docs.nvidia.com/dynamo/latest/).
+
+## What's next
+
+<CardGroup cols={3}>
+  <Card
+    title="Securing Endpoints"
+    icon="lock"
+    href="/resources/private"
+  >
+    Protect your endpoint with a Bearer token or mTLS client certificate.
+  </Card>
+  <Card
+    title="NVIDIA Dynamo Frontend"
+    icon="waypoints"
+    href="https://docs.nvidia.com/dynamo/components/frontend"
+  >
+    Review Dynamo's OpenAI-compatible HTTP and KServe gRPC interfaces.
+  </Card>
+  <Card
+    title="Get Support"
+    icon="headset"
+    href="/resources/requesting_support"
+  >
+    Ask about Dynamo availability, capacity, or deployment failures.
+  </Card>
+</CardGroup>

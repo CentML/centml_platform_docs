@@ -16,6 +16,7 @@ const sidebars = {
       collapsed: false,
       items: [
         { type: 'doc', id: 'apps/llm', customProps: { icon: 'messages' } },
+        { type: 'doc', id: 'apps/dynamo', customProps: { icon: 'waypoints' } },
         { type: 'doc', id: 'apps/inference', customProps: { icon: 'circle-nodes' } },
         { type: 'doc', id: 'apps/compute', customProps: { icon: 'microchip' } },
         { type: 'doc', id: 'apps/jobs', customProps: { icon: 'list-checks' } },
