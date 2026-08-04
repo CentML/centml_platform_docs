@@ -69,18 +69,18 @@ Configure the worker count with these fields:
 | --- | --- |
 | **Min Replicas** | Minimum number of GPU worker replicas. Must be at least `1`; Dynamo deployments cannot scale to zero. |
 | **Max Replicas** | Maximum number of GPU worker replicas. Set it equal to **Min Replicas** for a fixed-size deployment. |
-| **Concurrency** | Target number of in-flight requests per worker. Required when **Max Replicas** is greater than **Min Replicas**. |
+| **Concurrency** | Target number of active requests per worker used to calculate the desired worker replica count. Required when **Max Replicas** is greater than **Min Replicas**. |
 | **Cooldown Period** | Scale-down stabilization time in seconds, from `0` to `3600`. |
 
 <Note>
-Use a fixed-size deployment with **Min Replicas** equal to **Max Replicas**. Dynamic autoscaling is not currently supported for customer workloads.
+Set **Min Replicas** lower than **Max Replicas** to enable autoscaling. NVIDIA CCluster scales the Worker component within the configured range based on active request concurrency. The worker replica count does not scale below **Min Replicas**, which must be at least `1`.
 </Note>
 
 <Frame>
-    <img src="/images/dynamo_hardware_scaling.png" alt="NVIDIA Dynamo Hardware step with GPU hardware choices and fixed worker replica settings" style={{ borderRadius: '0.5rem' }} />
+    <img src="/images/dynamo_hardware_scaling.png" alt="NVIDIA Dynamo Hardware step with GPU hardware choices and worker replica autoscaling settings" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-NVIDIA CCluster evaluates GPU quota against **Max Replicas**. For a supported fixed-size deployment, set **Min Replicas** and **Max Replicas** to the same value, and make sure the cluster has enough capacity for every worker to consume the complete selected hardware instance.
+NVIDIA CCluster evaluates GPU quota against **Max Replicas**. Make sure the cluster has enough capacity to run that many workers, each consuming one complete selected hardware instance. Set **Min Replicas** equal to **Max Replicas** for a fixed-size deployment, or set **Min Replicas** lower than **Max Replicas** for autoscaling.
 
 Click **Deploy**. Model download and worker startup can take several minutes, especially for large models that are not already cached.
 
@@ -132,7 +132,7 @@ If you selected `gRPC`, connect to `<endpoint_url>:443` with TLS and use Dynamo'
 The beta integration currently supports:
 
 - Aggregated serving with a Dynamo Frontend and vLLM workers.
-- Fixed-size worker deployments. Dynamic autoscaling is not currently supported for customer workloads.
+- Fixed-size workers or dynamic worker autoscaling between the configured minimum and maximum replica counts.
 - HTTP OpenAI-compatible and KServe gRPC endpoints.
 - Bearer token or mTLS endpoint protection.
 - Revision-aware status, logs, editing, cloning, and rollback.
