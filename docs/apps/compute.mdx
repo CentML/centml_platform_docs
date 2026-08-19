@@ -24,6 +24,11 @@ To deploy an image from a private registry (e.g., Amazon ECR, Google Artifact Re
 
 Enter your SSH public key to configure access to the instance, select a GPU instance type, and click Deploy.
 
+Optional settings on the create form:
+
+- **Enable logging** — collect container output and show it on the deployment **Logs** tab.
+- **Annotations** — optional key/value metadata on the instance.
+
 <Frame>
     <img src="/images/comp_1.png" alt="Compute instance launch page" style={{ borderRadius: '0.5rem' }} />
 </Frame>
@@ -74,16 +79,22 @@ The interactive shell depends on what your image provides:
 
 The instance includes the libraries from your image. Additional packages can be installed with your preferred package manager.
 
+### In-console Terminal
+
+While the instance is **Active**, the deployment **Terminal** tab opens a shell in the browser without SSH from your machine. Use SSH (above) for `scp`/`SFTP` and port forwarding. See [Managing Deployments](/resources/managing_deployments) for Terminal availability, pause/resume, clone, and logs.
+
+Compute deployments are not revision-aware in the console: edits update the instance in place and there is no rollback table.
+
 
 ## What's next
 
 <CardGroup cols={3}>
   <Card
-    title="Clients"
-    icon="terminal"
-    href="/clients/setup"
+    title="Managing Deployments"
+    icon="sliders"
+    href="/resources/managing_deployments"
   >
-    Learn how to interact with the NVIDIA CCluster programmatically
+    In-console Terminal, logs, pause, and clone.
   </Card>
   <Card
     title="Managing Vault Objects"

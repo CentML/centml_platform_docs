@@ -1,0 +1,126 @@
+---
+title: 'Managing Deployments'
+description: 'Operate deployments from the console: logs, in-browser Terminal, pause and resume, clone, revisions, and rollout'
+icon: 'sliders'
+---
+
+After you create a deployment, open it from the deployments list to inspect status, stream logs, open a shell, pause or resume it, clone it, or (for revision-aware types) roll back to an earlier spec.
+
+This page covers those shared operations. Create-form fields stay on the type pages: [LLM Serving](/apps/llm), [General Inference](/apps/inference), [NVIDIA Dynamo](/apps/dynamo), [Compute](/apps/compute), and [Batch Jobs](/apps/jobs).
+
+## Detail page tabs
+
+| Tab | What it shows |
+| --- | --- |
+| **Detail** | Endpoint, hardware, scaling, and (when supported) revision history. |
+| **Logs** | Container stdout/stderr for a selected pod and revision. |
+| **Terminal** | An interactive shell into a selected pod. Available while the deployment is **Active**. |
+| **Usage** | Resource usage for the deployment. |
+
+Jobs have no serving endpoint. Use **Detail** and **Logs** (and **Terminal** while pods are running) to follow the batch run.
+
+## In-browser Terminal
+
+The **Terminal** tab opens a shell in the browser to a pod in an **Active** deployment. If more than one pod is running, choose the pod from the dropdown.
+
+Use the Terminal for a quick look at processes, files, and GPU state without leaving the console.
+
+<Note>
+The Terminal is available only while the deployment status is **Active**. For batch jobs, it is available while job pods are running. It disappears when the deployment is paused, completed, or no longer Active.
+</Note>
+
+The shell you get depends on the image, the same as SSH on Compute:
+
+| Image | Shell in the Terminal |
+| --- | --- |
+| Images with `bash` (for example Ubuntu, Debian, NGC images) | `bash` |
+| Images with only `sh` (for example Alpine) | `/bin/sh` |
+| Images without a shell (for example distroless) | No interactive shell |
+
+For Compute instances, the Terminal does **not** replace SSH. Use [SSH](/apps/compute) from your machine when you need `scp`/`SFTP`, port forwarding, or a persistent local session. Use the in-console Terminal for a short interactive session.
+
+## Pause and resume
+
+On the deployment detail page you can **Pause** an Active deployment or **Resume** a paused one. Pausing stops serving (or stops the Compute instance) without deleting the deployment.
+
+- **LLM Serving**, **General Inference**, **Compute**: pause and resume the whole deployment.
+- **Dynamo**: pause and resume the whole deployment. You cannot pause only an in-progress Dynamo rollout. See [NVIDIA Dynamo](/apps/dynamo).
+- **Jobs**: jobs run to completion and then stop. Pause and resume do not apply.
+
+You can also pause and resume from the CLI (`ccluster pause` / `ccluster resume`). See [Client Setup](/clients/setup).
+
+## Clone and edit
+
+**Clone** opens the create form prefilled from an existing deployment (the name typically gets a `-clone` suffix). Review hardware, secrets, and tokens before you deploy the copy — cloned credentials such as Hugging Face tokens may need to be selected again.
+
+**Edit** (update) changes the running deployment. On revision-aware types, spec edits create a **new revision** and start a rollout. Compute and jobs are not revision-aware in the console: an edit updates the deployment without a revision table or rollback UI.
+
+## Revisions, rollback, and rollout
+
+**LLM Serving**, **General Inference**, and **Dynamo** are revision-aware. The **Detail** tab lists revisions so you can inspect status and logs per revision and **roll back** to an earlier revision.
+
+**Compute** and **Jobs** do not expose a revision table or rollback in the console.
+
+When you edit a revision-aware deployment that is already Active, you can set rollout surge:
+
+| Setting | Description |
+| --- | --- |
+| **Max surge** | Extra replicas allowed above the desired count during the rollout. |
+| **Max unavailable** | Replicas that may be unavailable during the rollout. |
+
+Neither value can exceed the deployment's max replica count. Dynamo rollouts are operator-managed; see [NVIDIA Dynamo](/apps/dynamo) for Dynamo-specific behavior.
+
+### Scaling replicas does not create a revision
+
+<Note>
+Changing **Min Replicas** or **Max Replicas** (scaling up or down) updates the running deployment in place and **does not create a new revision**.
+</Note>
+
+A new revision is created when you change the deployment **spec** — for example image, command, environment variables, session affinity, model caching, or a config file — on a revision-aware type.
+
+Rollback restores an earlier **spec** revision. It does not undo a replica-count change. To undo a scale-up or scale-down, set the replica fields back to the values you want.
+
+## Logs
+
+Logs appear on the **Logs** tab when **Enable logging** was on for that revision (or for the deployment, on types without revisions). Historical revisions keep the logs collected while they ran. If logging was off, the Logs tab has nothing to show for that revision.
+
+On Dynamo, pick a Frontend or Worker pod; replica counts are reported per component. See [NVIDIA Dynamo](/apps/dynamo).
+
+## What each deployment type supports
+
+| Action | LLM Serving | General Inference | Dynamo | Compute | Jobs |
+| --- | --- | --- | --- | --- | --- |
+| Logs | Yes, if logging is enabled | Yes, if logging is enabled | Yes, if logging is enabled | Yes, if logging is enabled | Yes, if logging is enabled |
+| Terminal | While **Active** | While **Active** | While **Active** | While **Active** | While pods are running |
+| Pause / resume | Yes | Yes | Whole deployment only | Yes | Not applicable |
+| Clone | Yes | Yes | Yes | Yes | Yes |
+| Edit | New revision | New revision | New revision | In-place update | In-place update |
+| Revision table / rollback | Yes | Yes | Yes | No | No |
+| Change rollout (`max_surge` / `max_unavailable`) | Yes | Yes | Operator-managed | No | No |
+| Scale replicas without a new revision | Yes | Yes | Yes | Not a multi-replica serving deployment | Not applicable |
+
+## What's next
+
+<CardGroup cols={3}>
+  <Card
+    title="General Inference"
+    icon="circle-nodes"
+    href="/apps/inference"
+  >
+    Configure logging, affinity, caching, config files, and autoscaling when you create an endpoint.
+  </Card>
+  <Card
+    title="LLM Serving"
+    icon="messages"
+    href="/apps/llm"
+  >
+    Deploy a dedicated LLM endpoint, then operate it from the detail page.
+  </Card>
+  <Card
+    title="Compute Instance"
+    icon="microchip"
+    href="/apps/compute"
+  >
+    Use SSH from your machine or the in-console Terminal on an Active instance.
+  </Card>
+</CardGroup>

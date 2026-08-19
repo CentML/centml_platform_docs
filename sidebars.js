@@ -38,6 +38,7 @@ const sidebars = {
       items: [
         { type: 'doc', id: 'resources/custom_image', customProps: { icon: 'screwdriver-wrench' } },
         { type: 'doc', id: 'resources/hardware_instances', customProps: { icon: 'server' } },
+        { type: 'doc', id: 'resources/managing_deployments', customProps: { icon: 'sliders' } },
         { type: 'doc', id: 'resources/grpc', customProps: { icon: 'waypoints' } },
         { type: 'doc', id: 'resources/nim', customProps: { icon: 'box-open-full' } },
         { type: 'doc', id: 'resources/trtllm', customProps: { icon: 'gauge' } },

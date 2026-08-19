@@ -23,6 +23,7 @@ import {
   Bot,
   Server,
   Gauge,
+  SlidersHorizontal,
 } from 'lucide-react';
 
 // Single source of truth for icon names → Lucide components, shared by the
@@ -56,6 +57,7 @@ const icons = {
   bot: Bot,
   server: Server,
   gauge: Gauge,
+  sliders: SlidersHorizontal,
 };
 
 export function renderIcon(name, {size = 16, strokeWidth = 1.75} = {}) {
