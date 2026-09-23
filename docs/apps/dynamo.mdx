@@ -145,7 +145,11 @@ Open the deployment to access:
 - **Terminal** — an interactive shell for an active deployment.
 - **Usage** — deployment resource usage.
 
-Editing a Dynamo deployment creates a new revision and starts an operator-managed rolling update. You can inspect historical revision status and logs or roll back to an earlier revision. Pausing or resuming the whole deployment is supported; pausing only an in-progress Dynamo rollout is not.
+<Note>
+Changing worker **Min Replicas** or **Max Replicas** on a running Dynamo deployment scales in place and **does not create a new revision**. Editing the spec (model, protocol, extra arguments, and similar) creates a new revision. See [Managing Deployments](/resources/managing_deployments) for Terminal, pause/resume, clone, and the shared revision model.
+</Note>
+
+Editing a Dynamo deployment creates a new revision and starts an operator-managed rolling update. You can inspect historical revision status and logs, clone a deployment, or roll back to an earlier revision. Pausing or resuming the whole deployment is supported; pausing only an in-progress Dynamo rollout is not.
 
 The console's **Edit** and **Clone** flows currently support aggregated deployments only. For a disaggregated deployment, use the Dynamo API to update supported fields or create a copy from the `worker_pools` configuration returned by the API.
 
@@ -190,11 +194,11 @@ The current integration has a single Frontend and does not expose Frontend high 
 
 <CardGroup cols={3}>
   <Card
-    title="Securing Endpoints"
-    icon="lock"
-    href="/resources/private"
+    title="Managing Deployments"
+    icon="sliders"
+    href="/resources/managing_deployments"
   >
-    Protect your endpoint with a Bearer token or mTLS client certificate.
+    Terminal, pause, clone, revisions, and replica scaling.
   </Card>
   <Card
     title="NVIDIA Dynamo Frontend"

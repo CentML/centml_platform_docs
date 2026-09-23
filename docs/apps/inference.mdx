@@ -19,11 +19,34 @@ At a minimum, you need to specify:
 - **Health check path** — the endpoint used to verify readiness (e.g., `/health`, `/`). For gRPC deployments, CCluster uses TCP socket checks automatically, so this field is ignored.
 - **Image Registry Username / Password** — required only if the image is hosted on a private registry (e.g., Docker Hub private repo). You can also use credentials stored in your [Vault](/resources/vault).
 
-Under the **Optional Details** tab:
+The create wizard splits optional settings across **Advanced** and **Scaling**.
 
+**Advanced**
+
+- **Enable logging** — collect container stdout/stderr and show it on the deployment **Logs** tab. If this is off, that revision has no logs in the console.
+- **Enable Model Caching** — store model files in a node-local persistent cache. Restarts and replicas scheduled on the same node can reuse the files instead of downloading them again.
+- **Session affinity** — best-effort sticky routing using the `X-Session-Id` request header. Requests with the same header value land on the same pod, which helps KV-cache reuse for agentic workloads. Requests without the header are routed at random. Affinity is **not** durable: scaling, rollouts, restarts, or readiness-probe transitions can remap sessions to different pods. Do not use it for irreplaceable in-pod state.
+- **Health check path** — the endpoint used to verify readiness (also listed in the required fields above).
 - **Add command** — entrypoint command and arguments. If left empty, the image's default entrypoint is used.
-- **Autoscaling** — set the min and max scale for your deployment. CCluster scales replicas based on max concurrency (maximum in-flight requests per replica). Default is infinity.
-- **Environment variables** — pass additional environment variables to the container (e.g., `HF_TOKEN`).
+- **Metrics port** / **Metrics path** — optional Prometheus scrape endpoint. Set **both** together, or leave both empty to use the defaults (the container port and `/metrics`).
+- **Environment variables** — pass additional variables to the container (e.g., `HF_TOKEN`).
+- **Config file** — mount a file into the container. Provide **Filename**, **Mount Path (directory)**, and **File Content**. For worked examples, see [gRPC Inference Endpoints](/resources/grpc) and [Deploying TensorRT-LLM](/resources/trtllm).
+- **Annotations** — optional key/value metadata on the deployment.
+
+**Scaling**
+
+CCluster scales replicas from in-flight request concurrency (**Max Concurrency**). Leave concurrency unset for no concurrency target (effectively unlimited).
+
+| Setting | Description |
+| --- | --- |
+| **Min Replicas** | Lower bound for replica count. `0` allows scale-to-zero when demand drops. |
+| **Max Replicas** | Upper bound for replica count. Set equal to **Min Replicas** for a fixed size. |
+| **Max Concurrency** | Target in-flight requests per replica. Required when **Max Replicas** is greater than **Min Replicas**. |
+| **Cooldown Period (s)** | Scale-down stabilization time, from `0` to `3600`. |
+
+<Note>
+Changing min or max replica counts on a running deployment scales in place and **does not create a new revision**. Spec changes such as image, command, or affinity do. See [Managing Deployments](/resources/managing_deployments).
+</Note>
 
 <Frame>
     <img src="/images/inf_1.png" alt="General Inference deployment page" style={{ borderRadius: '0.5rem' }} />
@@ -109,6 +132,8 @@ Click on the deployment to view the details page, logs and monitoring informatio
     <img src="/images/inf_4.png" alt="Deployment details panel after launching a general inference endpoint" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
+From the detail page you can stream **Logs**, open the in-browser **Terminal** while the deployment is Active, pause or resume, clone, edit (which creates a new revision), or roll back. See [Managing Deployments](/resources/managing_deployments).
+
 Once the deployment status is ready, the container port is going to be exposed under the endpoint url shown in the details page.
 
 ### Accessing your endpoint
@@ -141,19 +166,19 @@ For gRPC deployments, see [gRPC Inference Endpoints](/resources/grpc) for connec
 
 <CardGroup cols={3}>
   <Card
+    title="Managing Deployments"
+    icon="sliders"
+    href="/resources/managing_deployments"
+  >
+    Logs, Terminal, pause, clone, revisions, and replica scaling.
+  </Card>
+  <Card
     title="Securing Endpoints"
     icon="lock"
     href="/resources/private"
   >
 Learn how to protect your endpoints with Bearer tokens and mTLS certificates
  </Card>
-  <Card
-    title="Clients"
-    icon="terminal"
-    href="/clients/setup"
-  >
-    Learn how to interact with the NVIDIA CCluster programmatically
-  </Card>
   <Card
     title="LLM Serving"
     icon="messages"

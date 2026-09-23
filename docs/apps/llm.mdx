@@ -36,11 +36,34 @@ Each configuration is accompanied by detailed analysis on:
 
 These insights help you choose the configuration that best meets your needs.
 
+### Optional details
+
+Expand **Optional Details** for runtime, observability, and scaling controls. These are independent of the preset (or Custom) performance configuration.
+
+- **Enable logging** — collect container output and show it on the deployment **Logs** tab.
+- **Enable Model Caching** — store model files in a node-local persistent cache so restarts and replicas on the same node can skip re-downloading weights.
+- **Enable session affinity** — best-effort sticky routing via the `X-Session-Id` request header. Requests with the same header value land on the same pod; requests without it are routed at random. Affinity is not durable across scaling, rollouts, or restarts.
+- **Environment variables** — extra variables passed to the serving container.
+- **Annotations** — optional key/value metadata.
+
+| Setting | Description |
+| --- | --- |
+| **Min Replicas** | Lower bound for replica count. |
+| **Max Replicas** | Upper bound for replica count. Set equal to **Min Replicas** for a fixed size. |
+| **Max Concurrency** | Target in-flight requests per replica. Required when max is greater than min. |
+| **Cooldown Period (s)** | Scale-down stabilization time, from `0` to `3600`. |
+
+<Note>
+Scaling min or max replicas on a running deployment does **not** create a new revision. Changing the serving spec does. See [Managing Deployments](/resources/managing_deployments).
+</Note>
+
 ### (Optional) Performance customization
 For advanced users, NVIDIA CCluster also offers an option to customize their model performance configuration. Simply click the "Custom" configuration to gain full control over several tunable parameters.
 
 ## 3. Deploy and integrate
 Finally, click "Deploy". Once the deployment is ready in a few minutes, copy the endpoint url and go to `https://<endpoint_url>/docs` to find the list of API endpoints to start using your LLM deployment. We offer API compatibility with CServe, OpenAI, and Cortex, making integration with other applications seamless.
+
+From the deployment detail page you can stream logs, open the in-browser **Terminal**, pause or resume, clone, edit (new revision), or roll back. See [Managing Deployments](/resources/managing_deployments).
 
 Endpoints are never public, so every request must authenticate with a Bearer token or a client certificate. The example below uses a Bearer token; see [Securing Endpoints](/resources/private) for all options.
 
@@ -77,11 +100,11 @@ For more details on how to use the LLM deployment, please refer to the [examples
 
 <CardGroup cols={3}>
   <Card
-    title="Clients"
-    icon="terminal"
-    href="/clients/setup"
+    title="Managing Deployments"
+    icon="sliders"
+    href="/resources/managing_deployments"
   >
-    Learn how to interact with the NVIDIA CCluster programmatically
+    Logs, Terminal, pause, clone, revisions, and replica scaling.
   </Card>
   <Card
     title="Securing Endpoints"
