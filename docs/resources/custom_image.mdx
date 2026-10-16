@@ -23,8 +23,34 @@ After building the container, push it to a container registry. The NVIDIA CClust
 
 For **public images**, navigate to the General Inference option in the NVIDIA CCluster and enter the image name, tag, and container port to deploy your application.
 
-For **private images**, you will need to provide registry credentials so CCluster can pull the image. You can either store credentials in your [Vault](/resources/vault) as a `Registry Credentials` item and select them during deployment, or enter the registry username and password directly when configuring the deployment. CCluster automatically detects the registry from the image URL.
+For **private images**, you will need to provide registry credentials so CCluster can pull the image. Enter the registry username and password directly when configuring the deployment. CCluster automatically detects the registry from the image URL. If your cluster administrator already manages an image pull secret, you can reference it through the API as described below.
 
+## Use an existing image pull secret
+
+[General Inference](/apps/inference), [Compute](/apps/compute), and [Batch Jobs](/apps/jobs) support the API field `image_pull_secret_name` to pull private container images using an existing Kubernetes Secret. This is useful when your cluster administrator manages registry credentials and their refresh outside CCluster.
+
+Before deploying, ask your cluster administrator to ensure that the image pull secret exists in the **deployment namespace on the target cluster** and contains valid credentials for your image's registry. Use the Kubernetes Secret's name for `image_pull_secret_name`.
+
+Add the following field to your deployment create request, alongside the other required deployment fields:
+
+```json
+{
+  "image_pull_secret_name": "private-registry-pull"
+}
+```
+
+Choose only one registry authentication method per request:
+
+- `image_pull_secret_name` — reference an existing Kubernetes image pull secret.
+- `image_pull_secret_credentials` — provide a registry username and password directly.
+
+Requests that combine `image_pull_secret_name` with `image_pull_secret_credentials` are rejected. The secret name must be a valid Kubernetes DNS subdomain name, at most 253 characters: lowercase letters, digits, hyphens, and dots, with each dot-separated segment starting and ending with a letter or digit.
+
+### Updates and secret maintenance
+
+Include `image_pull_secret_name` in every deployment update request to retain the reference. Updates replace the deployment configuration; omitting the field or setting it to `null` clears the reference. When cloning a deployment through the API, carry the field into the new request and ensure the secret also exists in the new deployment's namespace and cluster.
+
+CCluster references the secret but does not create, refresh, or delete it. Your cluster administrator must keep its registry credentials valid and manage its lifecycle independently of the deployment.
 
 ## What's next
 
