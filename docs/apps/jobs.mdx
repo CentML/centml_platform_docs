@@ -13,7 +13,7 @@ Under the **Job Information** section, provide the core details for your workloa
 - **Job Name** — a unique name for the job. It must start with a lowercase letter, contain only lowercase letters, digits, or hyphens (`-`), end with an alphanumeric character, and be at most 20 characters.
 - **Container Image URL** — the container image to run (e.g., `nvcr.io/nvidia/base/ubuntu`).
 - **Container Tag** — the image tag (e.g., `latest`).
-- **Image Pull Secret Username / Password** — required only if the image is hosted on a private registry. Leave both empty for public images; if you provide one, you must provide the other.
+- **Image Pull Secret Username / Password** — credentials for private images. Leave both empty for public images; if you provide one, you must provide the other. API deployments can instead [reference an existing image pull secret](/resources/custom_image#use-an-existing-image-pull-secret) using `image_pull_secret_name`.
 
 ## 2. Set optional details
 

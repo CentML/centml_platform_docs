@@ -18,7 +18,9 @@ Your image does not need an SSH server preinstalled. CCluster injects one at dep
 
 ### Private registry images
 
-To deploy an image from a private registry (e.g., Amazon ECR, Google Artifact Registry, Azure Container Registry, or a self-hosted registry), provide credentials in the **Image Registry Username** and **Image Registry Password** fields. You can enter them directly or select a `Registry Credentials` item stored in your [Vault](/resources/vault). CCluster automatically detects the registry from the image URL. For public images, leave both fields empty.
+To deploy an image from a private registry (e.g., Amazon ECR, Google Artifact Registry, Azure Container Registry, or a self-hosted registry), provide credentials in the **Image Registry Username** and **Image Registry Password** fields. CCluster automatically detects the registry from the image URL. For public images, leave both fields empty.
+
+API deployments can instead [reference an existing image pull secret](/resources/custom_image#use-an-existing-image-pull-secret) managed by your cluster administrator using `image_pull_secret_name`.
 
 ## 2. Configure access and deploy
 
