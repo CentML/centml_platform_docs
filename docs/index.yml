@@ -54,16 +54,16 @@ navigation:
     slug: resources
     contents:
       - page: Deploying Custom Models
-        path: ./resources/custom_image.mdx
-        slug: custom_image
+        path: ./resources/custom-image.mdx
+        slug: custom-image
         icon: fa-solid fa-screwdriver-wrench
       - page: Managing Hardware Instances
-        path: ./resources/hardware_instances.mdx
-        slug: hardware_instances
+        path: ./resources/hardware-instances.mdx
+        slug: hardware-instances
         icon: fa-solid fa-server
       - page: Managing Deployments
-        path: ./resources/managing_deployments.mdx
-        slug: managing_deployments
+        path: ./resources/managing-deployments.mdx
+        slug: managing-deployments
         icon: fa-solid fa-sliders
       - page: gRPC Inference Endpoints
         path: ./resources/grpc.mdx
@@ -82,22 +82,22 @@ navigation:
         slug: private
         icon: fa-solid fa-lock
       - page: Service Accounts
-        path: ./resources/service_accounts.mdx
-        slug: service_accounts
+        path: ./resources/service-accounts.mdx
+        slug: service-accounts
         icon: fa-solid fa-robot
       - page: Agents on NVIDIA CCluster
-        path: ./resources/json_and_tool.mdx
-        slug: json_and_tool
+        path: ./resources/json-and-tool.mdx
+        slug: json-and-tool
         icon: fa-solid fa-user-secret
       - page: Requesting Support
-        path: ./resources/requesting_support.mdx
-        slug: requesting_support
+        path: ./resources/requesting-support.mdx
+        slug: requesting-support
         icon: fa-solid fa-headset
       - page: Managing Vault Objects
         path: ./resources/vault.mdx
         slug: vault
         icon: fa-solid fa-key
       - page: The Model Integration Lifecycle
-        path: ./resources/model_integration_lifecycle.mdx
-        slug: model_integration_lifecycle
+        path: ./resources/model-integration-lifecycle.mdx
+        slug: model-integration-lifecycle
         icon: fa-solid fa-arrows-spin

@@ -37,6 +37,7 @@ python3 tools/check-docs-paths --allow '../docs/index.yml' docs fern
 ## Editing Rules
 
 - `docs/index.yml` is the source of truth for page order and visibility; a file on disk is not published unless listed.
+- Name pages, slugs, and images in lowercase with hyphens (`custom-image.mdx`), not underscores. When renaming or removing a published page, add a rule to `fern/redirects.yml`.
 - Never use absolute paths, `..` segments, or symlinks in page or YAML file references; `tools/check-docs-paths` rejects them because the Fern CLI runs with `FERN_TOKEN`.
 - Keep `fern/docs.yml` and `docs/index.yml` as plain `key: value` YAML (no anchors, flow collections, or block scalars) so the path checker can read them.
 - Never commit Fern tokens. `FERN_TOKEN` is a repository secret only.

@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+# `source` is matched without the site base path (/ccluster); `destination` must include it.
+redirects:
+  - source: /index.html
+    destination: /ccluster
+  - source: /resources/custom_image
+    destination: /ccluster/resources/custom-image
+    permanent: true
+  - source: /resources/hardware_instances
+    destination: /ccluster/resources/hardware-instances
+    permanent: true
+  - source: /resources/managing_deployments
+    destination: /ccluster/resources/managing-deployments
+    permanent: true
+  - source: /resources/service_accounts
+    destination: /ccluster/resources/service-accounts
+    permanent: true
+  - source: /resources/json_and_tool
+    destination: /ccluster/resources/json-and-tool
+    permanent: true
+  - source: /resources/requesting_support
+    destination: /ccluster/resources/requesting-support
+    permanent: true
+  - source: /resources/model_integration_lifecycle
+    destination: /ccluster/resources/model-integration-lifecycle
+    permanent: true

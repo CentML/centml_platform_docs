@@ -3,7 +3,7 @@ title: 'General Inference'
 description: 'Deploy and scale any model'
 ---
 
-We make it easy for you to containerize and deploy any custom models on CCluster. Containers can run as **any user, including root** — see [Deploying Custom Models](/resources/custom_image) for CCluster security details. We also provide popular inference engine recipes such as vLLM, Ollama, SGLang, and LMDeploy.
+We make it easy for you to containerize and deploy any custom models on CCluster. Containers can run as **any user, including root** — see [Deploying Custom Models](/resources/custom-image) for CCluster security details. We also provide popular inference engine recipes such as vLLM, Ollama, SGLang, and LMDeploy.
 
 ## 1. Configure your inference deployment
 
@@ -16,7 +16,7 @@ At a minimum, you need to specify:
 - **Container Port** — the port your container exposes its HTTP or gRPC service on.
 - **Protocol** — select `HTTP` (default) or `gRPC`.
 - **Health check path** — the endpoint used to verify readiness (e.g., `/health`, `/`). For gRPC deployments, CCluster uses TCP socket checks automatically, so this field is ignored.
-- **Image Registry Username / Password** — credentials for private images (e.g., Docker Hub private repo). API deployments can instead [reference an existing image pull secret](/resources/custom_image#use-an-existing-image-pull-secret).
+- **Image Registry Username / Password** — credentials for private images (e.g., Docker Hub private repo). API deployments can instead [reference an existing image pull secret](/resources/custom-image#use-an-existing-image-pull-secret).
 
 The create wizard splits optional settings across **Advanced** and **Scaling**.
 
@@ -44,11 +44,11 @@ CCluster scales replicas from in-flight request concurrency (**Max Concurrency**
 | **Cooldown Period (s)** | Scale-down stabilization time, from `0` to `3600`. |
 
 <Note>
-Changing min or max replica counts on a running deployment scales in place and **does not create a new revision**. Spec changes such as image, command, or affinity do. See [Managing Deployments](/resources/managing_deployments).
+Changing min or max replica counts on a running deployment scales in place and **does not create a new revision**. Spec changes such as image, command, or affinity do. See [Managing Deployments](/resources/managing-deployments).
 </Note>
 
 <Frame>
-    <img src="./images/inf_1.png" alt="General Inference deployment page" />
+    <img src="./images/inf-1.png" alt="General Inference deployment page" />
 </Frame>
 
 <Tip>
@@ -56,7 +56,7 @@ Every deployment must be protected — there are no public endpoints. Secure you
 </Tip>
 
 <Tip>
-For building your own custom container image and deploying on NVIDIA CCluster, please refer to this [resource](/resources/custom_image).
+For building your own custom container image and deploying on NVIDIA CCluster, please refer to this [resource](/resources/custom-image).
 </Tip>
 
 ### Protocol: HTTP and gRPC
@@ -112,7 +112,7 @@ For the full NIM configuration and an end-to-end walkthrough, see [Deploying NVI
 By default, NVIDIA CCluster provides several managed clusters and GPU instances for you to deploy your inference containers. 
 
 <Frame>
-    <img src="./images/inf_2.png" alt="Hardware instance selection for general inference" />
+    <img src="./images/inf-2.png" alt="Hardware instance selection for general inference" />
 </Frame>
 
 Select the regional cluster and hardware instance that best fits your need and click Deploy.
@@ -126,16 +126,16 @@ You can integrate your own private cluster into CCluster through bring-your-own-
 Once deployed, you can see all your deployments under the listing view along with their current status.
 
 <Frame>
-    <img src="./images/inf_3.png" alt="Container image configuration for general inference" />
+    <img src="./images/inf-3.png" alt="Container image configuration for general inference" />
 </Frame>
 
 Click on the deployment to view the details page, logs and monitoring information.
 
 <Frame>
-    <img src="./images/inf_4.png" alt="Deployment details panel after launching a general inference endpoint" />
+    <img src="./images/inf-4.png" alt="Deployment details panel after launching a general inference endpoint" />
 </Frame>
 
-From the detail page you can stream **Logs**, open the in-browser **Terminal** while the deployment is Active, pause or resume, clone, edit (which creates a new revision), or roll back. See [Managing Deployments](/resources/managing_deployments).
+From the detail page you can stream **Logs**, open the in-browser **Terminal** while the deployment is Active, pause or resume, clone, edit (which creates a new revision), or roll back. See [Managing Deployments](/resources/managing-deployments).
 
 Once the deployment status is ready, the container port is going to be exposed under the endpoint url shown in the details page.
 
@@ -171,7 +171,7 @@ For gRPC deployments, see [gRPC Inference Endpoints](/resources/grpc) for connec
   <Card
     title="Managing Deployments"
     icon="fa-solid fa-sliders"
-    href="/resources/managing_deployments"
+    href="/resources/managing-deployments"
   >
     Logs, Terminal, pause, clone, revisions, and replica scaling.
   </Card>

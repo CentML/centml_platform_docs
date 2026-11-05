@@ -6,9 +6,7 @@ instances:
     custom-domain: docs.nvidia.com/ccluster
     multi-source: true
 
-redirects:
-  - source: /ccluster/index.html
-    destination: /ccluster
+redirects: ./redirects.yml
 
 title: NVIDIA CCluster
 
@@ -21,7 +19,7 @@ logo:
 navbar-links:
   - type: secondary
     text: Get Support
-    href: /ccluster/resources/requesting_support
+    href: /ccluster/resources/requesting-support
   - type: primary
     text: Get Started
     href: /ccluster/home/quickstart
