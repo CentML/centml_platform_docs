@@ -15,7 +15,7 @@ from centml.sdk.api import get_centml_client
 from centml.sdk import DeploymentType
 
 with get_centml_client() as cclient:
-    deployments = cclient.get(DeploymentType.INFERENCE_V2)
+    deployments = cclient.get(DeploymentType.INFERENCE_V3)
     print(deployments)
 ```
 

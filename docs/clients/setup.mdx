@@ -28,23 +28,39 @@ centml cluster ls
 ccluster ls
 ```
 
-Checkout other supported commands,
+Check out other supported commands:
 ```bash
 ccluster --help
 Usage: ccluster [OPTIONS] COMMAND [ARGS]...
 
-  NVIDIA CCluster CLI tool
+  CentML cluster CLI tool
 
 Options:
   --help  Show this message and exit.
 
 Commands:
-  delete  Delete a deployment
-  get     Get deployment details
-  ls      List all deployments
-  pause   Pause a deployment
-  resume  Resume a deployment
+  capacity  Show GPU capacity across clusters
+  delete    Delete a deployment
+  exec      Execute a command in a deployment pod
+  get       Get deployment details
+  ls        List all deployments
+  pause     Pause a deployment
+  resume    Resume a deployment
+  shell     Open an interactive shell to a deployment pod
 ```
+
+| Command | Usage |
+|---------|-------|
+| `ls` | `ccluster ls [inference\|cserve\|compute\|rag\|job]` — list deployments, optionally filtered by type |
+| `get` | `ccluster get <type> <id>` — show details for one deployment |
+| `pause` / `resume` / `delete` | `ccluster pause <id>` — change or remove a deployment |
+| `shell` | `ccluster shell <id> [--pod NAME] [--shell bash\|sh\|zsh] [--first-pod]` — open an interactive shell in a running pod |
+| `exec` | `ccluster exec <id> [--pod NAME] [--first-pod] -- <command>` — run a single command in a running pod |
+| `capacity` | `ccluster capacity [--cluster-id ID]` — show GPU capacity across clusters |
+
+<Note>
+`ccluster ls` does not list NVIDIA Dynamo deployments. View and manage Dynamo deployments from the console.
+</Note>
 
 To logout, use the following command.
 

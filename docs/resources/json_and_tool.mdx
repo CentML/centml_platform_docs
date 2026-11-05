@@ -9,7 +9,7 @@ NVIDIA CCluster's **Dedicated** LLM APIs support structured outputs using the sa
 
 When you need a response strictly formatted as JSON, you can use JSON schema constraints. This is particularly useful in scenarios where your system or other downstream processes rely on valid JSON.
 
-Below is an example of how to set up a request to the NVIDIA CCluster LLM API using JSON schema enforcement.
+Below is an example of how to set up a request to the NVIDIA CCluster LLM API using JSON schema enforcement. Replace `<endpoint_url>` with the endpoint URL of your [LLM Serving](/apps/llm) deployment, and set `CENTML_API_KEY` to a bearer token from your [Vault](/resources/vault).
 
 ```python
 from openai import OpenAI
@@ -62,7 +62,7 @@ schema_json = {
 # Initialize the OpenAI-compatible client with the API key and base URL
 client = OpenAI(
     api_key=api_key,
-    base_url="https://api.centml.com/openai/v1",
+    base_url="https://<endpoint_url>/openai/v1",
 )
 
 # Create a chat completion request with the defined prompt and schema
@@ -105,7 +105,7 @@ import time
 # Supply your API key from your NVIDIA CCluster vault
 api_key = os.environ.get("CENTML_API_KEY")
 assert api_key is not None, "Please provide an API Key"
-base_url = "https://api.centml.com/openai/v1"
+base_url = "https://<endpoint_url>/openai/v1"
 
 def get_weather(location):
     """

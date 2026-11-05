@@ -9,7 +9,7 @@ General Inference can serve your container over **HTTP** (the default) or **gRPC
 
 When you select **gRPC** as the protocol, a few things differ from an HTTP deployment:
 
-- **Container port** — set it to the port your container serves gRPC on. For vLLM this is `50051`, its default gRPC port.
+- **Container port** — set it to the port your container serves gRPC on. This guide uses `50051` for vLLM.
 - **Health checks** — CCluster verifies readiness with a TCP socket check on the container port, so the **Health check path** field is ignored.
 - **External access** — like every deployment, the endpoint is exposed on **port 443 with TLS enforced**. CCluster's ingress terminates TLS on 443 and forwards traffic to your container's internal port. Clients connect to `<endpoint_url>:443`.
 
@@ -23,7 +23,7 @@ From the **General Inference** deployment page, fill in the basic details:
 
 - **Add or Select Image** — `vllm/vllm-openai`.
 - **Container Tag** — `latest`.
-- **Container Port** — `50051` (vLLM's default gRPC port).
+- **Container Port** — `50051` (the port the startup script below passes to `--port`).
 - **Protocol** — select `gRPC`.
 - **Hugging Face Token** — include one if your model is gated.
 
@@ -49,8 +49,14 @@ Under **Optional Details → Config File**:
 
 ```bash
 python3 -m pip install -q --root-user-action=ignore vllm[grpc]
-python3 -m vllm.entrypoints.grpc_server --model meta-llama/Llama-2-7b-hf
+vllm serve meta-llama/Llama-2-7b-hf --grpc --port 50051
 ```
+
+`--port 50051` is required: in gRPC mode `vllm serve` binds its regular `--port`, which defaults to `8000`.
+
+<Warning>
+**Deprecated:** `python3 -m vllm.entrypoints.grpc_server --model <model>` is deprecated as of vLLM 0.30 and may be removed in a future release. Use `vllm serve <model> --grpc` instead.
+</Warning>
 
 The file is mounted at `<mount path>/<filename>`, so set **Add command** to run it:
 

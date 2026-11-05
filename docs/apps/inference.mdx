@@ -74,11 +74,15 @@ For an end-to-end gRPC walkthrough using vLLM's gRPC server, see [gRPC Inference
 
 CCluster provides pre-configured recipes for popular inference engines in the **Add or Select Image** dropdown. Selecting a recipe auto-fills all fields except the entrypoint command. Below are the **Add command** values you need to provide for each engine:
 
-- **vLLM** — `python3 -m vllm.entrypoints.openai.api_server --model <HF_REPO_NAME>`
-- **SGLang** — `python3 -m sglang.launch_server --model-path <HF_MODEL_REPO> --host 0.0.0.0`
+- **vLLM** — `vllm serve <HF_REPO_NAME>`
+- **SGLang** — `sglang serve --model-path <HF_MODEL_REPO> --host 0.0.0.0`
 - **LMDeploy** — `lmdeploy serve api_server <HF_REPO_NAME> --server-name 0.0.0.0`
 - **Ollama** — leave **Add command** empty. See the Ollama-specific note below.
 - **TensorRT-LLM** — `trtllm-serve <HF_REPO_NAME> --host 0.0.0.0 --port 8000`. See the TensorRT-LLM note below.
+
+<Warning>
+**Deprecated:** `python3 -m vllm.entrypoints.openai.api_server --model <HF_REPO_NAME>` is deprecated as of vLLM 0.29 and may be removed in a future release; use `vllm serve` instead.
+</Warning>
 
 <Note>
 **Ollama** does not require a custom entrypoint. After the deployment is ready, you need to pull a model before it can serve requests:
