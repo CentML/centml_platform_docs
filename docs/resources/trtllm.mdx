@@ -1,7 +1,6 @@
 ---
 title: 'Deploying TensorRT-LLM'
 description: 'Deploy TensorRT-LLM images on CCluster through General Inference'
-icon: 'gauge'
 ---
 
 [NVIDIA TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM) images run through [General Inference](/apps/inference) and expose an OpenAI-compatible API with `trtllm-serve`. This example walks through deploying `TinyLlama/TinyLlama-1.1B-Chat-v1.0` with a validated release image.
@@ -132,21 +131,21 @@ Use the exact model `id` returned by `/v1/models` in subsequent requests. The fi
 <CardGroup cols={3}>
   <Card
     title="General Inference"
-    icon="circle-nodes"
+    icon="fa-solid fa-circle-nodes"
     href="/apps/inference"
   >
     Deploy and scale any containerized model on CCluster.
   </Card>
   <Card
     title="Securing Endpoints"
-    icon="lock"
+    icon="fa-solid fa-lock"
     href="/resources/private"
   >
     Protect your endpoints with Bearer tokens and mTLS certificates.
   </Card>
   <Card
     title="Managing Vault Objects"
-    icon="key-skeleton-left-right"
+    icon="fa-solid fa-key"
     href="/resources/vault"
   >
     Store the registry credentials and API keys your deployments use.

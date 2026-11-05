@@ -1,7 +1,6 @@
 ---
 title: 'Batch Jobs'
 description: 'Run containerized batch workloads to completion'
-icon: 'list-checks'
 ---
 
 Jobs let you run any containerized workload as a **batch task** that runs to completion — model training, fine-tuning, data preprocessing, evaluation, or any one-off GPU job. Unlike inference or LLM deployments, jobs are batch workloads with **no endpoint or ingress**: they start, run your container until it finishes (or fails), and then stop. CCluster runs your container as a Kubernetes Job, so you can control how many times it runs, how many run in parallel, and how failures are retried.
@@ -59,21 +58,21 @@ Because jobs are batch workloads, there is no endpoint to call — the job runs 
 <CardGroup cols={3}>
   <Card
     title="Managing Deployments"
-    icon="sliders"
+    icon="fa-solid fa-sliders"
     href="/resources/managing_deployments"
   >
     Follow logs and use the in-console Terminal while the job is running.
   </Card>
   <Card
     title="Deploying Custom Models"
-    icon="screwdriver-wrench"
+    icon="fa-solid fa-screwdriver-wrench"
     href="/resources/custom_image"
   >
     Learn how to build and deploy your own custom container images.
   </Card>
   <Card
     title="Compute Instance"
-    icon="microchip"
+    icon="fa-solid fa-microchip"
     href="/apps/compute"
   >
     Launch an on-demand GPU instance with SSH access for interactive work.

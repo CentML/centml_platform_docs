@@ -1,7 +1,6 @@
 ---
 title: 'gRPC Inference Endpoints'
 description: 'Deploy and call a gRPC inference endpoint on CCluster, using vLLM as a worked example'
-icon: 'waypoints'
 ---
 
 General Inference can serve your container over **HTTP** (the default) or **gRPC**. gRPC runs over HTTP/2 and exchanges binary [Protocol Buffers](https://protobuf.dev/), which makes it a good fit for low-latency, high-throughput, or streaming inference workloads. We use **vLLM** as the example throughout this guide, deploying its gRPC server end to end.
@@ -29,7 +28,7 @@ From the **General Inference** deployment page, fill in the basic details:
 - **Hugging Face Token** — include one if your model is gated.
 
 <Frame>
-    <img src="/images/grpc_vllm_config.png" alt="General Inference form configured for a vLLM gRPC deployment" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/grpc_vllm_config.png" alt="General Inference form configured for a vLLM gRPC deployment" />
 </Frame>
 
 <Tip>
@@ -60,7 +59,7 @@ The file is mounted at `<mount path>/<filename>`, so set **Add command** to run 
 ```
 
 <Frame>
-    <img src="/images/grpc_vllm_entry_script.png" alt="Config File entry.sh installing vllm[grpc] and launching the gRPC server, invoked from Add command" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/grpc_vllm_entry_script.png" alt="Config File entry.sh installing vllm[grpc] and launching the gRPC server, invoked from Add command" />
 </Frame>
 
 <Tip>
@@ -72,7 +71,7 @@ Every endpoint is protected — there are no public endpoints. Secure access wit
 Choose the cluster and GPU instance that match your model and setup, then click **Deploy**.
 
 <Frame>
-    <img src="/images/grpc_vllm_hardware.png" alt="Hardware instance selection" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/grpc_vllm_hardware.png" alt="Hardware instance selection" />
 </Frame>
 
 ## 3. Call your gRPC endpoint
@@ -120,21 +119,21 @@ Endpoints are protected, so authenticate every call — pass a Bearer token, or 
 <CardGroup cols={3}>
   <Card
     title="Deploying Custom Models"
-    icon="screwdriver-wrench"
+    icon="fa-solid fa-screwdriver-wrench"
     href="/resources/custom_image"
   >
     Build your own containerized gRPC inference engine and deploy it.
   </Card>
   <Card
     title="Clients"
-    icon="terminal"
+    icon="fa-solid fa-terminal"
     href="/clients/setup"
   >
     Interact with NVIDIA CCluster programmatically.
   </Card>
   <Card
     title="Managing Vault Objects"
-    icon="key-skeleton-left-right"
+    icon="fa-solid fa-key"
     href="/resources/vault"
   >
     Store the Hugging Face tokens and registry credentials your deployments use.

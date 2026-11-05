@@ -1,0 +1,32 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+instances:
+  - url: nvidia-ccluster.docs.buildwithfern.com/ccluster
+    custom-domain: docs.nvidia.com/ccluster
+    multi-source: true
+
+redirects:
+  - source: /ccluster/index.html
+    destination: /ccluster
+
+title: NVIDIA CCluster
+
+global-theme: nvidia
+
+logo:
+  href: /ccluster
+  right-text: CCluster
+
+navbar-links:
+  - type: secondary
+    text: Get Support
+    href: /ccluster/resources/requesting_support
+  - type: primary
+    text: Get Started
+    href: /ccluster/home/quickstart
+
+products:
+  - display-name: NVIDIA CCluster
+    path: ../docs/index.yml
+    slug: /

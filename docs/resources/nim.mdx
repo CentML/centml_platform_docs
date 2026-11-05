@@ -1,7 +1,6 @@
 ---
 title: 'Deploying NVIDIA NIM'
 description: 'Deploy NVIDIA NIM microservices on CCluster through General Inference'
-icon: 'box-open-full'
 ---
 
 [NVIDIA NIM](https://developer.nvidia.com/nim) microservices are self-contained containers that bundle a model-optimized inference engine and download model weights automatically at startup, exposing an OpenAI-compatible API. NIM is not a pre-configured recipe on the [General Inference](/apps/inference) page — enter the image manually with the settings below.
@@ -72,21 +71,21 @@ Every endpoint is protected — there are no public endpoints. Secure access wit
 <CardGroup cols={3}>
   <Card
     title="General Inference"
-    icon="circle-nodes"
+    icon="fa-solid fa-circle-nodes"
     href="/apps/inference"
   >
     Deploy and scale any containerized model on CCluster.
   </Card>
   <Card
     title="Securing Endpoints"
-    icon="lock"
+    icon="fa-solid fa-lock"
     href="/resources/private"
   >
     Protect your endpoints with Bearer tokens and mTLS certificates.
   </Card>
   <Card
     title="Managing Vault Objects"
-    icon="key-skeleton-left-right"
+    icon="fa-solid fa-key"
     href="/resources/vault"
   >
     Store the registry credentials and API keys your deployments use.

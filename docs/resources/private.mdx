@@ -1,7 +1,6 @@
 ---
 title: 'Securing Endpoints'
 description: 'How to protect your inference endpoints with Bearer tokens and mTLS certificates'
-icon: 'lock'
 ---
 
 NVIDIA CCluster does not expose public endpoints. Every LLM Serving and General Inference deployment must be protected, and clients must authenticate on each request. You secure a deployment with **at least one** of the following:
@@ -105,21 +104,21 @@ client = OpenAI(
 <CardGroup cols={3}>
   <Card
     title="Managing Vault Objects"
-    icon="key-skeleton-left-right"
+    icon="fa-solid fa-key"
     href="/resources/vault"
   >
     Learn how to generate and store NVIDIA CCluster tokens and other vault objects.
   </Card>
   <Card
     title="Clients"
-    icon="terminal"
+    icon="fa-solid fa-terminal"
     href="/clients/setup"
   >
     Learn how to interact with the NVIDIA CCluster programmatically
   </Card>
   <Card
     title="Python SDK Reference"
-    icon="python"
+    icon="fa-brands fa-python"
     href="/clients/sdk"
   >
     Learn how to access the NVIDIA CCluster using Python.

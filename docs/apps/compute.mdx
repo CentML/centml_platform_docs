@@ -1,7 +1,6 @@
 ---
 title: 'Compute Instance'
 description: 'Launch an on-demand GPU instance from any container image and start building'
-icon: 'microchip'
 ---
 
 On-demand GPU instances with SSH access to run any GPU-accelerated workloads and let you run, test, and experiment with any AI application seamlessly.
@@ -32,7 +31,7 @@ Optional settings on the create form:
 - **Annotations** — optional key/value metadata on the instance.
 
 <Frame>
-    <img src="/images/comp_1.png" alt="Compute instance launch page" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/comp_1.png" alt="Compute instance launch page" />
 </Frame>
 
 ## 3. SSH into the instance
@@ -42,7 +41,7 @@ Once the instance is ready, navigate to the deployment details page. The **Endpo
 - **Endpoint URL** — the hostname for your instance. Next to it are the copy button (copies the URL) and the SSH button (copies `ssh root@<endpoint_url>` so you can paste it directly into your terminal).
 
 <Frame>
-    <img src="/images/comp_2.png" alt="Endpoint Configuration section showing the endpoint URL and SSH public key" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/comp_2.png" alt="Endpoint Configuration section showing the endpoint URL and SSH public key" />
 </Frame>
 
 To connect, use the SSH command with the `root` user:
@@ -52,7 +51,7 @@ ssh root@<endpoint_url>
 ```
 
 <Frame>
-    <img src="/images/comp_3.png" alt="Running compute instance showing its endpoint URL" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/comp_3.png" alt="Running compute instance showing its endpoint URL" />
 </Frame>
 
 The instance authenticates you with the SSH public key you provided at deployment. You can also run one-off commands, transfer files, and forward TCP ports:
@@ -93,21 +92,21 @@ Compute deployments are not revision-aware in the console: edits update the inst
 <CardGroup cols={3}>
   <Card
     title="Managing Deployments"
-    icon="sliders"
+    icon="fa-solid fa-sliders"
     href="/resources/managing_deployments"
   >
     In-console Terminal, logs, pause, and clone.
   </Card>
   <Card
     title="Managing Vault Objects"
-    icon="key-skeleton-left-right"
+    icon="fa-solid fa-key"
     href="/resources/vault"
   >
 Store SSH keys and registry credentials for reuse across deployments
  </Card>
   <Card
     title="LLM Serving"
-    icon="messages"
+    icon="fa-solid fa-comments"
     href="/apps/llm"
   >
     Explore dedicated, protected endpoints for production model deployments.

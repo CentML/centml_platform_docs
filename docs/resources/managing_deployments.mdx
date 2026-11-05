@@ -1,7 +1,6 @@
 ---
 title: 'Managing Deployments'
 description: 'Operate deployments from the console: logs, in-browser Terminal, pause and resume, clone, revisions, and rollout'
-icon: 'sliders'
 ---
 
 After you create a deployment, open it from the deployments list to inspect status, stream logs, open a shell, pause or resume it, clone it, or (for revision-aware types) roll back to an earlier spec.
@@ -104,21 +103,21 @@ On Dynamo, pick a Frontend or Worker pod; replica counts are reported per compon
 <CardGroup cols={3}>
   <Card
     title="General Inference"
-    icon="circle-nodes"
+    icon="fa-solid fa-circle-nodes"
     href="/apps/inference"
   >
     Configure logging, affinity, caching, config files, and autoscaling when you create an endpoint.
   </Card>
   <Card
     title="LLM Serving"
-    icon="messages"
+    icon="fa-solid fa-comments"
     href="/apps/llm"
   >
     Deploy a dedicated LLM endpoint, then operate it from the detail page.
   </Card>
   <Card
     title="Compute Instance"
-    icon="microchip"
+    icon="fa-solid fa-microchip"
     href="/apps/compute"
   >
     Use SSH from your machine or the in-console Terminal on an Active instance.

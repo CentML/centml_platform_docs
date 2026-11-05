@@ -1,7 +1,6 @@
 ---
 title: 'General Inference'
 description: 'Deploy and scale any model'
-icon: 'circle-nodes'
 ---
 
 We make it easy for you to containerize and deploy any custom models on CCluster. Containers can run as **any user, including root** — see [Deploying Custom Models](/resources/custom_image) for CCluster security details. We also provide popular inference engine recipes such as vLLM, Ollama, SGLang, and LMDeploy.
@@ -49,7 +48,7 @@ Changing min or max replica counts on a running deployment scales in place and *
 </Note>
 
 <Frame>
-    <img src="/images/inf_1.png" alt="General Inference deployment page" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/inf_1.png" alt="General Inference deployment page" />
 </Frame>
 
 <Tip>
@@ -109,7 +108,7 @@ For the full NIM configuration and an end-to-end walkthrough, see [Deploying NVI
 By default, NVIDIA CCluster provides several managed clusters and GPU instances for you to deploy your inference containers. 
 
 <Frame>
-    <img src="/images/inf_2.png" alt="Hardware instance selection for general inference" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/inf_2.png" alt="Hardware instance selection for general inference" />
 </Frame>
 
 Select the regional cluster and hardware instance that best fits your need and click Deploy.
@@ -123,13 +122,13 @@ You can integrate your own private cluster into CCluster through bring-your-own-
 Once deployed, you can see all your deployments under the listing view along with their current status.
 
 <Frame>
-    <img src="/images/inf_3.png" alt="Container image configuration for general inference" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/inf_3.png" alt="Container image configuration for general inference" />
 </Frame>
 
 Click on the deployment to view the details page, logs and monitoring information.
 
 <Frame>
-    <img src="/images/inf_4.png" alt="Deployment details panel after launching a general inference endpoint" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/inf_4.png" alt="Deployment details panel after launching a general inference endpoint" />
 </Frame>
 
 From the detail page you can stream **Logs**, open the in-browser **Terminal** while the deployment is Active, pause or resume, clone, edit (which creates a new revision), or roll back. See [Managing Deployments](/resources/managing_deployments).
@@ -167,21 +166,21 @@ For gRPC deployments, see [gRPC Inference Endpoints](/resources/grpc) for connec
 <CardGroup cols={3}>
   <Card
     title="Managing Deployments"
-    icon="sliders"
+    icon="fa-solid fa-sliders"
     href="/resources/managing_deployments"
   >
     Logs, Terminal, pause, clone, revisions, and replica scaling.
   </Card>
   <Card
     title="Securing Endpoints"
-    icon="lock"
+    icon="fa-solid fa-lock"
     href="/resources/private"
   >
 Learn how to protect your endpoints with Bearer tokens and mTLS certificates
  </Card>
   <Card
     title="LLM Serving"
-    icon="messages"
+    icon="fa-solid fa-comments"
     href="/apps/llm"
   >
     Explore dedicated, protected endpoints for production model deployments.
