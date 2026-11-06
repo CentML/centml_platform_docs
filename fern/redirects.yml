@@ -21,7 +21,10 @@ redirects:
     destination: /ccluster/resources/json-and-tool
     permanent: true
   - source: /resources/requesting_support
-    destination: /ccluster/resources/requesting-support
+    destination: /ccluster/home/quickstart
+    permanent: true
+  - source: /resources/requesting-support
+    destination: /ccluster/home/quickstart
     permanent: true
   - source: /resources/model_integration_lifecycle
     destination: /ccluster/resources/model-integration-lifecycle

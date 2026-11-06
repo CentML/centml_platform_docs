@@ -17,14 +17,103 @@ logo:
   right-text: CCluster
 
 navbar-links:
-  - type: secondary
-    text: Get Support
-    href: /ccluster/resources/requesting-support
   - type: primary
     text: Get Started
     href: /ccluster/home/quickstart
 
-products:
-  - display-name: NVIDIA CCluster
-    path: ../docs/index.yml
-    slug: /
+navigation:
+  - section: Getting Started
+    slug: home
+    contents:
+      - page: Introduction
+        path: ../docs/home/introduction.mdx
+        slug: introduction
+        icon: fa-solid fa-house
+      - page: Quickstart
+        path: ../docs/home/quickstart.mdx
+        slug: quickstart
+        icon: fa-solid fa-rocket
+
+  - section: Deployments
+    slug: apps
+    contents:
+      - page: LLM Serving
+        path: ../docs/apps/llm.mdx
+        slug: llm
+        icon: fa-solid fa-comments
+      - page: NVIDIA Dynamo
+        path: ../docs/apps/dynamo.mdx
+        slug: dynamo
+        icon: fa-solid fa-diagram-project
+      - page: General Inference
+        path: ../docs/apps/inference.mdx
+        slug: inference
+        icon: fa-solid fa-circle-nodes
+      - page: Compute Instance
+        path: ../docs/apps/compute.mdx
+        slug: compute
+        icon: fa-solid fa-microchip
+      - page: Batch Jobs
+        path: ../docs/apps/jobs.mdx
+        slug: jobs
+        icon: fa-solid fa-list-check
+
+  - section: Clients
+    slug: clients
+    contents:
+      - page: Client Setup
+        path: ../docs/clients/setup.mdx
+        slug: setup
+        icon: fa-solid fa-terminal
+      - page: Python SDK Reference
+        path: ../docs/clients/sdk.mdx
+        slug: sdk
+        icon: fa-brands fa-python
+
+  - section: Resources
+    slug: resources
+    contents:
+      - page: Deploying Custom Models
+        path: ../docs/resources/custom-image.mdx
+        slug: custom-image
+        icon: fa-solid fa-screwdriver-wrench
+      - page: Managing Hardware Instances
+        path: ../docs/resources/hardware-instances.mdx
+        slug: hardware-instances
+        icon: fa-solid fa-server
+      - page: Managing Deployments
+        path: ../docs/resources/managing-deployments.mdx
+        slug: managing-deployments
+        icon: fa-solid fa-sliders
+      - page: gRPC Inference Endpoints
+        path: ../docs/resources/grpc.mdx
+        slug: grpc
+        icon: fa-solid fa-diagram-project
+      - page: Deploying NVIDIA NIM
+        path: ../docs/resources/nim.mdx
+        slug: nim
+        icon: fa-solid fa-box-open
+      - page: Deploying TensorRT-LLM
+        path: ../docs/resources/trtllm.mdx
+        slug: trtllm
+        icon: fa-solid fa-gauge
+      - page: Securing Endpoints
+        path: ../docs/resources/private.mdx
+        slug: private
+        icon: fa-solid fa-lock
+      - page: Service Accounts
+        path: ../docs/resources/service-accounts.mdx
+        slug: service-accounts
+        icon: fa-solid fa-robot
+      - page: Agents on NVIDIA CCluster
+        path: ../docs/resources/json-and-tool.mdx
+        slug: json-and-tool
+        icon: fa-solid fa-user-secret
+      - page: Managing Vault Objects
+        path: ../docs/resources/vault.mdx
+        slug: vault
+        icon: fa-solid fa-key
+      - page: The Model Integration Lifecycle
+        path: ../docs/resources/model-integration-lifecycle.mdx
+        slug: model-integration-lifecycle
+        icon: fa-solid fa-arrows-spin

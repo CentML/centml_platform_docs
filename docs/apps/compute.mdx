@@ -46,7 +46,7 @@ Once the instance is ready, navigate to the deployment details page. The **Endpo
 
 To connect, use the SSH command with the `root` user:
 
-```bash
+```bash showLineNumbers={false}
 ssh root@<endpoint_url>
 ```
 
@@ -56,7 +56,7 @@ ssh root@<endpoint_url>
 
 The instance authenticates you with the SSH public key you provided at deployment. You can also run one-off commands, transfer files, and forward TCP ports:
 
-```bash
+```bash showLineNumbers={false}
 # Run a one-off command
 ssh root@<endpoint_url> 'nvidia-smi'
 

@@ -72,7 +72,7 @@ jobs:
           npm install -g "fern-api@$VERSION"
 
       - name: Check docs paths stay inside docs/
-        run: python3 tools/check-docs-paths --allow '../docs/index.yml' docs fern
+        run: python3 tools/check-docs-paths --allow '../docs/' docs fern
 
       - name: Generate preview URL
         id: generate-docs

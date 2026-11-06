@@ -7,13 +7,13 @@ The site uses the NVIDIA global theme (`global-theme: nvidia`), so logo, colors,
 ## Repository Layout
 
 - [fern/fern.config.json](fern/fern.config.json): Fern organization (`nvidia`) and pinned CLI version
-- [fern/docs.yml](fern/docs.yml): hosting, custom domain, theme, navbar links, and redirects
-- [docs/index.yml](docs/index.yml): left-nav structure, page order, slugs, and sidebar icons
+- [fern/docs.yml](fern/docs.yml): hosting, custom domain, theme, navbar links, and the left-nav structure (page order, slugs, sidebar icons)
+- [fern/redirects.yml](fern/redirects.yml): redirects for renamed or removed pages
 - [docs/](docs/): all documentation pages, written as `.mdx`
   - [docs/home/](docs/home/): landing pages (introduction, quickstart)
   - [docs/apps/](docs/apps/): deployment product docs (LLM serving, inference, compute, jobs)
   - [docs/clients/](docs/clients/): SDK and client setup docs
-  - [docs/resources/](docs/resources/): supporting guides (custom images, vault, support, etc.)
+  - [docs/resources/](docs/resources/): supporting guides (custom images, vault, service accounts, etc.)
   - `docs/<section>/images/`: screenshots used by the pages in that section
 - [tools/](tools/): MDX-safety and docs-path checkers run in CI
 - [.github/workflows/](.github/workflows/): Fern check, PR preview, and publish workflows
@@ -43,14 +43,14 @@ fern check
 fern docs md check
 fern docs broken-links --strict
 python3 tools/check-docs-mdx docs/
-python3 tools/check-docs-paths --allow '../docs/index.yml' docs fern
+python3 tools/check-docs-paths --allow '../docs/' docs fern
 ```
 
 ## Editing Workflow
 
 1. Update or add `.mdx` pages under the appropriate directory in [docs/](docs/).
-2. Add new pages to [docs/index.yml](docs/index.yml); only pages listed there are published.
-3. Put images in the section's `images/` folder and reference them with `./images/...` paths. Absolute paths and `..` segments are rejected by `tools/check-docs-paths`.
+2. Add new pages to the `navigation` section of [fern/docs.yml](fern/docs.yml) with a `../docs/<section>/<page>.mdx` path; only pages listed there are published.
+3. Put images in the section's `images/` folder and reference them with `./images/...` paths. Absolute paths and `..` segments are rejected by `tools/check-docs-paths`; the only exception is the `../docs/` prefix of page paths in `fern/docs.yml`.
 4. Use Fern's [built-in components](https://buildwithfern.com/learn/docs/writing-content/components/overview) (`Card`, `CardGroup`, `Frame`, `Note`, `Tip`, and others). Icons are Font Awesome classes such as `fa-solid fa-lock`.
 5. Link between pages with root-relative paths such as `/apps/llm`; Fern adds the `/ccluster` base path.
 

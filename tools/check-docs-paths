@@ -5,7 +5,7 @@
 """Check published docs for paths that make Fern read files outside docs/.
 
 Fern reads local files named by a page: the src of a Code, Markdown, or Image
-component, a markdown image, and the path entries in index.yml and docs.yml. It
+component, a markdown image, and the path entries in docs.yml. It
 accepts paths that leave docs/, such as ../../x, and absolute paths. The publish
 job runs the Fern CLI with FERN_TOKEN in its environment, so a page that reads
 /proc/self/environ can print the token on the published site.
@@ -22,8 +22,9 @@ This checker reports:
     checker cannot read those safely and so rejects them
   - symbolic links under the checked directories
 
-A path that is expected, such as the "../docs/index.yml" entry in
-fern/docs.yml, is accepted with --allow. The match is exact.
+A path that is expected is accepted with --allow. The match is exact, unless
+the value ends with "/": then it is a directory prefix, such as "../docs/" for
+the page paths in fern/docs.yml, and the rest of the path is still checked.
 
 It scans every line, including fenced code blocks, so an example that shows one
 of these patterns is reported too. Exclude such a file with --exclude.
@@ -118,11 +119,16 @@ def problem(value: str, *, file_like: bool, allowed: set[str]) -> str | None:
     value = normalize(value)
     if not value or value in allowed:
         return None
-    if traversal(value):
+    rest = value
+    for prefix in allowed:
+        if prefix.endswith("/") and value.startswith(prefix):
+            rest = value[len(prefix) :]
+            break
+    if traversal(rest):
         return f"path {value!r} leaves the docs directory with '..'"
     if not file_like:
         return None
-    decoded = unquote(unquote(value))
+    decoded = unquote(unquote(rest))
     if SCHEME.match(decoded):
         if decoded.lower().startswith("https:"):
             return None
@@ -230,7 +236,7 @@ def main() -> int:
         action="append",
         default=[],
         metavar="PATH",
-        help="exact path value to accept even though it leaves the directory; repeatable",
+        help="exact path value, or directory prefix ending in '/', to accept even though it leaves the directory; repeatable",
     )
     args = parser.parse_args()
     allowed = set(args.allow)

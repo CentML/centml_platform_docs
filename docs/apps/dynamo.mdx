@@ -6,7 +6,7 @@ description: 'Deploy and operate NVIDIA Dynamo inference endpoints'
 NVIDIA Dynamo deployments are backed by a Dynamo Frontend and GPU-powered vLLM workers. HTTP deployments expose an OpenAI-compatible API, while gRPC deployments expose the KServe v2 inference protocol. NVIDIA CCluster manages the Dynamo runtime, deployment lifecycle, TLS ingress, revisions, scaling configuration, status, and logs.
 
 <Note>
-NVIDIA Dynamo support is currently in beta. It is available only on clusters where the Dynamo operator is enabled. If **Dynamo** is not available when you create a deployment, [request support](/resources/requesting-support).
+NVIDIA Dynamo support is currently in beta. It is available only on clusters where the Dynamo operator is enabled. If **Dynamo** is not available when you create a deployment, contact your NVIDIA representative.
 </Note>
 
 The integration supports two serving topologies:
@@ -121,7 +121,7 @@ NVIDIA CCluster configures `NixlConnector` on both Prefill and Decode workers. N
 The current deployment layout uses separate pod IPC namespaces, does not request an RDMA or EFA device, and does not guarantee same-node placement. In a live validation with one Prefill and one Decode pod placed on the same 8×B200 node, UCX reported `rma_am(tcp/eth0)` and other TCP lanes over `eth0`; no RDMA or CUDA-IPC lane was selected. The KV transfer completed successfully, but this was a transport correctness check rather than a performance benchmark.
 
 <Note>
-TCP KV transfer adds overhead and can reduce the expected latency or throughput benefit of disaggregated serving. Do not infer the active transport from the GPU model or same-node placement alone. Measure the selected transport on your target cluster before making performance assumptions, and [request support](/resources/requesting-support) if your workload requires an accelerated cross-pod KV path.
+TCP KV transfer adds overhead and can reduce the expected latency or throughput benefit of disaggregated serving. Do not infer the active transport from the GPU model or same-node placement alone. Measure the selected transport on your target cluster before making performance assumptions, and contact your NVIDIA representative if your workload requires an accelerated cross-pod KV path.
 </Note>
 
 With logging enabled, inspect the Prefill and Decode logs for UCX backend and lane output and for KV transfer metrics. Do not force `UCX_TLS` when establishing a baseline because that override changes transport selection.
@@ -156,7 +156,7 @@ The console's **Edit** and **Clone** flows currently support aggregated deployme
 
 For a Bearer-protected HTTP deployment, copy the endpoint hostname and Bearer token from the **Detail** tab. Send requests to the OpenAI-compatible chat completions endpoint:
 
-```bash
+```bash showLineNumbers={false}
 curl "https://<endpoint_url>/v1/chat/completions" \
   -H "Authorization: Bearer <your_bearer_token>" \
   -H "Content-Type: application/json" \
@@ -191,7 +191,7 @@ The current integration has a single Frontend and does not expose Frontend high 
 
 ## What's next
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card
     title="Managing Deployments"
     icon="fa-solid fa-sliders"
@@ -205,12 +205,5 @@ The current integration has a single Frontend and does not expose Frontend high 
     href="https://docs.nvidia.com/dynamo/components/frontend"
   >
     Review Dynamo's OpenAI-compatible HTTP and KServe gRPC interfaces.
-  </Card>
-  <Card
-    title="Get Support"
-    icon="fa-solid fa-headset"
-    href="/resources/requesting-support"
-  >
-    Ask about Dynamo availability, capacity, or deployment failures.
   </Card>
 </CardGroup>

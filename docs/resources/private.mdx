@@ -19,7 +19,7 @@ You choose the protection method when configuring a deployment. You may enable b
 Generate a Bearer token from your [Vault](/resources/vault), then include it in the `Authorization` header of every request.
 
 **Using curl command**
-```bash
+```bash showLineNumbers={false}
 curl -X 'POST' 'https://<endpoint_url>/openai/v1/chat/completions' \
   -H 'Authorization: Bearer <your_bearer_token>' \
   -H 'accept: application/json' \
@@ -52,7 +52,7 @@ Select the <em>Make it a private endpoint?</em> option when configuring a deploy
 
 
 **Using curl command**
-```bash
+```bash showLineNumbers={false}
 curl -X 'POST' 'https://<endpoint_url>/openai/v1/chat/completions' \
   --cert <path to TLS certificate> \   # Downloaded certificate
   -H 'accept: application/json' \

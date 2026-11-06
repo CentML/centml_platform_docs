@@ -47,7 +47,7 @@ Under **Optional Details → Config File**:
 - **Mount Path (directory)** — `/etc/start`
 - **File Content**:
 
-```bash
+```bash showLineNumbers={false}
 python3 -m pip install -q --root-user-action=ignore vllm[grpc]
 vllm serve meta-llama/Llama-2-7b-hf --grpc --port 50051
 ```
@@ -60,7 +60,7 @@ vllm serve meta-llama/Llama-2-7b-hf --grpc --port 50051
 
 The file is mounted at `<mount path>/<filename>`, so set **Add command** to run it:
 
-```bash
+```bash showLineNumbers={false}
 /bin/sh /etc/start/entry.sh
 ```
 
@@ -86,7 +86,7 @@ Once the deployment is **Ready**, its endpoint URL appears on the deployment's *
 
 vLLM's gRPC server has reflection enabled, so you can list its services with [`grpcurl`](https://github.com/fullstorydev/grpcurl):
 
-```bash
+```bash showLineNumbers={false}
 grpcurl <endpoint_url>:443 list
 ```
 
@@ -98,20 +98,20 @@ vllm.grpc.engine.VllmEngine
 
 Check readiness with the standard gRPC health service:
 
-```bash
+```bash showLineNumbers={false}
 grpcurl <endpoint_url>:443 grpc.health.v1.Health/Check
 # {"status": "SERVING"}
 ```
 
 Inspect the served model:
 
-```bash
+```bash showLineNumbers={false}
 grpcurl -d '{}' <endpoint_url>:443 vllm.grpc.engine.VllmEngine/GetModelInfo
 ```
 
 Run inference with the server-streaming `Generate` RPC. The response streams `token_ids` rather than decoded text — decode them with the tokenizer (the `GetTokenizer` RPC) or see the [vLLM documentation](https://docs.vllm.ai/) for the full request and response schema:
 
-```bash
+```bash showLineNumbers={false}
 grpcurl -d '{"request_id": "1", "text": "The capital of France is", "sampling_params": {"temperature": 0.7, "max_tokens": 16}, "stream": true}' \
   <endpoint_url>:443 vllm.grpc.engine.VllmEngine/Generate
 ```

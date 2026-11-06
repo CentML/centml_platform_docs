@@ -66,7 +66,7 @@ From the deployment detail page you can stream logs, open the in-browser **Termi
 
 Endpoints are never public, so every request must authenticate with a Bearer token or a client certificate. The example below uses a Bearer token; see [Securing Endpoints](/resources/private) for all options.
 
-```bash
+```bash showLineNumbers={false}
 curl -X 'POST' 'https://<endpoint_url>/openai/v1/chat/completions' \
   -H 'Authorization: Bearer <your_bearer_token>' \
   -H 'accept: application/json' \

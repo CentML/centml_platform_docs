@@ -33,7 +33,7 @@ The image might appear as `nvidia/tensorrt-llm/release` in the prebuilt image li
 
 The TensorRT-LLM release image does not start an inference server by itself. Under **Optional Details → Add command**, enter:
 
-```bash
+```bash showLineNumbers={false}
 /bin/bash -lc 'trtllm-serve TinyLlama/TinyLlama-1.1B-Chat-v1.0 --host 0.0.0.0 --port 8000 --config /etc/engine/config.yaml'
 ```
 
@@ -88,7 +88,7 @@ From here the deployment follows the standard General Inference flow — select 
 
 Copy the endpoint URL and Bearer token from the deployment detail page:
 
-```bash
+```bash showLineNumbers={false}
 export ENDPOINT='https://<endpoint_url>'
 export CCLUSTER_TOKEN='<your_bearer_token>'
 

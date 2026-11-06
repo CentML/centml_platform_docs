@@ -76,7 +76,7 @@ jobs:
         run: python3 tools/check-docs-mdx docs/
 
       - name: Check docs paths stay inside docs/
-        run: python3 tools/check-docs-paths --allow '../docs/index.yml' docs fern
+        run: python3 tools/check-docs-paths --allow '../docs/' docs fern
 
       - name: Check broken links
         # Without --strict the command reports broken links but exits 0.

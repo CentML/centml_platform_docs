@@ -87,7 +87,7 @@ CCluster provides pre-configured recipes for popular inference engines in the **
 <Note>
 **Ollama** does not require a custom entrypoint. After the deployment is ready, you need to pull a model before it can serve requests:
 
-```bash
+```bash showLineNumbers={false}
 # Pull a model (Ollama only)
 curl -X POST https://<endpoint_url>/api/pull -d '{"name": "qwen2:1.5b"}'
 
@@ -156,7 +156,7 @@ The **container port** you configure is used internally within the cluster. CClu
 
 **Example usage:**
 
-```bash
+```bash showLineNumbers={false}
 # HTTP deployment
 curl https://my-deployment.some-hash.cluster-alias.centml.com/v1/models
 ```

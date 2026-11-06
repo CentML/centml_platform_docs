@@ -46,7 +46,7 @@ From here the deployment follows the standard General Inference flow — select 
 
 Once ready, query the endpoint like any OpenAI-compatible endpoint. List the served model identifier first, then send requests:
 
-```bash
+```bash showLineNumbers={false}
 # Find the model identifier served by this NIM
 curl https://<endpoint_url>/v1/models \
   -H "Authorization: Bearer <your_bearer_token>"

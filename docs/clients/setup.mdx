@@ -7,13 +7,13 @@ We provide a client library to programmatically interact with NVIDIA CCluster ei
 
 Use the following command to install centml client.
 
-```bash
+```bash showLineNumbers={false}
 pip install centml
 ```
 
 Run the following command to log in using your NVIDIA CCluster client credentials.
 
-```bash
+```bash showLineNumbers={false}
 centml login
 ```
 
@@ -21,7 +21,7 @@ The first time, you'll be prompted to log in to your CCluster account through a 
 
 For **unattended automation** (CI pipelines, scheduled jobs, or integrations), use a [service account](/resources/service-accounts) instead of browser login. Set `CENTML_SERVICE_ACCOUNT_ID` and `CENTML_SERVICE_ACCOUNT_SECRET` from the Client ID and Client Secret shown in the UI.
 
-```bash
+```bash showLineNumbers={false}
 centml cluster ls
 
 # Alternatively, as a shorthand
@@ -29,7 +29,7 @@ ccluster ls
 ```
 
 Check out other supported commands:
-```bash
+```bash showLineNumbers={false}
 ccluster --help
 Usage: ccluster [OPTIONS] COMMAND [ARGS]...
 
@@ -64,14 +64,14 @@ Commands:
 
 To logout, use the following command.
 
-```bash
+```bash showLineNumbers={false}
 centml logout
 ```
 
 
 ## What's next
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card
     title="Managing Vault Objects"
     icon="fa-solid fa-key"
@@ -86,11 +86,4 @@ centml logout
   >
     Learn how to access the NVIDIA CCluster using Python.
   </Card>
-  <Card
-    title="Get Support"
-    icon="fa-solid fa-headset"
-    href="/resources/requesting-support"
-  >
-    Submit a Support Request
- </Card>
 </CardGroup>
