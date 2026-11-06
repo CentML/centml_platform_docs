@@ -13,38 +13,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Publishes docs.nvidia.com/ccluster on release tags
-# (v1.3.0, v1.2.1) and optional docs-only tags (docs-v1.3.0-1). Runs the
-# check-docs workflow first and publishes only if it passes.
+# Publishes docs.nvidia.com/ccluster on every push to the default branch
+# that touches docs or fern/. Runs the check-docs workflow first and
+# publishes only if it passes.
 # Requires the FERN_TOKEN repo secret.
 
 name: publish-docs
 
 on:
   push:
-    tags:
-      # Engineering release tag, e.g. v1.3.0 or v1.2.1
-      - 'v[0-9]+.[0-9]+.[0-9]+'
-      - 'v[0-9]+.[0-9]+.[0-9]+.[0-9]+'
-      # Doc-only update after a release, e.g. docs-v1.3.0-1
-      - 'docs-v[0-9]+.[0-9]+.[0-9]+-[0-9]+'
-      - 'docs-v[0-9]+.[0-9]+.[0-9]+.[0-9]+-[0-9]+'
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'fern/**'
+      - '.github/workflows/publish-docs.yml'
   workflow_dispatch: {}
 
 permissions:
   contents: read
 
 # Prevent overlapping runs (checks and publish). GitHub keeps at most one
-# pending run and can replace it with a newer run. This does not enforce
-# increasing release versions.
+# pending run and can replace it with a newer run.
 concurrency:
   group: publish-docs
   cancel-in-progress: false
 
 jobs:
   check:
-    # Manual runs may only publish from the default branch or a tag; anything else is skipped.
-    if: github.ref_type == 'tag' || github.ref_name == github.event.repository.default_branch
+    # Manual runs may only publish from the default branch; anything else is skipped.
+    if: github.ref_name == github.event.repository.default_branch
     uses: ./.github/workflows/check-docs.yml
     secrets:
       FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
@@ -53,9 +51,6 @@ jobs:
     needs: check
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    # Create this environment in repo settings and add required reviewers or
-    # tag/branch rules to gate production publishes.
-    environment: production
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

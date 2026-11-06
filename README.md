@@ -16,7 +16,7 @@ The site uses the NVIDIA global theme (`global-theme: nvidia`), so logo, colors,
   - [docs/resources/](docs/resources/): supporting guides (custom images, vault, support, etc.)
   - `docs/<section>/images/`: screenshots used by the pages in that section
 - [tools/](tools/): MDX-safety and docs-path checkers run in CI
-- [.github/workflows/](.github/workflows/): Fern check, PR preview, staging, and production publish workflows
+- [.github/workflows/](.github/workflows/): Fern check, PR preview, and publish workflows
 
 ## Prerequisites
 
@@ -62,7 +62,6 @@ Publishing runs through GitHub Actions and needs the `FERN_TOKEN` repository sec
 | --- | --- | --- |
 | [check-docs.yml](.github/workflows/check-docs.yml) | PRs and pushes to `main` | Validates config, MDX, links, and docs paths |
 | [preview-docs.yml](.github/workflows/preview-docs.yml) | Same-repo PRs | Posts a Fern preview link on the PR |
-| [staging-docs.yml](.github/workflows/staging-docs.yml) | Merge to `main` | Updates the shared `staging` preview |
-| [publish-docs.yml](.github/workflows/publish-docs.yml) | `v1.2.3` or `docs-v1.2.3-1` tags, or manual run | Publishes production through the `production` environment |
+| [publish-docs.yml](.github/workflows/publish-docs.yml) | Merge to `main` that changes `docs/` or `fern/`, or manual run | Publishes production after the checks pass |
 
 Connecting the Fern site to `docs.nvidia.com/ccluster` requires a review and Jira ticket from the Developer Experience team; ask in [#cdd-fern](https://nvidia.enterprise.slack.com/archives/C0A8987CQ7K).

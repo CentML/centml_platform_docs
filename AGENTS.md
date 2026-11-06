@@ -10,7 +10,7 @@ This repository is the Fern documentation site for NVIDIA CCluster. Agents shoul
 - **Navigation:** [docs/index.yml](docs/index.yml) (page order, slugs, sidebar icons)
 - **Content:** MDX files in [docs/](docs/); images in `docs/<section>/images/`
 - **Base path:** the site is served under `/ccluster` (`docs.nvidia.com/ccluster`)
-- **Workflows:** [.github/workflows/](.github/workflows/) (check, preview, staging, publish)
+- **Workflows:** [.github/workflows/](.github/workflows/) (check, PR preview, publish on merge to `main`)
 - **Guide:** [NVIDIA Fern onboarding guide](https://gitlab-master.nvidia.com/fern-documentation/guides)
 
 ## Local Development
