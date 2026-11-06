@@ -1,7 +1,6 @@
 ---
 title: 'Compute Instance'
 description: 'Launch an on-demand GPU instance from any container image and start building'
-icon: 'microchip'
 ---
 
 On-demand GPU instances with SSH access to run any GPU-accelerated workloads and let you run, test, and experiment with any AI application seamlessly.
@@ -20,7 +19,7 @@ Your image does not need an SSH server preinstalled. CCluster injects one at dep
 
 To deploy an image from a private registry (e.g., Amazon ECR, Google Artifact Registry, Azure Container Registry, or a self-hosted registry), provide credentials in the **Image Registry Username** and **Image Registry Password** fields. CCluster automatically detects the registry from the image URL. For public images, leave both fields empty.
 
-API deployments can instead [reference an existing image pull secret](/resources/custom_image#use-an-existing-image-pull-secret) managed by your cluster administrator using `image_pull_secret_name`.
+API deployments can instead [reference an existing image pull secret](/resources/custom-image#use-an-existing-image-pull-secret) managed by your cluster administrator using `image_pull_secret_name`.
 
 ## 2. Configure access and deploy
 
@@ -32,7 +31,7 @@ Optional settings on the create form:
 - **Annotations** — optional key/value metadata on the instance.
 
 <Frame>
-    <img src="/images/comp_1.png" alt="Compute instance launch page" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/comp-1.png" alt="Compute instance launch page" />
 </Frame>
 
 ## 3. SSH into the instance
@@ -42,22 +41,22 @@ Once the instance is ready, navigate to the deployment details page. The **Endpo
 - **Endpoint URL** — the hostname for your instance. Next to it are the copy button (copies the URL) and the SSH button (copies `ssh root@<endpoint_url>` so you can paste it directly into your terminal).
 
 <Frame>
-    <img src="/images/comp_2.png" alt="Endpoint Configuration section showing the endpoint URL and SSH public key" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/comp-2.png" alt="Endpoint Configuration section showing the endpoint URL and SSH public key" />
 </Frame>
 
 To connect, use the SSH command with the `root` user:
 
-```bash
+```bash showLineNumbers={false}
 ssh root@<endpoint_url>
 ```
 
 <Frame>
-    <img src="/images/comp_3.png" alt="Running compute instance showing its endpoint URL" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/comp-3.png" alt="Running compute instance showing its endpoint URL" />
 </Frame>
 
 The instance authenticates you with the SSH public key you provided at deployment. You can also run one-off commands, transfer files, and forward TCP ports:
 
-```bash
+```bash showLineNumbers={false}
 # Run a one-off command
 ssh root@<endpoint_url> 'nvidia-smi'
 
@@ -83,7 +82,7 @@ The instance includes the libraries from your image. Additional packages can be 
 
 ### In-console Terminal
 
-While the instance is **Active**, the deployment **Terminal** tab opens a shell in the browser without SSH from your machine. Use SSH (above) for `scp`/`SFTP` and port forwarding. See [Managing Deployments](/resources/managing_deployments) for Terminal availability, pause/resume, clone, and logs.
+While the instance is **Active**, the deployment **Terminal** tab opens a shell in the browser without SSH from your machine. Use SSH (above) for `scp`/`SFTP` and port forwarding. See [Managing Deployments](/resources/managing-deployments) for Terminal availability, pause/resume, clone, and logs.
 
 Compute deployments are not revision-aware in the console: edits update the instance in place and there is no rollback table.
 
@@ -93,21 +92,21 @@ Compute deployments are not revision-aware in the console: edits update the inst
 <CardGroup cols={3}>
   <Card
     title="Managing Deployments"
-    icon="sliders"
-    href="/resources/managing_deployments"
+    icon="fa-solid fa-sliders"
+    href="/resources/managing-deployments"
   >
     In-console Terminal, logs, pause, and clone.
   </Card>
   <Card
     title="Managing Vault Objects"
-    icon="key-skeleton-left-right"
+    icon="fa-solid fa-key"
     href="/resources/vault"
   >
 Store SSH keys and registry credentials for reuse across deployments
  </Card>
   <Card
     title="LLM Serving"
-    icon="messages"
+    icon="fa-solid fa-comments"
     href="/apps/llm"
   >
     Explore dedicated, protected endpoints for production model deployments.

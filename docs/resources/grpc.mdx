@@ -1,7 +1,6 @@
 ---
 title: 'gRPC Inference Endpoints'
 description: 'Deploy and call a gRPC inference endpoint on CCluster, using vLLM as a worked example'
-icon: 'waypoints'
 ---
 
 General Inference can serve your container over **HTTP** (the default) or **gRPC**. gRPC runs over HTTP/2 and exchanges binary [Protocol Buffers](https://protobuf.dev/), which makes it a good fit for low-latency, high-throughput, or streaming inference workloads. We use **vLLM** as the example throughout this guide, deploying its gRPC server end to end.
@@ -10,7 +9,7 @@ General Inference can serve your container over **HTTP** (the default) or **gRPC
 
 When you select **gRPC** as the protocol, a few things differ from an HTTP deployment:
 
-- **Container port** — set it to the port your container serves gRPC on. For vLLM this is `50051`, its default gRPC port.
+- **Container port** — set it to the port your container serves gRPC on. This guide uses `50051` for vLLM.
 - **Health checks** — CCluster verifies readiness with a TCP socket check on the container port, so the **Health check path** field is ignored.
 - **External access** — like every deployment, the endpoint is exposed on **port 443 with TLS enforced**. CCluster's ingress terminates TLS on 443 and forwards traffic to your container's internal port. Clients connect to `<endpoint_url>:443`.
 
@@ -24,16 +23,16 @@ From the **General Inference** deployment page, fill in the basic details:
 
 - **Add or Select Image** — `vllm/vllm-openai`.
 - **Container Tag** — `latest`.
-- **Container Port** — `50051` (vLLM's default gRPC port).
+- **Container Port** — `50051` (the port the startup script below passes to `--port`).
 - **Protocol** — select `gRPC`.
 - **Hugging Face Token** — include one if your model is gated.
 
 <Frame>
-    <img src="/images/grpc_vllm_config.png" alt="General Inference form configured for a vLLM gRPC deployment" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/grpc-vllm-config.png" alt="General Inference form configured for a vLLM gRPC deployment" />
 </Frame>
 
 <Tip>
-This guide uses the pre-built `vllm/vllm-openai` image. To package and deploy your own gRPC container, see [Deploying Custom Models](/resources/custom_image).
+This guide uses the pre-built `vllm/vllm-openai` image. To package and deploy your own gRPC container, see [Deploying Custom Models](/resources/custom-image).
 </Tip>
 
 ### Use a config-file startup script
@@ -48,19 +47,25 @@ Under **Optional Details → Config File**:
 - **Mount Path (directory)** — `/etc/start`
 - **File Content**:
 
-```bash
+```bash showLineNumbers={false}
 python3 -m pip install -q --root-user-action=ignore vllm[grpc]
-python3 -m vllm.entrypoints.grpc_server --model meta-llama/Llama-2-7b-hf
+vllm serve meta-llama/Llama-2-7b-hf --grpc --port 50051
 ```
+
+`--port 50051` is required: in gRPC mode `vllm serve` binds its regular `--port`, which defaults to `8000`.
+
+<Warning>
+**Deprecated:** `python3 -m vllm.entrypoints.grpc_server --model <model>` is deprecated as of vLLM 0.30 and may be removed in a future release. Use `vllm serve <model> --grpc` instead.
+</Warning>
 
 The file is mounted at `<mount path>/<filename>`, so set **Add command** to run it:
 
-```bash
+```bash showLineNumbers={false}
 /bin/sh /etc/start/entry.sh
 ```
 
 <Frame>
-    <img src="/images/grpc_vllm_entry_script.png" alt="Config File entry.sh installing vllm[grpc] and launching the gRPC server, invoked from Add command" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/grpc-vllm-entry-script.png" alt="Config File entry.sh installing vllm[grpc] and launching the gRPC server, invoked from Add command" />
 </Frame>
 
 <Tip>
@@ -72,7 +77,7 @@ Every endpoint is protected — there are no public endpoints. Secure access wit
 Choose the cluster and GPU instance that match your model and setup, then click **Deploy**.
 
 <Frame>
-    <img src="/images/grpc_vllm_hardware.png" alt="Hardware instance selection" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/grpc-vllm-hardware.png" alt="Hardware instance selection" />
 </Frame>
 
 ## 3. Call your gRPC endpoint
@@ -81,7 +86,7 @@ Once the deployment is **Ready**, its endpoint URL appears on the deployment's *
 
 vLLM's gRPC server has reflection enabled, so you can list its services with [`grpcurl`](https://github.com/fullstorydev/grpcurl):
 
-```bash
+```bash showLineNumbers={false}
 grpcurl <endpoint_url>:443 list
 ```
 
@@ -93,20 +98,20 @@ vllm.grpc.engine.VllmEngine
 
 Check readiness with the standard gRPC health service:
 
-```bash
+```bash showLineNumbers={false}
 grpcurl <endpoint_url>:443 grpc.health.v1.Health/Check
 # {"status": "SERVING"}
 ```
 
 Inspect the served model:
 
-```bash
+```bash showLineNumbers={false}
 grpcurl -d '{}' <endpoint_url>:443 vllm.grpc.engine.VllmEngine/GetModelInfo
 ```
 
 Run inference with the server-streaming `Generate` RPC. The response streams `token_ids` rather than decoded text — decode them with the tokenizer (the `GetTokenizer` RPC) or see the [vLLM documentation](https://docs.vllm.ai/) for the full request and response schema:
 
-```bash
+```bash showLineNumbers={false}
 grpcurl -d '{"request_id": "1", "text": "The capital of France is", "sampling_params": {"temperature": 0.7, "max_tokens": 16}, "stream": true}' \
   <endpoint_url>:443 vllm.grpc.engine.VllmEngine/Generate
 ```
@@ -120,21 +125,21 @@ Endpoints are protected, so authenticate every call — pass a Bearer token, or 
 <CardGroup cols={3}>
   <Card
     title="Deploying Custom Models"
-    icon="screwdriver-wrench"
-    href="/resources/custom_image"
+    icon="fa-solid fa-screwdriver-wrench"
+    href="/resources/custom-image"
   >
     Build your own containerized gRPC inference engine and deploy it.
   </Card>
   <Card
     title="Clients"
-    icon="terminal"
+    icon="fa-solid fa-terminal"
     href="/clients/setup"
   >
     Interact with NVIDIA CCluster programmatically.
   </Card>
   <Card
     title="Managing Vault Objects"
-    icon="key-skeleton-left-right"
+    icon="fa-solid fa-key"
     href="/resources/vault"
   >
     Store the Hugging Face tokens and registry credentials your deployments use.

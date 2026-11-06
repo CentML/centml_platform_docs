@@ -1,0 +1,127 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Publishes a Fern preview of docs.nvidia.com/ccluster for PRs that
+# touch docs or fern/, and posts the URL on the PR.
+# Requires the FERN_TOKEN repo secret.
+
+name: preview-docs
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'fern/**'
+      - '.github/workflows/preview-docs.yml'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+# A newer push to the same PR supersedes an in-flight preview.
+concurrency:
+  group: preview-docs-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  run:
+    # Fork PRs get no secrets and a read-only GITHUB_TOKEN, so they cannot
+    # publish or comment. check-docs still validates them.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Require Fern token
+        env:
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+        run: |
+          if [ -z "$FERN_TOKEN" ]; then
+            echo "::error::FERN_TOKEN is not available to this run (for example, a Dependabot PR)."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: '22'
+
+      - name: Install Fern CLI tool
+        shell: bash
+        run: |
+          VERSION=$(jq -er '.version | select(type == "string" and test("^[0-9]+\\.[0-9]+\\.[0-9]+$"))' fern/fern.config.json) || {
+            echo "::error::Set version to an exact x.y.z CLI version in fern/fern.config.json."
+            exit 1
+          }
+          npm install -g "fern-api@$VERSION"
+
+      - name: Check docs paths stay inside docs/
+        run: python3 tools/check-docs-paths --allow '../docs/' docs fern
+
+      - name: Generate preview URL
+        id: generate-docs
+        shell: bash
+        env:
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+        run: |
+          # bash -eo pipefail keeps Fern failures fatal while tee shows the logs.
+          # For multi-source sites, prefix this ID with a repository identifier.
+          fern generate --docs --preview --id "pr-${{ github.event.pull_request.number }}" 2>&1 | tee fern-output.txt
+          URL=$(sed -nE 's/.*Published docs to (https:\/\/[^[:space:]]+).*/\1/p' fern-output.txt | head -n 1)
+          if [ -z "$URL" ]; then
+            echo "::error::Fern did not return a preview URL. Check the logs above and FERN_TOKEN."
+            exit 1
+          fi
+          # The URL is posted on the PR, so only accept https Fern hosts without userinfo.
+          node -e "
+            const u = new URL(process.argv[1]);
+            const ok = u.protocol === 'https:' && !u.username && !u.password && u.hostname.endsWith('.buildwithfern.com');
+            process.exit(ok ? 0 : 1);
+          " "$URL" || { echo "::error::Unexpected preview URL host: $URL"; exit 1; }
+          echo "Preview URL: $URL"
+          echo "🌿 Preview your docs: $URL" > preview_url.txt
+
+      - name: Post or update preview comment
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          MARKER='<!-- preview-docs -->'
+          COMMENT_FILE="$RUNNER_TEMP/fern-preview-comment.md"
+          {
+            cat preview_url.txt
+            printf '\n%s\n' "$MARKER"
+          } > "$COMMENT_FILE"
+
+          # Read every page and only update comments posted by GitHub Actions.
+          COMMENT_IDS=$(gh api "repos/${GH_REPO}/issues/${PR_NUMBER}/comments" \
+            --paginate \
+            --jq '.[] | select(.user.login == "github-actions[bot]" and ((.body // "") | contains("<!-- preview-docs -->"))) | .id')
+          COMMENT_ID="${COMMENT_IDS%%$'\n'*}"
+
+          if [ -n "$COMMENT_ID" ]; then
+            gh api "repos/${GH_REPO}/issues/comments/${COMMENT_ID}" \
+              --method PATCH -F "body=@${COMMENT_FILE}"
+          else
+            gh api "repos/${GH_REPO}/issues/${PR_NUMBER}/comments" \
+              --method POST -F "body=@${COMMENT_FILE}"
+          fi

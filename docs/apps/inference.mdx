@@ -1,10 +1,9 @@
 ---
 title: 'General Inference'
 description: 'Deploy and scale any model'
-icon: 'circle-nodes'
 ---
 
-We make it easy for you to containerize and deploy any custom models on CCluster. Containers can run as **any user, including root** — see [Deploying Custom Models](/resources/custom_image) for CCluster security details. We also provide popular inference engine recipes such as vLLM, Ollama, SGLang, and LMDeploy.
+We make it easy for you to containerize and deploy any custom models on CCluster. Containers can run as **any user, including root** — see [Deploying Custom Models](/resources/custom-image) for CCluster security details. We also provide popular inference engine recipes such as vLLM, Ollama, SGLang, and LMDeploy.
 
 ## 1. Configure your inference deployment
 
@@ -17,7 +16,7 @@ At a minimum, you need to specify:
 - **Container Port** — the port your container exposes its HTTP or gRPC service on.
 - **Protocol** — select `HTTP` (default) or `gRPC`.
 - **Health check path** — the endpoint used to verify readiness (e.g., `/health`, `/`). For gRPC deployments, CCluster uses TCP socket checks automatically, so this field is ignored.
-- **Image Registry Username / Password** — credentials for private images (e.g., Docker Hub private repo). API deployments can instead [reference an existing image pull secret](/resources/custom_image#use-an-existing-image-pull-secret).
+- **Image Registry Username / Password** — credentials for private images (e.g., Docker Hub private repo). API deployments can instead [reference an existing image pull secret](/resources/custom-image#use-an-existing-image-pull-secret).
 
 The create wizard splits optional settings across **Advanced** and **Scaling**.
 
@@ -45,11 +44,11 @@ CCluster scales replicas from in-flight request concurrency (**Max Concurrency**
 | **Cooldown Period (s)** | Scale-down stabilization time, from `0` to `3600`. |
 
 <Note>
-Changing min or max replica counts on a running deployment scales in place and **does not create a new revision**. Spec changes such as image, command, or affinity do. See [Managing Deployments](/resources/managing_deployments).
+Changing min or max replica counts on a running deployment scales in place and **does not create a new revision**. Spec changes such as image, command, or affinity do. See [Managing Deployments](/resources/managing-deployments).
 </Note>
 
 <Frame>
-    <img src="/images/inf_1.png" alt="General Inference deployment page" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/inf-1.png" alt="General Inference deployment page" />
 </Frame>
 
 <Tip>
@@ -57,7 +56,7 @@ Every deployment must be protected — there are no public endpoints. Secure you
 </Tip>
 
 <Tip>
-For building your own custom container image and deploying on NVIDIA CCluster, please refer to this [resource](/resources/custom_image).
+For building your own custom container image and deploying on NVIDIA CCluster, please refer to this [resource](/resources/custom-image).
 </Tip>
 
 ### Protocol: HTTP and gRPC
@@ -75,16 +74,20 @@ For an end-to-end gRPC walkthrough using vLLM's gRPC server, see [gRPC Inference
 
 CCluster provides pre-configured recipes for popular inference engines in the **Add or Select Image** dropdown. Selecting a recipe auto-fills all fields except the entrypoint command. Below are the **Add command** values you need to provide for each engine:
 
-- **vLLM** — `python3 -m vllm.entrypoints.openai.api_server --model <HF_REPO_NAME>`
-- **SGLang** — `python3 -m sglang.launch_server --model-path <HF_MODEL_REPO> --host 0.0.0.0`
+- **vLLM** — `vllm serve <HF_REPO_NAME>`
+- **SGLang** — `sglang serve --model-path <HF_MODEL_REPO> --host 0.0.0.0`
 - **LMDeploy** — `lmdeploy serve api_server <HF_REPO_NAME> --server-name 0.0.0.0`
 - **Ollama** — leave **Add command** empty. See the Ollama-specific note below.
 - **TensorRT-LLM** — `trtllm-serve <HF_REPO_NAME> --host 0.0.0.0 --port 8000`. See the TensorRT-LLM note below.
 
+<Warning>
+**Deprecated:** `python3 -m vllm.entrypoints.openai.api_server --model <HF_REPO_NAME>` is deprecated as of vLLM 0.29 and may be removed in a future release; use `vllm serve` instead.
+</Warning>
+
 <Note>
 **Ollama** does not require a custom entrypoint. After the deployment is ready, you need to pull a model before it can serve requests:
 
-```bash
+```bash showLineNumbers={false}
 # Pull a model (Ollama only)
 curl -X POST https://<endpoint_url>/api/pull -d '{"name": "qwen2:1.5b"}'
 
@@ -109,7 +112,7 @@ For the full NIM configuration and an end-to-end walkthrough, see [Deploying NVI
 By default, NVIDIA CCluster provides several managed clusters and GPU instances for you to deploy your inference containers. 
 
 <Frame>
-    <img src="/images/inf_2.png" alt="Hardware instance selection for general inference" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/inf-2.png" alt="Hardware instance selection for general inference" />
 </Frame>
 
 Select the regional cluster and hardware instance that best fits your need and click Deploy.
@@ -123,16 +126,16 @@ You can integrate your own private cluster into CCluster through bring-your-own-
 Once deployed, you can see all your deployments under the listing view along with their current status.
 
 <Frame>
-    <img src="/images/inf_3.png" alt="Container image configuration for general inference" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/inf-3.png" alt="Container image configuration for general inference" />
 </Frame>
 
 Click on the deployment to view the details page, logs and monitoring information.
 
 <Frame>
-    <img src="/images/inf_4.png" alt="Deployment details panel after launching a general inference endpoint" style={{ borderRadius: '0.5rem' }} />
+    <img src="./images/inf-4.png" alt="Deployment details panel after launching a general inference endpoint" />
 </Frame>
 
-From the detail page you can stream **Logs**, open the in-browser **Terminal** while the deployment is Active, pause or resume, clone, edit (which creates a new revision), or roll back. See [Managing Deployments](/resources/managing_deployments).
+From the detail page you can stream **Logs**, open the in-browser **Terminal** while the deployment is Active, pause or resume, clone, edit (which creates a new revision), or roll back. See [Managing Deployments](/resources/managing-deployments).
 
 Once the deployment status is ready, the container port is going to be exposed under the endpoint url shown in the details page.
 
@@ -153,7 +156,7 @@ The **container port** you configure is used internally within the cluster. CClu
 
 **Example usage:**
 
-```bash
+```bash showLineNumbers={false}
 # HTTP deployment
 curl https://my-deployment.some-hash.cluster-alias.centml.com/v1/models
 ```
@@ -167,21 +170,21 @@ For gRPC deployments, see [gRPC Inference Endpoints](/resources/grpc) for connec
 <CardGroup cols={3}>
   <Card
     title="Managing Deployments"
-    icon="sliders"
-    href="/resources/managing_deployments"
+    icon="fa-solid fa-sliders"
+    href="/resources/managing-deployments"
   >
     Logs, Terminal, pause, clone, revisions, and replica scaling.
   </Card>
   <Card
     title="Securing Endpoints"
-    icon="lock"
+    icon="fa-solid fa-lock"
     href="/resources/private"
   >
 Learn how to protect your endpoints with Bearer tokens and mTLS certificates
  </Card>
   <Card
     title="LLM Serving"
-    icon="messages"
+    icon="fa-solid fa-comments"
     href="/apps/llm"
   >
     Explore dedicated, protected endpoints for production model deployments.

@@ -1,12 +1,11 @@
 ---
 title: 'Python SDK Reference'
 description: 'Access the NVIDIA CCluster using python'
-icon: 'python'
 ---
 
 We provide a Python SDK to programmatically access NVIDIA CCluster backend APIs to manage your deployments.
 
-For unattended use in CI or automation, authenticate with a [service account](/resources/service_accounts) by setting `CENTML_SERVICE_ACCOUNT_ID` and `CENTML_SERVICE_ACCOUNT_SECRET` before calling the SDK. Interactive development can use `centml login` instead — see [Client Setup](/clients/setup).
+For unattended use in CI or automation, authenticate with a [service account](/resources/service-accounts) by setting `CENTML_SERVICE_ACCOUNT_ID` and `CENTML_SERVICE_ACCOUNT_SECRET` before calling the SDK. Interactive development can use `centml login` instead — see [Client Setup](/clients/setup).
 
 Following is a sample code to list all the inference deployments under your account.
 
@@ -16,7 +15,7 @@ from centml.sdk.api import get_centml_client
 from centml.sdk import DeploymentType
 
 with get_centml_client() as cclient:
-    deployments = cclient.get(DeploymentType.INFERENCE_V2)
+    deployments = cclient.get(DeploymentType.INFERENCE_V3)
     print(deployments)
 ```
 
@@ -25,32 +24,25 @@ For more examples, please refer to https://github.com/CentML/centml-python-clien
 
 ## Managing hardware instances
 
-The SDK can also list, create, and delete the **hardware instances** available to a cluster. See [Managing Hardware Instances](/resources/hardware_instances) for details.
+The SDK can also list, create, and delete the **hardware instances** available to a cluster. See [Managing Hardware Instances](/resources/hardware-instances) for details.
 
 
 ## What's next
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card
     title="Managing Vault Objects"
-    icon="key-skeleton-left-right"
+    icon="fa-solid fa-key"
     href="/resources/vault"
   >
     Learn how to generate and store NVIDIA CCluster tokens and other vault objects.
   </Card>
   <Card
     title="Clients"
-    icon="terminal"
+    icon="fa-solid fa-terminal"
     href="/clients/setup"
   >
     Learn how to interact with the NVIDIA CCluster programmatically
   </Card>
-  <Card
-    title="Get Support"
-    icon="headset"
-    href="/resources/requesting_support"
-  >
-    Submit a Support Request
- </Card>
 </CardGroup>
 

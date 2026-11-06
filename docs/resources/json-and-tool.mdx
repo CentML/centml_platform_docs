@@ -1,0 +1,348 @@
+---
+title: 'Agents on NVIDIA CCluster'
+description: 'How to build AI agents using structured outputs such as JSON and function/tool calls with NVIDIA CCluster'
+---
+
+NVIDIA CCluster's **Dedicated** LLM APIs support structured outputs using the same OpenAI-compatible API. These features are crucial for agentic workloads that require reliable data parsing and function calling. The NVIDIA CCluster also provides reasoning-enabled models (e.g., `DeepSeek-AI/deepseek-r1`) that can perform reasoning before generating structured outputs.
+
+## JSON schema output
+
+When you need a response strictly formatted as JSON, you can use JSON schema constraints. This is particularly useful in scenarios where your system or other downstream processes rely on valid JSON.
+
+Below is an example of how to set up a request to the NVIDIA CCluster LLM API using JSON schema enforcement. Replace `<endpoint_url>` with the endpoint URL of your [LLM Serving](/apps/llm) deployment, and set `CENTML_API_KEY` to a bearer token from your [Vault](/resources/vault).
+
+```python
+from openai import OpenAI
+import os
+
+# Retrieve the model name from environment variables
+model = os.environ.get("MODEL", "deepseek-ai/DeepSeek-R1")
+
+# Supply your API key from your NVIDIA CCluster vault
+api_key = os.environ.get("CENTML_API_KEY")
+assert api_key is not None, "Please provide an API Key"
+
+
+# Define the prompt for the OpenAI compatible API
+prompt = [
+    {
+        "content": (
+            "You are a helpful assistant that answers in JSON. Here's the json schema you must adhere to:\n"
+            "<schema>\n"
+            "{'title': 'WirelessAccessPoint', 'type': 'object', 'properties': {'ssid': {'title': 'SSID', 'type': 'string'}, "
+            "'securityProtocol': {'title': 'SecurityProtocol', 'type': 'string'}, 'bandwidth': {'title': 'Bandwidth', 'type': 'string'}}, "
+            "'required': ['ssid', 'securityProtocol', 'bandwidth']}\n"
+            "</schema>\n"
+        ),
+        "role": "system"
+    },
+    {
+        "content": (
+            "The access point's SSID should be 'OfficeNetSecure', it uses WPA2-Enterprise as its security protocol, "
+            "and it's capable of a bandwidth of up to 1300 Mbps on the 5 GHz band. This JSON object will be used to document our network "
+            "configurations and to automate the setup process for additional access points in the future. Please provide a JSON object that "
+            "includes these details."
+        ),
+        "role": "user"
+    }
+]
+
+# Define the JSON schema for the wireless access point configuration
+schema_json = {
+    "title": "WirelessAccessPoint",
+    "type": "object",
+    "properties": {
+        "ssid": {"title": "SSID", "type": "string"},
+        "securityProtocol": {"title": "SecurityProtocol", "type": "string"},
+        "bandwidth": {"title": "Bandwidth", "type": "integer"}
+    },
+    "required": ["ssid", "securityProtocol", "bandwidth"]
+}
+
+# Initialize the OpenAI-compatible client with the API key and base URL
+client = OpenAI(
+    api_key=api_key,
+    base_url="https://<endpoint_url>/openai/v1",
+)
+
+# Create a chat completion request with the defined prompt and schema
+chat_completion = client.chat.completions.create(
+    model=model,
+    messages=prompt,
+    max_tokens=5000,
+    temperature=0,
+    response_format={
+        "type": "json_schema",
+        "json_schema": {"name": "schema", "schema": schema_json}
+    }
+)
+
+# Print the entire chat completion response
+print("Chat Completion Response:", chat_completion)
+
+# Print the content of the first choice in the chat completion response
+print("Generated JSON Object:", chat_completion.choices[0].message.content)
+```
+
+### How it works
+
+1. **Prompt Construction**: Provide a system message telling the model to respond in JSON, along with the JSON schema itself.
+2. **Schema Enforcement**: In the `response_format` parameter, specify `"type": "json_schema"` and include your JSON schema definition.
+3. **Parsing the Output**: The response is guaranteed to follow the schema (as strictly as the model can enforce it). You can then parse it directly in your application.
+
+---
+
+## Tool (function) calling
+
+NVIDIA CCluster's LLM APIs support function calling similarly to OpenAI's "function calling" feature. This allows you to define "tools" that the model can call with structured parameters. For example, you might have a `get_weather` function your model can invoke based on user requests.
+
+```python
+from openai import OpenAI
+import os
+import json
+import time
+
+# Supply your API key from your NVIDIA CCluster vault
+api_key = os.environ.get("CENTML_API_KEY")
+assert api_key is not None, "Please provide an API Key"
+base_url = "https://<endpoint_url>/openai/v1"
+
+def get_weather(location):
+    """
+    Simulates getting weather data for a location.
+    In a real application, this would call a weather API.
+    """
+    # This is a mock implementation
+    weather_data = {
+        "Paris, France": "temperature: 22",
+        "London, UK": "temperature: 18",
+        "New York, USA": "temperature: 25",
+        "Tokyo, Japan": "temperature: 27",
+        "Bogotá, Colombia": "temperature: 20"
+    }
+
+    # Return mock data if location exists, otherwise return a default
+    return weather_data.get(location, "temperature: 20")
+
+
+# Define a tool (function) the model can call
+tools = [{
+    "type": "function",
+    "function": {
+        "name": "get_weather",
+        "description": "Get current temperature for a given location.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "location": {
+                    "type": "string",
+                    "description": "City and country e.g. Bogotá, Colombia"
+                }
+            },
+            "required": ["location"],
+            "additionalProperties": False
+        },
+        "strict": True
+    }
+}]
+
+def process_tool_calling(client, model_id, messages, available_functions=None):
+    """
+    Process a tool calling request with proper error handling.
+    
+    Args:
+        client: The OpenAI client
+        model_id: The ID of the model to use
+        messages: The messages to send to the model
+        available_functions: Dictionary mapping function names to their implementations
+        
+    Returns:
+        str: response_text: The text response from the model
+    """
+    if available_functions is None:
+        available_functions = {"get_weather": get_weather}
+        
+    response_text = ""
+    
+    try:
+        # Create a chat completion request with the defined prompt and schema
+        chat_completion = client.chat.completions.create(
+            model=model_id,
+            messages=messages,
+            max_tokens=4096,
+            tools=tools,
+            tool_choice="auto"  # Let the model decide when to use tools
+        )
+        
+        tool_calls = chat_completion.choices[0].message.tool_calls
+        if tool_calls:
+            # Create a properly formatted assistant message
+            assistant_message = {
+                "role": "assistant",
+                "content": chat_completion.choices[0].message.content or "",  # Ensure content is a string
+                "tool_calls": [
+                    {
+                        "id": tool_call.id,
+                        "type": tool_call.type,
+                        "function": {
+                            "name": tool_call.function.name,
+                            "arguments": tool_call.function.arguments
+                        }
+                    } for tool_call in tool_calls
+                ]
+            }
+            
+            # Start with the original prompt and add the assistant's response
+            updated_messages = messages + [assistant_message]
+            
+            for tool_call in tool_calls:
+                function_name = tool_call.function.name
+                function_to_call = available_functions[function_name]
+                function_args = json.loads(tool_call.function.arguments)
+                
+                print(f"Function name: {function_name}, Function args: {function_args}")
+                
+                function_response = function_to_call(location=function_args.get("location"))
+                print(f"Function response: {function_response}")
+                
+                # Add the tool response
+                updated_messages.append({ 
+                    "tool_call_id": tool_call.id, 
+                    "role": "tool", 
+                    "name": function_name, 
+                    "content": function_response
+                })
+            
+            # Make the second API call with properly formatted messages
+            second_response = client.chat.completions.create( 
+                model=model_id, 
+                messages=updated_messages 
+            )
+            response_text = second_response.choices[0].message.content
+            print(f"Final response: {response_text}")
+        else:
+            print("No tool calls found")
+            response_text = chat_completion.choices[0].message.content
+            print(f"Direct response: {response_text}")
+    
+    except Exception as e:
+        error_message = str(e)
+        if "tool choice requires --enable-auto-tool-choice" in error_message:
+            print("⚠️ ERROR: Tool calling is not supported by this model.")
+            print("The model requires server-side configuration for tool calling.")
+            print("Try using a different model or approach.")
+        else:
+            # For other errors, print the full error message
+            print(f"Error: {error_message}")
+    
+    return response_text
+
+# Define the system prompt with clear instructions about tool usage
+system_message = {
+    "content": "You are a helpful assistant. You have access to ONLY get_weather function that provides temperature information for locations. ONLY use this function when explicitly asked about weather or temperature. For all other questions, respond directly without using any tools.",
+    "role": "system"
+}
+
+# Define two different user messages to test
+weather_question = {
+    "content": "What is the weather like in Paris today?",
+    "role": "user"
+}
+
+general_question = {
+    "content": "Who is the president of the United States?",
+    "role": "user"
+}
+
+# Initialize the OpenAI-compatible NVIDIA CCluster client with the API key and base URL
+client = OpenAI(api_key=api_key, base_url=base_url)
+models = client.models.list()
+models = [model for model in models if model.id == "meta-llama/Llama-3.3-70B-Instruct"]
+for model in models:
+    print(f"\n--- Testing model: {model.id} ---")
+    
+    # Test with weather question (should use tool)
+    print("\nTesting with weather question:")
+    weather_prompt = [system_message, weather_question]
+    
+    start_time = time.time()
+    
+    # Process the weather question with tool calling
+    response = process_tool_calling(
+        client=client,
+        model_id=model.id,
+        messages=weather_prompt,
+        available_functions={"get_weather": get_weather}
+    )
+    elapsed_time = time.time() - start_time
+    print(f"Weather question time taken: {elapsed_time:.2f} seconds")
+    
+    # Test with general question (should NOT use tool)
+    print("\nTesting with general question:")
+    general_prompt = [system_message, general_question]
+    
+    start_time = time.time()
+
+    # For general questions, we'll try without tools
+    # Process the weather question with tool calling
+    response = process_tool_calling(
+        client=client,
+        model_id=model.id,
+        messages=general_prompt,
+        available_functions={"get_weather": get_weather}
+    )
+    elapsed_time = time.time() - start_time
+    print(f"General question time taken: {elapsed_time:.2f} seconds")
+
+```
+
+### How it works
+
+1. **Tool Definition**: In the `tools` parameter, define a function with a `name`, `description`, and a JSON schema for parameters.
+2. **Function Invocation**: The model may decide to call the function (tool), returning the parameters it deems relevant based on user input.
+3. **Your Application Logic**: You receive the structured function arguments in `completion.choices[0].message.tool_calls`. You can then handle them programmatically (e.g., call an actual weather service).
+
+<Note>
+**Tip**: Make sure your model (e.g., `gpt-4o` or `deepseek-ai/DeepSeek-R1`) is function-call capable. Not all model versions support function calling. Always check the NVIDIA CCluster model documentation for compatibility.
+</Note>
+
+---
+
+## Best practices and tips
+
+- **Schema Validation**: The model will try to adhere to your schema, but always perform server-side validation before using the data (especially important in production).
+- **Temperature Setting**: When generating structured data, lower the temperature to reduce the likelihood of extraneous or incorrect fields.
+- **Use Reasoning Models**: For complex tasks requiring reasoning steps, consider using `deepseek-ai/DeepSeek-R1`. It provides chain-of-thought style reasoning capabilities.
+- **Production Hardening**: If you're building an agentic or workflow-driven application, ensure you handle potential parsing errors and fallback scenarios gracefully.
+
+---
+
+## Conclusion
+
+Using JSON schema enforcement and function calling (tools) with NVIDIA CCluster LLM APIs lets you build more reliable, agentic, and automated workflows. With minimal changes to your existing OpenAI-compatible code, you can take advantage of these features on the NVIDIA CCluster.
+
+For more details, continue exploring this documentation set or use your established NVIDIA support channel if you have questions.
+
+<CardGroup cols={3}>
+  <Card
+    title="Our Services"
+    icon="fa-solid fa-box-open"
+    href="/apps/llm"
+  >
+    Learn how to build your AI application using NVIDIA CCluster
+  </Card>
+  <Card
+    title="Clients"
+    icon="fa-solid fa-terminal"
+    href="/clients/setup"
+  >
+    How to interact with CCluster programmatically
+  </Card>
+  <Card
+    title="Deploying Custom Models"
+    icon="fa-solid fa-screwdriver-wrench"
+    href="/resources/custom-image"
+  >
+    Learn how to build your own containerized inference engines and deploy them on the NVIDIA CCluster.
+  </Card>
+</CardGroup>

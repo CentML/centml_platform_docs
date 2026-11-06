@@ -1,7 +1,6 @@
 ---
 title: 'LLM Serving'
 description: 'Plan, optimize, and deploy LLMs effortlessly'
-icon: 'messages'
 ---
 
 Deploy dedicated LLM endpoints that fits your performance requirements and budget in just three steps.
@@ -10,7 +9,7 @@ Deploy dedicated LLM endpoints that fits your performance requirements and budge
 Select or enter the Hugging Face model name of your choosing and provide your Hugging Face token. Also provide a name for the dedicated endpoint you are going to deploy.
 
 <Frame>
-     <img src="/images/llm_stage1.png" alt="LLM Serving page showing available models" style={{ borderRadius: '0.5rem' }} />
+     <img src="./images/llm-stage1.png" alt="LLM Serving page showing available models" />
 </Frame>
 
 <Tip>
@@ -21,7 +20,7 @@ Make sure you have been granted access to the model you selected. If not, please
 Choose the cluster or the region you want to deploy the model. Based on that, NVIDIA CCluster presents three pre-configured deployment configurations to suit different requirements:
 
 <Frame>
-     <img src="/images/llm_stage2.png" alt="LLM Serving deployment configuration options" style={{ borderRadius: '0.5rem' }} />
+     <img src="./images/llm-stage2.png" alt="LLM Serving deployment configuration options" />
 </Frame>
 
 - **Best performance:** A configuration optimized for latency and throughput, suitable for high-demand applications where performance is critical.
@@ -54,7 +53,7 @@ Expand **Optional Details** for runtime, observability, and scaling controls. Th
 | **Cooldown Period (s)** | Scale-down stabilization time, from `0` to `3600`. |
 
 <Note>
-Scaling min or max replicas on a running deployment does **not** create a new revision. Changing the serving spec does. See [Managing Deployments](/resources/managing_deployments).
+Scaling min or max replicas on a running deployment does **not** create a new revision. Changing the serving spec does. See [Managing Deployments](/resources/managing-deployments).
 </Note>
 
 ### (Optional) Performance customization
@@ -63,11 +62,11 @@ For advanced users, NVIDIA CCluster also offers an option to customize their mod
 ## 3. Deploy and integrate
 Finally, click "Deploy". Once the deployment is ready in a few minutes, copy the endpoint url and go to `https://<endpoint_url>/docs` to find the list of API endpoints to start using your LLM deployment. We offer API compatibility with CServe, OpenAI, and Cortex, making integration with other applications seamless.
 
-From the deployment detail page you can stream logs, open the in-browser **Terminal**, pause or resume, clone, edit (new revision), or roll back. See [Managing Deployments](/resources/managing_deployments).
+From the deployment detail page you can stream logs, open the in-browser **Terminal**, pause or resume, clone, edit (new revision), or roll back. See [Managing Deployments](/resources/managing-deployments).
 
 Endpoints are never public, so every request must authenticate with a Bearer token or a client certificate. The example below uses a Bearer token; see [Securing Endpoints](/resources/private) for all options.
 
-```bash
+```bash showLineNumbers={false}
 curl -X 'POST' 'https://<endpoint_url>/openai/v1/chat/completions' \
   -H 'Authorization: Bearer <your_bearer_token>' \
   -H 'accept: application/json' \
@@ -101,22 +100,22 @@ For more details on how to use the LLM deployment, please refer to the [examples
 <CardGroup cols={3}>
   <Card
     title="Managing Deployments"
-    icon="sliders"
-    href="/resources/managing_deployments"
+    icon="fa-solid fa-sliders"
+    href="/resources/managing-deployments"
   >
     Logs, Terminal, pause, clone, revisions, and replica scaling.
   </Card>
   <Card
     title="Securing Endpoints"
-    icon="lock"
+    icon="fa-solid fa-lock"
     href="/resources/private"
   >
 Learn how to protect your endpoints with Bearer tokens and mTLS certificates
  </Card>
   <Card
     title="Agents on NVIDIA CCluster"
-    icon="user-secret"
-    href="/resources/json_and_tool"
+    icon="fa-solid fa-user-secret"
+    href="/resources/json-and-tool"
   >
     Learn how agents can interact with NVIDIA CCluster services.
   </Card>

@@ -1,0 +1,78 @@
+---
+title: 'Deploying Custom Models'
+description: 'How to build your own containerized inference engines and deploy'
+---
+
+The NVIDIA CCluster simplifies deploying your custom models and AI applications. Package your model or application as a containerized HTTP server, then deploy it using the General Inference deployment option.
+
+Here's an example of how to build a stable diffusion model served by a FastAPI-based inference server: https://github.com/CentML/codex/tree/main/general-apps/general-inference/stable-diffusion/centml-endpoint
+
+<Note>
+The NVIDIA CCluster enforces [Pod Security Admission (PSA) baseline](https://kubernetes.io/docs/concepts/security/pod-security-standards/) controls at the namespace level. Containers can run as **any user, including root**.
+</Note>
+
+<Note>
+If you are building the container on MacOS, make sure to set the image platform as `linux/amd64`.
+```bash showLineNumbers={false}
+docker build --platform linux/amd64 -t stable-diffusion:latest .
+```
+</Note>
+
+After building the container, push it to a container registry. The NVIDIA CCluster supports both public registries (e.g., [Docker Hub](https://hub.docker.com/)) and private registries (e.g., Amazon ECR, Google Artifact Registry, Azure Container Registry, or self-hosted registries).
+
+For **public images**, navigate to the General Inference option in the NVIDIA CCluster and enter the image name, tag, and container port to deploy your application.
+
+For **private images**, you will need to provide registry credentials so CCluster can pull the image. Enter the registry username and password directly when configuring the deployment. CCluster automatically detects the registry from the image URL. If your cluster administrator already manages an image pull secret, you can reference it through the API as described below.
+
+## Use an existing image pull secret
+
+[General Inference](/apps/inference), [Compute](/apps/compute), and [Batch Jobs](/apps/jobs) support the API field `image_pull_secret_name` to pull private container images using an existing Kubernetes Secret. This is useful when your cluster administrator manages registry credentials and their refresh outside CCluster.
+
+Before deploying, ask your cluster administrator to ensure that the image pull secret exists in the **deployment namespace on the target cluster** and contains valid credentials for your image's registry. Use the Kubernetes Secret's name for `image_pull_secret_name`.
+
+Add the following field to your deployment create request, alongside the other required deployment fields:
+
+```json
+{
+  "image_pull_secret_name": "private-registry-pull"
+}
+```
+
+Choose only one registry authentication method per request:
+
+- `image_pull_secret_name` — reference an existing Kubernetes image pull secret.
+- `image_pull_secret_credentials` — provide a registry username and password directly.
+
+Requests that combine `image_pull_secret_name` with `image_pull_secret_credentials` are rejected. The secret name must be a valid Kubernetes DNS subdomain name, at most 253 characters: lowercase letters, digits, hyphens, and dots, with each dot-separated segment starting and ending with a letter or digit.
+
+### Updates and secret maintenance
+
+Include `image_pull_secret_name` in every deployment update request to retain the reference. Updates replace the deployment configuration; omitting the field or setting it to `null` clears the reference. When cloning a deployment through the API, carry the field into the new request and ensure the secret also exists in the new deployment's namespace and cluster.
+
+CCluster references the secret but does not create, refresh, or delete it. Your cluster administrator must keep its registry credentials valid and manage its lifecycle independently of the deployment.
+
+## What's next
+
+<CardGroup cols={3}>
+  <Card
+    title="LLM Serving"
+    icon="fa-solid fa-comments"
+    href="/apps/llm"
+  >
+    Explore dedicated, protected endpoints for production model and model infrastructure management.
+ </Card>
+  <Card
+    title="Clients"
+    icon="fa-solid fa-terminal"
+    href="/clients/setup"
+  >
+    Learn how to interact with CCluster programmatically
+  </Card>
+  <Card
+    title="Agents on NVIDIA CCluster"
+    icon="fa-solid fa-user-secret"
+    href="/resources/json-and-tool"
+  >
+    Learn how agents can interact with NVIDIA CCluster services.
+  </Card>
+</CardGroup>
