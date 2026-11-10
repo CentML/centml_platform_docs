@@ -1,6 +1,6 @@
 # NVIDIA CCluster Docs
 
-This repository contains the [Fern](https://buildwithfern.com/learn/docs/getting-started/overview) source for the NVIDIA CCluster documentation site, published at `docs.nvidia.com/ccluster`.
+This repository contains the [Fern](https://buildwithfern.com/learn/docs/getting-started/overview) source for the NVIDIA CCluster documentation site, published at [docs.nvidia.com/ccluster](https://docs.nvidia.com/ccluster).
 
 The site uses the NVIDIA global theme (`global-theme: nvidia`), so logo, colors, fonts, layout, and footer come from the shared [global-theme](https://gitlab-master.nvidia.com/fern-documentation/global-theme) repository rather than this repo. See the [NVIDIA Fern onboarding guide](https://gitlab-master.nvidia.com/fern-documentation/guides) for platform details.
 
@@ -64,4 +64,4 @@ Publishing runs through GitHub Actions and needs the `FERN_TOKEN` repository sec
 | [preview-docs.yml](.github/workflows/preview-docs.yml) | Same-repo PRs | Posts a Fern preview link on the PR |
 | [publish-docs.yml](.github/workflows/publish-docs.yml) | Merge to `main` that changes `docs/` or `fern/`, or manual run | Publishes production after the checks pass |
 
-Connecting the Fern site to `docs.nvidia.com/ccluster` requires a review and Jira ticket from the Developer Experience team; ask in [#cdd-fern](https://nvidia.enterprise.slack.com/archives/C0A8987CQ7K).
+Merged changes go live at [docs.nvidia.com/ccluster](https://docs.nvidia.com/ccluster), the custom domain configured in [fern/docs.yml](fern/docs.yml). For Fern platform or domain issues, ask in [#cdd-fern](https://nvidia.enterprise.slack.com/archives/C0A8987CQ7K).
