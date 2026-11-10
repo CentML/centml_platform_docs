@@ -67,13 +67,15 @@ When you edit a revision-aware deployment that is already Active, you can set ro
 | **Max surge** | Extra replicas allowed above the desired count during the rollout. |
 | **Max unavailable** | Replicas that may be unavailable during the rollout. |
 
-Neither value can exceed the deployment's max replica count. Dynamo rollouts are operator-managed; see [NVIDIA Dynamo](/apps/dynamo) for Dynamo-specific behavior.
+Neither value can exceed the deployment's max replica count. On Dynamo, the console shows these settings when you edit an Active aggregated deployment, and the Dynamo operator applies them to the worker rollout; see [NVIDIA Dynamo](/apps/dynamo) for Dynamo-specific behavior.
 
 ### Scaling replicas does not create a revision
 
 <Note>
 Changing **Min Replicas** or **Max Replicas** (scaling up or down) updates the running deployment in place and **does not create a new revision**.
 </Note>
+
+On Dynamo, this applies to aggregated Workers. Disaggregated Prefill and Decode pools are fixed-size, so resizing a pool creates a new revision.
 
 A new revision is created when you change the deployment **spec** — for example image, command, environment variables, session affinity, model caching, or a config file — on a revision-aware type.
 
@@ -83,7 +85,7 @@ Rollback restores an earlier **spec** revision. It does not undo a replica-count
 
 Logs appear on the **Logs** tab when **Enable logging** was on for that revision (or for the deployment, on types without revisions). Historical revisions keep the logs collected while they ran. If logging was off, the Logs tab has nothing to show for that revision.
 
-On Dynamo, pick a Frontend or Worker pod; replica counts are reported per component. See [NVIDIA Dynamo](/apps/dynamo).
+On Dynamo, pick a Frontend, Worker, Prefill, or Decode pod; replica counts are reported per component. See [NVIDIA Dynamo](/apps/dynamo).
 
 ## What each deployment type supports
 
@@ -95,8 +97,8 @@ On Dynamo, pick a Frontend or Worker pod; replica counts are reported per compon
 | Clone | Yes | Yes | Yes | Yes | Yes |
 | Edit | New revision | New revision | New revision | In-place update | In-place update |
 | Revision table / rollback | Yes | Yes | Yes | No | No |
-| Change rollout (`max_surge` / `max_unavailable`) | Yes | Yes | Operator-managed | No | No |
-| Scale replicas without a new revision | Yes | Yes | Yes | Not a multi-replica serving deployment | Not applicable |
+| Change rollout (`max_surge` / `max_unavailable`) | Yes | Yes | Aggregated deployments | No | No |
+| Scale replicas without a new revision | Yes | Yes | Aggregated Workers | Not a multi-replica serving deployment | Not applicable |
 
 ## What's next
 
