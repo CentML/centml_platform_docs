@@ -244,7 +244,7 @@ curl "https://<endpoint_url>/v1/chat/completions" \
 
 For a certificate-protected endpoint, configure your HTTP client with the downloaded client certificate instead of the `Authorization` header. See [Securing Endpoints](/resources/private).
 
-If you selected `gRPC`, connect to `<endpoint_url>:443` with TLS and use Dynamo's KServe v2 `ModelInfer` or `ModelStreamInfer` API. This is different from the direct vLLM gRPC API used by General Inference deployments. See the [NVIDIA Dynamo KServe gRPC frontend guide](https://docs.nvidia.com/dynamo/latest/components/frontend/frontend-guide) for the protocol and [Securing Endpoints](/resources/private) for authentication.
+If you selected `gRPC`, connect to `<endpoint_url>:443` with TLS and use Dynamo's KServe v2 `ModelInfer` or `ModelStreamInfer` API. This is different from the direct vLLM gRPC API used by General Inference deployments. See the [NVIDIA Dynamo KServe gRPC frontend guide](https://docs.nvidia.com/dynamo/components/frontend) for the protocol and [Securing Endpoints](/resources/private) for authentication.
 
 ## Current scope
 
