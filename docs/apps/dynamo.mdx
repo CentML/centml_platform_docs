@@ -61,7 +61,7 @@ The Frontend uses KV-aware routing (`DYN_ROUTER_MODE=kv`) by default. To use ano
 </Tip>
 
 <Frame>
-    <img src="./images/dynamo-advanced-configuration.png" alt="NVIDIA Dynamo Advanced step with logging, model caching, extra arguments, and environment variables" />
+    <img src="./images/dynamo-advanced-configuration.png" alt="NVIDIA Dynamo Advanced step with runtime version, logging, model caching, priority class, extra arguments, and environment variables" />
 </Frame>
 
 ## 3. Select the serving topology and hardware
@@ -91,7 +91,7 @@ Set **Min Replicas** lower than **Max Replicas** to enable autoscaling. NVIDIA C
 </Note>
 
 <Frame>
-    <img src="./images/dynamo-hardware-scaling.png" alt="NVIDIA Dynamo Hardware step with GPU hardware choices and worker replica autoscaling settings" />
+    <img src="./images/dynamo-hardware-scaling.png" alt="NVIDIA Dynamo Hardware step with serving topology, cluster, GPU hardware choices, storage, and worker scaling settings" />
 </Frame>
 
 Make sure the cluster has enough capacity to run **Max Replicas** workers, each consuming one complete selected hardware instance. The **Configured worker capacity** summary shows the worker and accelerator range for your selection.
