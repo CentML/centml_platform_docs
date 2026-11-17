@@ -41,7 +41,7 @@ The `vllm/vllm-openai` image does **not** bundle the gRPC extra, so startup is t
 
 Keeping **Add command** to a simple script invocation is also the recommended pattern — commands with special characters (`.`, `,`, `[]`, and the like) placed directly in **Add command** can currently fail to deploy. This is a known issue CCluster is addressing.
 
-Under **Optional Details → Config File**:
+In the **Advanced** step, under **Config File**:
 
 - **Filename** — `entry.sh`
 - **Mount Path (directory)** — `/etc/start`
@@ -69,7 +69,7 @@ The file is mounted at `<mount path>/<filename>`, so set **Add command** to run 
 </Frame>
 
 <Tip>
-Every endpoint is protected — there are no public endpoints. Secure access with a Bearer token, an mTLS client certificate, or both. For mTLS, select **Make it a private endpoint?** and CCluster generates a TLS certificate that clients must present. See [Securing Endpoints](/resources/private) for details.
+Every endpoint is protected — there are no public endpoints. Secure access with a Bearer token, an mTLS client certificate, or both. For mTLS, select **Private Endpoint** and CCluster generates a TLS certificate that clients must present. See [Securing Endpoints](/resources/private) for details.
 </Tip>
 
 ## 2. Select the cluster and hardware

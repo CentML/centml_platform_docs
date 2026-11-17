@@ -30,7 +30,7 @@ From the **General Inference** deployment page, every NIM uses the same configur
 | **Image Registry Username** | `$oauthtoken` (literal string — not a variable) |
 | **Image Registry Password** | Your [NGC API Key](https://ngc.nvidia.com) |
 
-Leave **Add command** empty — the image's default entrypoint starts the server. Under **Optional Details → Environment Variables**, also add:
+Leave **Add command** empty — the image's default entrypoint starts the server. In the **Advanced** step, under **Environment Variables**, also add:
 
 | Key | Value |
 |---|---|
@@ -63,7 +63,7 @@ curl https://<endpoint_url>/v1/chat/completions \
 ```
 
 <Tip>
-Every endpoint is protected — there are no public endpoints. Secure access with a Bearer token, an mTLS client certificate, or both. For mTLS, select **Make it a private endpoint?** and CCluster generates a TLS certificate that clients must present. See [Securing Endpoints](/resources/private) for details.
+Every endpoint is protected — there are no public endpoints. Secure access with a Bearer token, an mTLS client certificate, or both. For mTLS, select **Private Endpoint** and CCluster generates a TLS certificate that clients must present. See [Securing Endpoints](/resources/private) for details.
 </Tip>
 
 ## What's next

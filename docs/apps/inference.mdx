@@ -7,7 +7,7 @@ We make it easy for you to containerize and deploy any custom models on CCluster
 
 ## 1. Configure your inference deployment
 
-Use the **Add or Select Image** dropdown to choose a pre-configured recipe or manually enter a custom image URL. Similarly, use the **Container Tag** dropdown to pick an available tag or type one in directly. If you select a recipe, all fields except **Add command** are auto-filled (some may be empty). You will still need to provide the entrypoint command under **Optional Details → Add command**.
+Use the **Add or Select Image** dropdown to choose a pre-configured recipe or manually enter a custom image URL. Similarly, use the **Container Tag** dropdown to pick an available tag or type one in directly. If you select a recipe, all fields except **Add command** are auto-filled (some may be empty). You will still need to provide the entrypoint command in the **Advanced** step under **Add command**.
 
 At a minimum, you need to specify:
 
@@ -40,7 +40,7 @@ CCluster scales replicas from in-flight request concurrency (**Max Concurrency**
 | --- | --- |
 | **Min Replicas** | Lower bound for replica count. `0` allows scale-to-zero when demand drops. |
 | **Max Replicas** | Upper bound for replica count. Set equal to **Min Replicas** for a fixed size. |
-| **Max Concurrency** | Target in-flight requests per replica. Required when **Max Replicas** is greater than **Min Replicas**. |
+| **Max Concurrency** | Target in-flight requests per replica. Optional; leave unset for no concurrency target. |
 | **Cooldown Period (s)** | Scale-down stabilization time, from `0` to `3600`. |
 
 <Note>
@@ -52,7 +52,7 @@ Changing min or max replica counts on a running deployment scales in place and *
 </Frame>
 
 <Tip>
-Every deployment must be protected — there are no public endpoints. Secure your endpoint with a Bearer token (an `Authorization: Bearer <token>` header), an mTLS client certificate, or both. To enable mTLS, select the "Make it a private endpoint?" option, which generates a TLS certificate you can download as a .pem file after the deployment is complete. For more details, see [Securing Endpoints](/resources/private).
+Every deployment must be protected — there are no public endpoints. Secure your endpoint with a Bearer token (an `Authorization: Bearer <token>` header), an mTLS client certificate, or both. To enable mTLS, select the **Private Endpoint** option, which generates a TLS certificate you can download as a .pem file after the deployment is complete. For more details, see [Securing Endpoints](/resources/private).
 </Tip>
 
 <Tip>
