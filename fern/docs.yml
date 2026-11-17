@@ -20,6 +20,8 @@ navbar-links:
   - type: primary
     text: Get Started
     href: /ccluster/home/quickstart
+  - type: github
+    value: https://github.com/NVIDIA/ccluster
 
 navigation:
   - section: Getting Started
@@ -33,6 +35,10 @@ navigation:
         path: ../docs/home/quickstart.mdx
         slug: quickstart
         icon: fa-solid fa-rocket
+      - page: Open Source
+        path: ../docs/home/open-source.mdx
+        slug: open-source
+        icon: fa-brands fa-github
 
   - section: Deployments
     slug: apps
