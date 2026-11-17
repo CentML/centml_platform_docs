@@ -37,10 +37,6 @@ navigation:
   - section: Deployments
     slug: apps
     contents:
-      - page: LLM Serving
-        path: ../docs/apps/llm.mdx
-        slug: llm
-        icon: fa-solid fa-comments
       - page: NVIDIA Dynamo
         path: ../docs/apps/dynamo.mdx
         slug: dynamo

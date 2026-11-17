@@ -5,7 +5,7 @@ description: 'Operate deployments from the console: logs, in-browser Terminal, p
 
 After you create a deployment, open it from the deployments list to inspect status, stream logs, open a shell, pause or resume it, clone it, or (for revision-aware types) roll back to an earlier spec.
 
-This page covers those shared operations. Create-form fields stay on the type pages: [LLM Serving](/apps/llm), [General Inference](/apps/inference), [NVIDIA Dynamo](/apps/dynamo), [Compute](/apps/compute), and [Batch Jobs](/apps/jobs).
+This page covers those shared operations. Create-form fields stay on the type pages: [General Inference](/apps/inference), [NVIDIA Dynamo](/apps/dynamo), [Compute](/apps/compute), and [Batch Jobs](/apps/jobs).
 
 ## Detail page tabs
 
@@ -42,7 +42,7 @@ For Compute instances, the Terminal does **not** replace SSH. Use [SSH](/apps/co
 
 On the deployment detail page you can **Pause** an Active deployment or **Resume** a paused one. Pausing stops serving (or stops the Compute instance) without deleting the deployment. On Compute, pausing deletes files on the default disk unless you mounted a writable volume at `/home` or `/root`; files in a mounted volume survive pause. Restarts and updates keep your home files.
 
-- **LLM Serving**, **General Inference**, **Compute**: pause and resume the whole deployment.
+- **General Inference** and **Compute**: pause and resume the whole deployment.
 - **Dynamo**: pause and resume the whole deployment. You cannot pause only an in-progress Dynamo rollout. See [NVIDIA Dynamo](/apps/dynamo).
 - **Jobs**: jobs run to completion and then stop. Pause and resume do not apply.
 
@@ -56,7 +56,7 @@ You can also pause and resume from the CLI (`ccluster pause <id>` / `ccluster re
 
 ## Revisions, rollback, and rollout
 
-**LLM Serving**, **General Inference**, **Dynamo**, and **Compute** are revision-aware. The **Detail** tab lists revisions so you can inspect status and logs per revision and **roll back** to an earlier revision.
+**General Inference**, **Dynamo**, and **Compute** are revision-aware. The **Detail** tab lists revisions so you can inspect status and logs per revision and **roll back** to an earlier revision.
 
 **Jobs** do not expose a revision table or rollback in the console.
 
@@ -89,16 +89,16 @@ On Dynamo, pick a Frontend, Worker, Prefill, or Decode pod; replica counts are r
 
 ## What each deployment type supports
 
-| Action | LLM Serving | General Inference | Dynamo | Compute | Jobs |
-| --- | --- | --- | --- | --- | --- |
-| Logs | Yes, if logging is enabled | Yes, if logging is enabled | Yes, if logging is enabled | Yes, if logging is enabled | Yes, if logging is enabled |
-| Terminal | While **Active** | While **Active** | While **Active** | While **Active** | While pods are running |
-| Pause / resume | Yes | Yes | Whole deployment only | Yes | Not applicable |
-| Clone | Yes | Yes | Yes | Yes | Yes |
-| Edit | New revision | New revision | New revision | New revision | Not editable |
-| Revision table / rollback | Yes | Yes | Yes | Yes | No |
-| Change rollout (`max_surge` / `max_unavailable`) | Yes | Yes | Aggregated deployments | No | No |
-| Scale replicas without a new revision | Yes | Yes | Aggregated Workers | Not a multi-replica serving deployment | Not applicable |
+| Action | General Inference | Dynamo | Compute | Jobs |
+| --- | --- | --- | --- | --- |
+| Logs | Yes, if logging is enabled | Yes, if logging is enabled | Yes, if logging is enabled | Yes, if logging is enabled |
+| Terminal | While **Active** | While **Active** | While **Active** | While pods are running |
+| Pause / resume | Yes | Whole deployment only | Yes | Not applicable |
+| Clone | Yes | Yes | Yes | Yes |
+| Edit | New revision | New revision | New revision | Not editable |
+| Revision table / rollback | Yes | Yes | Yes | No |
+| Change rollout (`max_surge` / `max_unavailable`) | Yes | Aggregated deployments | No | No |
+| Scale replicas without a new revision | Yes | Aggregated Workers | Not a multi-replica serving deployment | Not applicable |
 
 ## What's next
 

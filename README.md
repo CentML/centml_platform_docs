@@ -52,7 +52,7 @@ python3 tools/check-docs-paths --allow '../docs/' docs fern
 2. Add new pages to the `navigation` section of [fern/docs.yml](fern/docs.yml) with a `../docs/<section>/<page>.mdx` path; only pages listed there are published.
 3. Put images in the section's `images/` folder and reference them with `./images/...` paths. Absolute paths and `..` segments are rejected by `tools/check-docs-paths`; the only exception is the `../docs/` prefix of page paths in `fern/docs.yml`.
 4. Use Fern's [built-in components](https://buildwithfern.com/learn/docs/writing-content/components/overview) (`Card`, `CardGroup`, `Frame`, `Note`, `Tip`, and others). Icons are Font Awesome classes such as `fa-solid fa-lock`.
-5. Link between pages with root-relative paths such as `/apps/llm`; Fern adds the `/ccluster` base path.
+5. Link between pages with root-relative paths such as `/apps/dynamo`; Fern adds the `/ccluster` base path.
 
 ## Release Process
 
