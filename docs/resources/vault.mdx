@@ -101,7 +101,14 @@ curl -X POST 'https://centml-private-2.fe178792.c-09.centml.com/openai/v1/chat/c
 ```
 
 ### Adding your own certificates
-This section is currently under construction as we work to improve the UX around adding certificates to endpoints on the NVIDIA CCluster. Please check back soon! 
+If you already have a certificate authority (CA), you can use it instead of generating a certificate.
+
+1. On the **Secrets** page, select **Add Secret** and choose `Certificates`.
+2. Select **Use an existing Certificate**.
+3. Enter a name and paste the full certificate value (PEM format) of your CA into **Certificate Value**.
+4. Select **Add to Secrets**.
+
+The certificate then appears in the **Certificates** list. Select it under **Private Endpoint** when you create a deployment, and clients that present a certificate signed by your CA can reach the endpoint. No `.pem` file is downloaded, because you already hold the client certificate and key.
 
 
 
