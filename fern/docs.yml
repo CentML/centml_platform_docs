@@ -81,6 +81,14 @@ navigation:
         path: ../docs/resources/managing-deployments.mdx
         slug: managing-deployments
         icon: fa-solid fa-sliders
+      - page: Managing Storage
+        path: ../docs/resources/storage.mdx
+        slug: storage
+        icon: fa-solid fa-hard-drive
+      - page: Monitoring Usage
+        path: ../docs/resources/usage.mdx
+        slug: usage
+        icon: fa-solid fa-chart-line
       - page: gRPC Inference Endpoints
         path: ../docs/resources/grpc.mdx
         slug: grpc

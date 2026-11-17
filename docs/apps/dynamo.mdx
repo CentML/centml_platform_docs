@@ -120,7 +120,7 @@ Prefill and Decode pools do not autoscale, and they cannot scale to zero.
 
 ### Storage volumes
 
-Both topologies can mount reusable volumes from the cluster in the **Storage** section of the **Hardware** step. Mounts apply to the Frontend and to every worker's main container, at the same paths. Volumes must belong to the deployment's creator. When you edit a deployment, removing a mount changes only the new revision; the volume and its data are kept.
+Both topologies can mount reusable volumes from the cluster in the **Storage** section of the **Hardware** step. To create volumes, see [Managing Storage](/resources/storage). Mounts apply to the Frontend and to every worker's main container, at the same paths. Volumes must belong to the deployment's creator. When you edit a deployment, removing a mount changes only the new revision; the volume and its data are kept.
 
 Click **Deploy**. Model download and worker startup can take several minutes, especially for large models that are not already cached.
 

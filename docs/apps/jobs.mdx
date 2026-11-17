@@ -16,7 +16,7 @@ Under the **Job Information** section, provide the core details for your workloa
 
 ## 2. Set optional details
 
-Expand the **Optional Details** section to tune how the job executes. All of these fields are optional and fall back to sensible defaults.
+In the **Advanced** step, tune how the job executes. All of these fields are optional and fall back to sensible defaults.
 
 - **Completions** — the number of pods that must complete successfully for the job to be considered done. Defaults to `1`. Use a value greater than `1` for indexed, multi-pod batch work.
 - **Parallelism** — the maximum number of pods that run at the same time. Defaults to `1` and must be **less than or equal to Completions**.
@@ -24,7 +24,7 @@ Expand the **Optional Details** section to tune how the job executes. All of the
 - **Active Deadline Seconds** — the maximum time (in seconds) the job may run before it is terminated. Must be `1` or greater. Leave empty for no deadline.
 - **Command** — the entrypoint command and arguments for the container (e.g., `/bin/sh -c python3 "train.py"`). If left empty, the image's default entrypoint is used.
 - **Enable logging** — toggle to collect and view logs from the job's pods.
-- **Environment variables** — pass additional environment variables to the container (e.g., `HF_TOKEN`).
+- **Environment variables** — pass additional environment variables to the container. Select saved values from [Secrets](/resources/vault) where you can.
 - **Annotations** — attach custom key/value metadata to the job.
 - **Config file** — mount a file into the container. Provide **Filename**, **Mount Path (directory)**, and **File Content**. Use this for startup scripts or small configs your command can read.
 
@@ -41,7 +41,7 @@ For building and deploying your own custom container image on NVIDIA CCluster, s
 
 ## 3. Select the cluster and hardware
 
-Choose the regional cluster and GPU hardware instance that best fits your workload, then click **Deploy**. NVIDIA CCluster provides several managed clusters and GPU instance types to run your job on.
+Choose the regional cluster and GPU hardware instance that best fits your workload, then click **Deploy**. NVIDIA CCluster provides several managed clusters and GPU instance types to run your job on. To share data between the pods of a job or keep results after the job ends, add a mount in the **Storage** section; the mount applies to every pod of the job. See [Managing Storage](/resources/storage).
 
 <Tip>
 You can integrate your own private cluster into CCluster through bring-your-own-infrastructure support. To get started, open a support request through your NVIDIA CCluster support channel.
