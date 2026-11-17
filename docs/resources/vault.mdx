@@ -1,70 +1,70 @@
 ---
-title: 'Managing Vault Objects'
-description: 'How to generate and store NVIDIA CCluster tokens and other vault objects'
+title: 'Managing Secrets'
+description: 'How to create and manage bearer tokens, certificates, registry credentials, and other secrets in NVIDIA CCluster'
 ---
 
-The NVIDIA CCluster allows you to generate and manage `Vault` objects such as `Bearer Tokens`, `Certificates`, `Registry Credentials`, `Environment Variables`, `Hugging Face Tokens`, and `SSH Keys`.
-This guide will walk you through creating `Bearer Tokens` and other Vault objects you can use to configure or access NVIDIA CCluster services.
+The **Secrets** page in the NVIDIA CCluster console lets you create and manage `Bearer Tokens`, `Certificates`, `Registry Credentials`, `Environment Variables`, `Hugging Face Tokens`, and `SSH keys`. These were previously called Vault objects.
+This guide will walk you through creating `Bearer Tokens` and other secrets you can use to configure or access NVIDIA CCluster services.
 
 <Note>
-Vault **bearer tokens** protect your deployed inference endpoints — clients include them in requests to LLM Serving and General Inference URLs. For **platform API automation** (SDK, CLI, deployment management without browser login), use [Service Accounts](/resources/service-accounts) instead.
+Bearer tokens saved in Secrets protect your deployed inference endpoints — clients include them in requests to your General Inference and Dynamo endpoint URLs. For **platform API automation** (SDK, CLI, deployment management without browser login), use [Service Accounts](/resources/service-accounts) instead.
 </Note>
 
 ## Step 1: Log in to the NVIDIA CCluster
-You will need to log in to the NVIDIA CCluster to manage Vault objects. If you do not yet have access, contact your NVIDIA representative or your organization's designated support contact before proceeding.
+You will need to log in to the NVIDIA CCluster to manage secrets. If you do not yet have access, contact your NVIDIA representative or your organization's designated support contact before proceeding.
 
-Once logged in, you will need to select `Account` from sidebar menu, and then click on the `Vault` tab from the `Your Account` window. 
+Once logged in, select **Secrets** from the sidebar menu.
 
 <Frame>
-    <img src="./images/vault.png" alt="Vault section of the account page" />
+    <img src="./images/vault.png" alt="Secrets page" />
 </Frame>
 
 
-Once completed, move onto the second step below based on the type of Vault objects you are creating. 
+Once completed, move onto the second step below based on the type of secret you are creating. 
 
 ## Step 2A: Creating bearer tokens
 
 Bearer tokens can be used to access NVIDIA CCluster services.
 
-To generate a bearer token, select green `Add Vault Item`. A dropdown menu will appear. From that menu, select the `Bearer Tokens` option.
+To generate a bearer token, select **Add Secret**. A dropdown menu will appear. From that menu, select the `Bearer Tokens` option.
 
 
 <Frame>
-    <img src="./images/vault-bearer-tokens.png" alt="Add Vault Item menu showing Bearer Tokens option" />
+    <img src="./images/vault-bearer-tokens.png" alt="Add Secret menu showing Bearer Tokens option" />
 </Frame>
 
-A windows will pop up name `Add Bearer Token to Your Vault`. From there, you can either name and automatically generate a token with the `Generate new Bearer Token` option or you can enter a previous token using the `Use an existing Bearer Token` option.
+A window named `Add Bearer Token to Your Secrets` will pop up. From there, you can either name and automatically generate a token with the `Generate new Bearer Token` option or you can enter a previous token using the `Use an existing Bearer Token` option.
 
 <Frame>
     <img src="./images/add-bearer-token.png" alt="Form for adding a new bearer token to the vault" />
 </Frame>
 
-Once you either enter your token in the text box or opt into generating your token, click the green `Add to Vault` option and your Bearer Token should appear in your vault.
+Once you either enter your token in the text box or opt into generating your token, choose a **Visibility** (see below) and click **Add to Secrets**. Your bearer token appears in the **Bearer Tokens** list.
 
 <Frame>
-    <img src="./images/added-bearer-token.png" alt="Bearer token listed in the vault after creation" />
+    <img src="./images/added-bearer-token.png" alt="Bearer token listed in Secrets after creation" />
 </Frame>
 
 
 
 
-## Step 2B: Adding certificates to your vault
+## Step 2B: Adding certificates
 NVIDIA CCluster uses client certificates for [mutual TLS (mTLS)](https://www.cloudflare.com/learning/access-management/what-is-mutual-tls/)
-You can generate or add public certificates for mTLS just like you can with Bearer Tokens. Once you generate the certificate, it will appear in the vault. 
+You can generate or add public certificates for mTLS just like you can with Bearer Tokens. Once you generate the certificate, it appears in the **Certificates** list.
 
 <Frame>
-    <img src="./images/add-certificates.png" alt="Add Vault Item menu showing Certificates option" />
+    <img src="./images/add-certificates.png" alt="Add Secret menu showing Certificates option" />
 </Frame>
 
 <Frame>
-    <img src="./images/gen-cert.png" alt="Certificate generation form in the vault" />
+    <img src="./images/gen-cert.png" alt="Certificate generation form" />
 </Frame>
 
 <Frame>
-    <img src="./images/added-certificate.png" alt="Generated certificate listed in the vault" />
+    <img src="./images/added-certificate.png" alt="Generated certificate listed in Secrets" />
 </Frame>
 
-When generated, `Vault Certificates` download a `.pem` file to your local browser. That `.pem` file is named after the generated cert. You can then use that `.pem` file to access one of NVIDIA CCluster's [secured endpoints](/resources/private) as long as they are associated with the appropriate certificate and `.pem` pair.
+When generated, certificates download a `.pem` file to your local browser. That `.pem` file is named after the generated cert. You can then use that `.pem` file to access one of NVIDIA CCluster's [secured endpoints](/resources/private) as long as they are associated with the appropriate certificate and `.pem` pair.
 
 
 <Frame>
@@ -107,36 +107,45 @@ This section is currently under construction as we work to improve the UX around
 
 ## Step 2C: Adding registry credentials
 
-Registry credentials allow the NVIDIA CCluster to pull container images from private registries when creating [General Inference](/apps/inference) or [Compute](/apps/compute) deployments.
+Registry credentials allow the NVIDIA CCluster to pull container images from private registries when creating [General Inference](/apps/inference), [Compute](/apps/compute), or [Batch Jobs](/apps/jobs) deployments.
 
-To add registry credentials, select the green `Add Vault Item` button and choose `Registry Credentials` from the dropdown. Enter a name, along with the registry username and password (or access token). The credentials are stored securely in your Vault and can be selected during deployment configuration.
+To add registry credentials, select **Add Secret** and choose `Registry Credentials` from the dropdown. Enter a name, along with the registry username and password (or access token). The credentials are stored securely and can be selected as **Image Registry Credentials** during deployment configuration.
 
 Supported registries include Docker Hub, Amazon ECR, Google Artifact Registry, Azure Container Registry, and any Docker-compatible private registry. CCluster automatically detects the registry from the image URL at deployment time.
 
 
 ## Step 2D: Adding environment variables
 
+Select **Add Secret**, choose `Environment Variables`, and enter the variable name and value. When you configure a deployment, you can select a saved environment variable instead of typing its value.
+
 
 <Frame>
-    <img src="./images/add-env.png" alt="Form for adding an environment variable to the vault" />
+    <img src="./images/add-env.png" alt="Form for adding an environment variable" />
 </Frame>
 
 <Frame>
-    <img src="./images/env-vault.png" alt="Environment variable listed in the vault" />
+    <img src="./images/env-vault.png" alt="Environment variable listed in Secrets" />
 </Frame>
 
  
 
 
+## Visibility and lifecycle
+
+- **Visibility** — each secret is visible either to you (`User`) or to your organization (`Organization`). The Secrets table shows the visibility of each secret. A secret name must be unique per type and visibility.
+- **Secrets are immutable** — you cannot edit a secret after you create it. To rotate a value, create a new secret and update your deployments to use it, then delete the old one.
+- **Deleting is blocked while in use** — you cannot delete a secret that the selected revision of any deployment still references, including paused deployments. Switch those deployments to another secret first.
+- **Deployments reference secrets** — deployments store a reference to the secret rather than a copy of its value, so you pick Hugging Face tokens, registry credentials, bearer tokens, and environment variables from Secrets when you configure a deployment.
+
 ## What's next
 
 <CardGroup cols={3}>
   <Card
-    title="LLM Serving"
-    icon="fa-solid fa-comments"
-    href="/apps/llm"
+    title="General Inference"
+    icon="fa-solid fa-circle-nodes"
+    href="/apps/inference"
   >
-    Explore dedicated, protected endpoints for production model deployments.
+    Deploy protected endpoints for your own containers and models.
  </Card>
   <Card
     title="Securing Endpoints"

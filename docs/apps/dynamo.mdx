@@ -14,7 +14,7 @@ The integration supports two serving topologies:
 - **Aggregated** (**Combined workers** in the console) — each Worker performs both prompt processing and token generation. Aggregated Workers can use a fixed replica count, autoscale within a configured range, or scale to zero when idle.
 - **Disaggregated** (**Split prefill & decode** in the console, a Preview feature) — separate Prefill and Decode pools perform prompt processing and token generation. The Frontend routes work between the pools, and Prefill transfers KV state to Decode. These pools currently use fixed replica counts.
 
-Both topologies use one CPU-only **Frontend**. Every GPU worker replica consumes one complete instance of its selected hardware type. NVIDIA CCluster supplies the Dynamo runtime image, so you select the model, the hardware, and optionally a runtime version instead of providing a container image.
+Both topologies use a CPU-only **Frontend**, which runs as three pods by default. Every GPU worker replica consumes one complete instance of its selected hardware type. NVIDIA CCluster supplies the Dynamo runtime image, so you select the model, the hardware, and optionally a runtime version instead of providing a container image.
 
 ## Before you begin
 
@@ -32,8 +32,9 @@ From **New Deployment**, choose **Dynamo**. The **Endpoint** step contains the r
 - **Endpoint Name** — a unique name containing lowercase letters, numbers, and hyphens. It must begin with a lowercase letter, end with a letter or number, and be no more than 20 characters.
 - **Model** — the Hugging Face model identifier loaded by the vLLM workers.
 - **Served Model Name** — an optional alias clients can send in the OpenAI `model` field. If you leave it empty, use the Hugging Face model identifier.
-- **Hugging Face Token** — required for gated and private models.
+- **Hugging Face Token** — required for gated and private models. Select a token saved in [Secrets](/resources/vault).
 - **Protocol** — `HTTP` for the OpenAI-compatible API or `gRPC` for the KServe v2 inference protocol.
+- **Frontend Replicas** — the number of Frontend pods that serve the endpoint and route requests to the workers. The default is `3`, and the maximum is `10`. The pods run on separate nodes where possible, so two or more keep the endpoint up if a node fails. Changing this value restarts every component of a running deployment.
 - **Private Endpoint** — select or create a Bearer token or client certificate.
 - **Annotations** — optional key/value metadata applied to the deployment components.
 
@@ -157,6 +158,12 @@ You can also create a disaggregated deployment through the API. Send a `POST` re
 
 Each pool needs a `hardware_instance_id` and a fixed size: set `min_replicas` and `max_replicas` to the same value, at least `1`. The older per-pool `replicas` field is deprecated but still accepted. The Prefill and Decode pools can use the same GPU hardware profile or different profiles, but both profiles must be available in the selected cluster. Every replica consumes one complete hardware instance, so the deployment's GPU footprint is the sum of the Prefill and Decode pool footprints.
 
+You can also set `frontend` to choose the number of Frontend pods: `"frontend": {"min_replicas": 3, "max_replicas": 3}`. The Frontend has a fixed size for now, so `min_replicas` must equal `max_replicas`, between `1` and `10`. If you omit `frontend`, the Frontend runs three pods.
+
+To pin the model to a Hugging Face branch, tag, or commit, set `model_revision`. NVIDIA CCluster resolves it to a commit and runs every worker at that commit.
+
+On clusters that support GPU Direct RDMA, `"weight_transfer": {}` lets a starting worker copy the model weights GPU to GPU from a running worker of the same pool instead of downloading the checkpoint. It pins the model to a single commit, and it needs the same EFA-enabled AWS clusters as `require_gpu_direct_rdma`. When you enable it, `--revision` and `--load-format` in extra arguments are rejected, and environment variable names starting with `MX_` or `MODEL_EXPRESS_`, and `VLLM_PLUGINS`, are reserved.
+
 The `endpoint_bearer_token` in this request protects the deployed inference endpoint. It is separate from the credential used to authenticate the request to the NVIDIA CCluster API.
 
 `communications.kv_transfer.policy` selects the KV transfer policy: `allow_tcp`, the console default, or `require_gpu_direct_rdma`. If you omit `communications`, NVIDIA CCluster uses its default NIXL configuration, which also allows TCP. To pin a runtime version, set `runtime_version` to a Dynamo runtime version tag; otherwise NVIDIA CCluster selects the platform default for the cluster and policy.
@@ -199,12 +206,12 @@ The KV transfer charts on the **Usage** tab show transfer activity for both poli
 
 The deployments list and revision table report Dynamo pods by component instead of combining them into one replica count:
 
-- **Frontend** — the request-routing component. A standard deployment has one Frontend pod.
+- **Frontend** — the request-routing component. A deployment runs three Frontend pods by default; see **Frontend Replicas**.
 - **Worker** — the GPU-backed vLLM replicas in an aggregated deployment.
 - **Prefill** — the GPU-backed prompt-processing replicas in a disaggregated deployment.
 - **Decode** — the GPU-backed token-generation replicas in a disaggregated deployment.
 
-For example, `Frontend (1 / 1 observed pods ready)` and `Worker (2 / 2 observed pods ready)` describe a ready aggregated deployment. `Frontend (1 / 1 observed pods ready)`, `Prefill (1 / 1 observed pods ready)`, and `Decode (2 / 2 observed pods ready)` describe a ready disaggregated deployment. The overall deployment can remain not ready when the Frontend is unhealthy, even if all workers are running, because the endpoint cannot accept traffic without it.
+For example, `Frontend (3 / 3 observed pods ready)` and `Worker (2 / 2 observed pods ready)` describe a ready aggregated deployment. `Frontend (3 / 3 observed pods ready)`, `Prefill (1 / 1 observed pods ready)`, and `Decode (2 / 2 observed pods ready)` describe a ready disaggregated deployment. The overall deployment can remain not ready when the Frontend is unhealthy, even if all workers are running, because the endpoint cannot accept traffic without it.
 
 Open the deployment to access:
 

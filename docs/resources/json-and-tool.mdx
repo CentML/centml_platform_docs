@@ -9,7 +9,7 @@ NVIDIA CCluster's **Dedicated** LLM APIs support structured outputs using the sa
 
 When you need a response strictly formatted as JSON, you can use JSON schema constraints. This is particularly useful in scenarios where your system or other downstream processes rely on valid JSON.
 
-Below is an example of how to set up a request to the NVIDIA CCluster LLM API using JSON schema enforcement. Replace `<endpoint_url>` with the endpoint URL of your [LLM Serving](/apps/llm) deployment, and set `CENTML_API_KEY` to a bearer token from your [Vault](/resources/vault).
+Below is an example of how to set up a request to the NVIDIA CCluster LLM API using JSON schema enforcement. Replace `<endpoint_url>` with the endpoint URL of your [LLM Serving](/apps/llm) deployment, and set `CENTML_API_KEY` to a bearer token from your [Secrets](/resources/vault).
 
 ```python
 from openai import OpenAI
@@ -18,7 +18,7 @@ import os
 # Retrieve the model name from environment variables
 model = os.environ.get("MODEL", "deepseek-ai/DeepSeek-R1")
 
-# Supply your API key from your NVIDIA CCluster vault
+# Supply your API key from your NVIDIA CCluster Secrets
 api_key = os.environ.get("CENTML_API_KEY")
 assert api_key is not None, "Please provide an API Key"
 
@@ -102,7 +102,7 @@ import os
 import json
 import time
 
-# Supply your API key from your NVIDIA CCluster vault
+# Supply your API key from your NVIDIA CCluster Secrets
 api_key = os.environ.get("CENTML_API_KEY")
 assert api_key is not None, "Please provide an API Key"
 base_url = "https://<endpoint_url>/openai/v1"
@@ -327,7 +327,7 @@ For more details, continue exploring this documentation set or use your establis
   <Card
     title="Our Services"
     icon="fa-solid fa-box-open"
-    href="/apps/llm"
+    href="/apps/inference"
   >
     Learn how to build your AI application using NVIDIA CCluster
   </Card>

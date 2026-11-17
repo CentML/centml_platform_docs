@@ -3,7 +3,7 @@ title: Quickstart
 description: Get Started with the NVIDIA CCluster
 ---
 
-NVIDIA CCluster provides dedicated LLM endpoints, general inference, and compute deployments — all backed by optimized infrastructure.
+NVIDIA CCluster provides general inference, NVIDIA Dynamo LLM serving, compute instances, and batch jobs — all backed by optimized infrastructure.
 
 No need to worry about GPU provisioning, scaling, or maintenance — just log in and deploy.
 
@@ -23,14 +23,15 @@ Once logged in, you will see the NVIDIA CCluster console home page, as shown bel
 
 
 ## 2. Create a bearer token
-Endpoints are never public — every request must authenticate with a Bearer token or a client certificate. To interact with NVIDIA CCluster endpoints programmatically, generate a Bearer Token by following the [Managing Vault Objects](/resources/vault) documentation. For all protection options, see [Securing Endpoints](/resources/private).
+Endpoints are never public — every request must authenticate with a Bearer token or a client certificate. To interact with NVIDIA CCluster endpoints programmatically, generate a Bearer Token by following the [Managing Secrets](/resources/vault) documentation. For all protection options, see [Securing Endpoints](/resources/private).
 
 ## 3. Deploy your first model
 Choose the deployment type that fits your use case:
 
-- **[LLM Serving](/apps/llm)** — Deploy dedicated, protected LLM endpoints tailored to your performance requirements and budget.
+- **[NVIDIA Dynamo](/apps/dynamo)** — Deploy protected LLM endpoints with aggregated or disaggregated prefill/decode serving, autoscaling, and scale to zero.
 - **[General Inference](/apps/inference)** — Deploy custom containerized models on NVIDIA-managed infrastructure.
-- **[Compute](/apps/compute)** — Provision GPU compute for training, fine-tuning, or batch workloads.
+- **[Compute](/apps/compute)** — Provision GPU compute instances for training and fine-tuning.
+- **[Batch Jobs](/apps/jobs)** — Run containerized workloads to completion.
 
 ## Additional support: billing, sales, and/or technical
 
@@ -42,11 +43,11 @@ For access, billing, sales, or technical assistance, contact your NVIDIA represe
 
 <CardGroup cols={3}>
   <Card
-    title="LLM Serving"
-    icon="fa-solid fa-comments"
-    href="/apps/llm"
+    title="NVIDIA Dynamo"
+    icon="fa-solid fa-diagram-project"
+    href="/apps/dynamo"
   >
-    Explore dedicated, protected endpoints for production model deployments.
+    Serve LLMs with disaggregated prefill/decode, autoscaling, and scale to zero.
  </Card>
   <Card
     title="Deploying Custom Models"

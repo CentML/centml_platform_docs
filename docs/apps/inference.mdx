@@ -16,9 +16,9 @@ At a minimum, you need to specify:
 - **Container Port** — the port your container exposes its HTTP or gRPC service on.
 - **Protocol** — select `HTTP` (default) or `gRPC`.
 - **Health check path** — the endpoint used to verify readiness (e.g., `/health`, `/`). For gRPC deployments, CCluster uses TCP socket checks automatically, so this field is ignored.
-- **Image Registry Username / Password** — credentials for private images (e.g., Docker Hub private repo). API deployments can instead [reference an existing image pull secret](/resources/custom-image#use-an-existing-image-pull-secret).
+- **Image pull authentication** — for private images, choose **Username and password** and select **Image Registry Credentials** saved in [Secrets](/resources/vault), or choose **Existing cluster pull secret** and enter the **Cluster pull secret name** that your cluster administrator manages. Leave it unset for public images. See [Deploying Custom Models](/resources/custom-image#use-an-existing-image-pull-secret).
 
-The create wizard splits optional settings across **Advanced** and **Scaling**.
+The create wizard has three steps: **Endpoint**, **Advanced**, and **Hardware**. Optional runtime settings are in **Advanced**, and **Scaling** settings are in **Hardware**.
 
 **Advanced**
 
@@ -28,7 +28,8 @@ The create wizard splits optional settings across **Advanced** and **Scaling**.
 - **Health check path** — the endpoint used to verify readiness (also listed in the required fields above).
 - **Add command** — entrypoint command and arguments. If left empty, the image's default entrypoint is used.
 - **Metrics port** / **Metrics path** — optional Prometheus scrape endpoint. Set **both** together, or leave both empty to use the defaults (the container port and `/metrics`).
-- **Environment variables** — pass additional variables to the container (e.g., `HF_TOKEN`).
+- **Hugging Face Token** — select a Hugging Face token saved in [Secrets](/resources/vault) for gated or private models. Do not pass `HF_TOKEN` as a plain environment variable.
+- **Environment variables** — pass additional variables to the container.
 - **Config file** — mount a file into the container. Provide **Filename**, **Mount Path (directory)**, and **File Content**. For worked examples, see [gRPC Inference Endpoints](/resources/grpc) and [Deploying TensorRT-LLM](/resources/trtllm).
 - **Annotations** — optional key/value metadata on the deployment.
 
@@ -183,10 +184,10 @@ For gRPC deployments, see [gRPC Inference Endpoints](/resources/grpc) for connec
 Learn how to protect your endpoints with Bearer tokens and mTLS certificates
  </Card>
   <Card
-    title="LLM Serving"
-    icon="fa-solid fa-comments"
-    href="/apps/llm"
+    title="NVIDIA Dynamo"
+    icon="fa-solid fa-diagram-project"
+    href="/apps/dynamo"
   >
-    Explore dedicated, protected endpoints for production model deployments.
+    Serve LLMs with disaggregated prefill/decode, autoscaling, and scale to zero.
  </Card>
 </CardGroup>
