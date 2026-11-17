@@ -1,0 +1,35 @@
+---
+title: Open Source CCluster
+description: The open-source CCluster project on GitHub
+---
+
+CCluster is also developed as an open-source project under the Apache 2.0 license at [github.com/NVIDIA/ccluster](https://github.com/NVIDIA/ccluster). It is a Kubernetes-native platform for managing AI workloads across distributed, multi-cloud GPU infrastructure.
+
+<Note>
+The open-source project is in an early stage and changes quickly. See the repository README for its current status and scope.
+</Note>
+
+## How the project is structured
+
+- **Control-plane operator** — orchestrates the platform. It registers clusters, decides what is deployed where and in what order, and collects status from each cluster in one place.
+- **Infra-plane operator** — runs on each workload cluster. It checks that the cluster's dependencies are installed and healthy, and reports back.
+- **Catalog** — the Helm charts the control plane deploys, such as the GPU Operator, cert-manager, Istio, and KEDA, along with inference, training, and compute workloads.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card
+    title="CCluster on GitHub"
+    icon="fa-brands fa-github"
+    href="https://github.com/NVIDIA/ccluster"
+  >
+    Browse the source, report issues, and follow development.
+  </Card>
+  <Card
+    title="Quickstart"
+    icon="fa-solid fa-rocket"
+    href="/home/quickstart"
+  >
+    Deploy your first workload with the NVIDIA CCluster console.
+  </Card>
+</CardGroup>

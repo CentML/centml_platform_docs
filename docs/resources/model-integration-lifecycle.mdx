@@ -29,7 +29,7 @@ NVIDIA CCluster can support teams during multiple phases of the Model Integratio
 2. **Feasibility Analysis:** NVIDIA CCluster allows fast access to high-performance LLM endpoints, enabling latency, throughput, and cost testing early on.
 3. **Design & Architecture:** NVIDIA CCluster exposes standardized `/v1/chat/completions` endpoints with token-based auth, simplifying architecture planning.
 4. **Development & Integration:** Developers integrate NVIDIA CCluster endpoints using standard OpenAI SDKs or HTTP clients like httpx, minimizing boilerplate.
-5. **Fine-tuning (optional iteration step):** While NVIDIA CCluster currently focuses on serving, [Custom Model Endpoints](/apps/inference) and [LLM Serving](/apps/llm) support serving fine-tuned models.
+5. **Fine-tuning (optional iteration step):** While NVIDIA CCluster currently focuses on serving, [General Inference](/apps/inference) and [NVIDIA Dynamo](/apps/dynamo) support serving fine-tuned models.
 6. **Testing & Validation:** Teams can test prompt formats and model behavior in NVIDIA CCluster's hosted environment with minimal infrastructure overhead.
 7. **A/B Testing or Canary:** NVIDIA CCluster's flexibility allows parallel deployments. Users must implement endpoint routing logic for A/B or canary testing via external tooling.
 8. **Deployment:** NVIDIA CCluster handles scalable, production-ready deployment without requiring users to manage GPU infrastructure or custom serving stacks.
@@ -45,11 +45,11 @@ For more implementation guidance, review the rest of this documentation set.
 
 <CardGroup cols={3}>
   <Card
-    title="LLM Serving"
-    icon="fa-solid fa-comments"
-    href="/apps/llm"
+    title="NVIDIA Dynamo"
+    icon="fa-solid fa-diagram-project"
+    href="/apps/dynamo"
   >
-    Explore dedicated, protected endpoints for production model deployments.
+    Serve LLMs with disaggregated prefill/decode, autoscaling, and scale to zero.
   </Card>
   <Card
     title="Deploying Custom Models"

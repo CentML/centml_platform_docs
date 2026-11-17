@@ -1,6 +1,6 @@
 ---
 title: 'Managing Hardware Instances'
-description: 'Create, list, and delete hardware instances under a cluster with the Python SDK'
+description: 'View cluster capacity and hardware in the console, and create, list, and delete hardware instances with the Python SDK'
 ---
 
 A **hardware instance** describes a class of hardware — GPU type, GPU count, CPU, and memory — that is available for deployments within a [cluster](/apps/compute). The [Python SDK](/clients/sdk) lets you list the hardware instances you have access to, and (with the right permissions) create and delete them.
@@ -8,6 +8,44 @@ A **hardware instance** describes a class of hardware — GPU type, GPU count, C
 <Note>
 Creating and deleting hardware instances requires admin privileges (`PERM_ADMIN_MANAGE_HARDWARE`) on your NVIDIA CCluster organization. Listing hardware instances does not require admin privileges.
 </Note>
+
+## View clusters and capacity in the console
+
+Select **Clusters** from the sidebar to see every cluster available to your organization. Each cluster is a collapsible row that shows:
+
+- **GPU capacity** — one chip per GPU type, such as `H200: 3/8 in use`.
+- **Hardware configurations** — a table of the hardware instances you can deploy on the cluster, with **Name**, **GPU** (count and type), **GPU memory**, **CPU (cores)**, and **Memory**.
+
+<Frame>
+    <img src="./images/clusters.png" alt="Clusters page showing GPU capacity chips and the hardware configurations table for a cluster" />
+</Frame>
+
+The **Accelerator Capacity** table on the console home page shows the same capacity data, with a usage bar per GPU type. The bar is green below 70%, amber from 70% to 89%, and red at 90% or more.
+
+<Note>
+**In use** counts the GPUs that running workloads have requested, not how busy those GPUs are. A cluster whose capacity cannot be read shows "Capacity data is not currently available".
+</Note>
+
+When you create a deployment, the **Hardware** step shows one card per GPU type for the cluster you select, with its GPU memory, system memory, CPU count, and the GPU counts (1x, 2x, 4x, 8x) that are available. Cards for GPU types that the selected cluster does not offer are greyed out. If a cluster is closed to new deployments, creating one fails with "Cluster does not allow new deployments".
+
+### Add or remove hardware configurations
+
+Administrators can manage a cluster's hardware catalog from the same page. Click **Add hardware configuration** in a cluster and fill in:
+
+- **GPU type** — chosen from the shared hardware catalog. It sets the GPU memory shown for the configuration.
+- **Hardware name** — for example `x4-large-b200`.
+- **GPU count** — `1`, `2`, `4`, or `8`.
+- **CPU (millicores)** — `1000` millicores is one CPU core.
+- **Memory (MiB)** — `1024` MiB is one GiB.
+- **Node affinity labels** — at least one key and value that the scheduler must match when it places the hardware. Selecting a GPU type pre-fills `nvidia.com/gpu.product`.
+
+To remove a configuration, click the trash button in its row and confirm **Delete**. This removes the configuration from the cluster catalog so new deployments cannot use it. Existing deployments are not deleted.
+
+Adding and deleting hardware requires the `PERM_ADMIN_MANAGE_HARDWARE` permission. The **Add hardware configuration** button is visible to everyone in the console, but the request is rejected for users without that permission.
+
+## Manage hardware with the Python SDK
+
+The rest of this page shows how to list, create, and delete hardware instances with the [Python SDK](/clients/sdk).
 
 ## Prerequisites
 

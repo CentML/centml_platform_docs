@@ -1,0 +1,95 @@
+---
+title: 'Monitoring Usage'
+description: 'View request, latency, GPU, CPU, and memory metrics for your deployments in the console'
+---
+
+The **Usage** page shows live metrics for one deployment at a time. The same charts appear on the **Usage** tab of each deployment's detail page, with the deployment already selected. Usage is for monitoring performance and capacity. It does not show charges.
+
+## Open the metrics
+
+- Select **Usage** from the sidebar, then pick a deployment in **Deployments**. The newest deployment is selected by default.
+- Or open a deployment from **Deployments** and select its **Usage** tab.
+
+If you have no deployments yet, the page shows **No deployments found** and a **New Deployment** button.
+
+## Choose a time range
+
+Use **Time range** to pick **Last 30 mins**, **Last 1 hour** (the default), **Last 3 hours**, **Last 6 hours**, or **Custom**. A custom range uses a start and end date, can reach back at most one month, and cannot be longer than one month. A single day set to today runs from midnight to now.
+
+Click the refresh button to reload the charts. Relative ranges are recomputed from the current time when you refresh. The charts pick their step size from the length of the range, and times are shown in your browser's time zone. If a deployment stopped reporting for a while, the chart shows a gap. A range that ends before the deployment was created is empty.
+
+## Charts for General Inference, Compute, and Jobs
+
+**Deployment & Request Metrics** appears for inference deployments:
+
+| Chart | What it shows |
+| --- | --- |
+| **HTTP Requests** | Number of requests per step. |
+| **Latency** | Response time in seconds, as p50, p90, and p99. |
+| **HTTP Requests by Status** | Requests per HTTP status code. |
+| **Error Codes** | Total 4xx and 5xx responses in the selected range, per status code. |
+
+**Hardware Resource Utilization by Pod** appears for every deployment type, including jobs. Use **Revision** and **Pod** to choose which pod to inspect.
+
+| Chart | What it shows |
+| --- | --- |
+| **GPU** | GPU utilization, 0–100%, per GPU. |
+| **GPU Memory** | GPU memory in use, with the GPU's memory as the maximum. |
+| **CPU** | CPU use as a percentage of the container's CPU limit. |
+| **Memory** | Container memory in use, with the hardware's memory as the maximum. |
+
+## Charts for NVIDIA Dynamo
+
+Dynamo deployments have a dedicated view. Use **Metrics** to switch between views, and **Revision** to pick **All revisions** or a single revision. It defaults to the current revision.
+
+- **Overview**
+  - **Frontend TTFT** — time to first token, in milliseconds, as p50, p95, and p99.
+  - **Time per output token** — milliseconds per token.
+  - **Request duration** — seconds, without client network latency.
+  - **Output throughput** — tokens per second.
+  - **Request outcomes** — requests per second by result. Cancellations are shown separately.
+  - **Queue depth** — queued requests. Prefill and Decode are shown separately.
+- **Workers** — choose a **Worker pool** (**Worker**, **Prefill**, or **Decode**) and a **Worker**, then see **GPU utilization**, **GPU memory**, **Running requests**, and **KV cache occupancy**. **CPU and container memory** is in a collapsible section.
+- **KV transfer** — shown only for disaggregated deployments: **KV transfer throughput**, **KV transfer duration**, **Transfer completion rate**, and **Transfer failure rate**.
+
+<Note>
+KV transfer charts show how much KV cache moved and how long it took. They do not tell you which transport carried it, so they cannot confirm that GPU Direct RDMA was used.
+</Note>
+
+## Empty charts
+
+| Message | Meaning |
+| --- | --- |
+| **No observations in this period** | The deployment received no traffic in the range. |
+| **No samples in this period** | The range is before the deployment existed, or no data was collected. |
+| **Metrics are not available for this selection yet.** | The metric has not been reported for this deployment or pod. |
+| **Metrics stopped reporting. Showing the last available samples.** | The deployment stopped sending metrics. The last sample time is shown. |
+| **Some workers are not reporting metrics. Showing available samples.** | Some Dynamo workers are missing from the chart. |
+
+Use **Retry** on a chart that shows **Failed to load**.
+
+## What's next
+
+<CardGroup cols={3}>
+  <Card
+    title="Managing Deployments"
+    icon="fa-solid fa-sliders"
+    href="/resources/managing-deployments"
+  >
+    Check logs, pause, edit, and roll back from the detail page.
+  </Card>
+  <Card
+    title="NVIDIA Dynamo"
+    icon="fa-solid fa-diagram-project"
+    href="/apps/dynamo"
+  >
+    Learn about aggregated and disaggregated serving.
+  </Card>
+  <Card
+    title="Managing Hardware"
+    icon="fa-solid fa-server"
+    href="/resources/hardware-instances"
+  >
+    See cluster capacity and available hardware.
+  </Card>
+</CardGroup>

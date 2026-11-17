@@ -3,13 +3,13 @@ title: 'Agents on NVIDIA CCluster'
 description: 'How to build AI agents using structured outputs such as JSON and function/tool calls with NVIDIA CCluster'
 ---
 
-NVIDIA CCluster's **Dedicated** LLM APIs support structured outputs using the same OpenAI-compatible API. These features are crucial for agentic workloads that require reliable data parsing and function calling. The NVIDIA CCluster also provides reasoning-enabled models (e.g., `DeepSeek-AI/deepseek-r1`) that can perform reasoning before generating structured outputs.
+LLM endpoints you deploy on NVIDIA CCluster, such as [NVIDIA Dynamo](/apps/dynamo), expose an OpenAI-compatible API. Structured outputs such as JSON schema constraints and function or tool calls are crucial for agentic workloads that require reliable data parsing. Whether a given structured-output or tool-calling feature works depends on the model you deploy and the engine settings you choose, so test it against your own endpoint. Reasoning models, which can reason before generating structured outputs, work the same way.
 
 ## JSON schema output
 
 When you need a response strictly formatted as JSON, you can use JSON schema constraints. This is particularly useful in scenarios where your system or other downstream processes rely on valid JSON.
 
-Below is an example of how to set up a request to the NVIDIA CCluster LLM API using JSON schema enforcement. Replace `<endpoint_url>` with the endpoint URL of your [LLM Serving](/apps/llm) deployment, and set `CENTML_API_KEY` to a bearer token from your [Vault](/resources/vault).
+Below is an example of how to set up a request to the NVIDIA CCluster LLM API using JSON schema enforcement. Replace `<endpoint_url>` with the endpoint URL of your [NVIDIA Dynamo](/apps/dynamo) deployment (or another OpenAI-compatible [General Inference](/apps/inference) endpoint), and set `CENTML_API_KEY` to a bearer token from your [Secrets](/resources/vault).
 
 ```python
 from openai import OpenAI
@@ -18,7 +18,7 @@ import os
 # Retrieve the model name from environment variables
 model = os.environ.get("MODEL", "deepseek-ai/DeepSeek-R1")
 
-# Supply your API key from your NVIDIA CCluster vault
+# Supply your API key from your NVIDIA CCluster Secrets
 api_key = os.environ.get("CENTML_API_KEY")
 assert api_key is not None, "Please provide an API Key"
 
@@ -62,7 +62,7 @@ schema_json = {
 # Initialize the OpenAI-compatible client with the API key and base URL
 client = OpenAI(
     api_key=api_key,
-    base_url="https://<endpoint_url>/openai/v1",
+    base_url="https://<endpoint_url>/v1",
 )
 
 # Create a chat completion request with the defined prompt and schema
@@ -102,10 +102,10 @@ import os
 import json
 import time
 
-# Supply your API key from your NVIDIA CCluster vault
+# Supply your API key from your NVIDIA CCluster Secrets
 api_key = os.environ.get("CENTML_API_KEY")
 assert api_key is not None, "Please provide an API Key"
-base_url = "https://<endpoint_url>/openai/v1"
+base_url = "https://<endpoint_url>/v1"
 
 def get_weather(location):
     """
@@ -327,7 +327,7 @@ For more details, continue exploring this documentation set or use your establis
   <Card
     title="Our Services"
     icon="fa-solid fa-box-open"
-    href="/apps/llm"
+    href="/apps/inference"
   >
     Learn how to build your AI application using NVIDIA CCluster
   </Card>

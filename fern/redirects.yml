@@ -29,3 +29,6 @@ redirects:
   - source: /resources/model_integration_lifecycle
     destination: /ccluster/resources/model-integration-lifecycle
     permanent: true
+  - source: /apps/llm
+    destination: /ccluster/apps/dynamo
+    permanent: true

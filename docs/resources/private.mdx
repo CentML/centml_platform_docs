@@ -3,24 +3,26 @@ title: 'Securing Endpoints'
 description: 'How to protect your inference endpoints with Bearer tokens and mTLS certificates'
 ---
 
-NVIDIA CCluster does not expose public endpoints. Every LLM Serving and General Inference deployment must be protected, and clients must authenticate on each request. You secure a deployment with **at least one** of the following:
+NVIDIA CCluster does not expose public endpoints. Every General Inference and Dynamo deployment must be protected, and clients must authenticate on each request. You secure a deployment with **at least one** of the following:
 
 - **Bearer token** — an `Authorization: Bearer <token>` header on each request.
 - **mTLS client certificate** — a TLS certificate the client presents on each request.
 
 <Note>
-Endpoint bearer tokens (from your [Vault](/resources/vault)) are not the same as [service account](/resources/service-accounts) credentials. Service accounts authenticate automation to NVIDIA CCluster platform APIs; Vault bearer tokens protect calls to your deployed endpoints.
+Endpoint bearer tokens (from your [Secrets](/resources/vault)) are not the same as [service account](/resources/service-accounts) credentials. Service accounts authenticate automation to NVIDIA CCluster platform APIs; bearer tokens from Secrets protect calls to your deployed endpoints.
 </Note>
 
 You choose the protection method when configuring a deployment. You may enable both for defense in depth.
 
 ## Bearer token access
 
-Generate a Bearer token from your [Vault](/resources/vault), then include it in the `Authorization` header of every request.
+Generate a Bearer token from your [Secrets](/resources/vault), then include it in the `Authorization` header of every request.
+
+The request path comes from the server running in your deployment. The examples use `/v1/chat/completions`, which OpenAI-compatible servers such as vLLM, TensorRT-LLM, NIM, and Dynamo expose. If your container serves a different API, use its path.
 
 **Using curl command**
 ```bash showLineNumbers={false}
-curl -X 'POST' 'https://<endpoint_url>/openai/v1/chat/completions' \
+curl -X 'POST' 'https://<endpoint_url>/v1/chat/completions' \
   -H 'Authorization: Bearer <your_bearer_token>' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
@@ -42,19 +44,20 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="<your_bearer_token>",
-    base_url="https://<endpoint url>/openai/v1",
+    base_url="https://<endpoint url>/v1",
 )
 ```
 
 ## mTLS certificate access
 
-Select the <em>Make it a private endpoint?</em> option when configuring a deployment. This generates a TLS certificate upon deployment, which you can download. Access to the endpoint will then require the http client to use this certificate. Here are a few examples:
+When configuring a deployment, under **Private Endpoint**, choose **Certificate**. Then select an existing certificate, or select **+ Add a new certificate** to generate one or use your own. When you generate a new certificate, its `.pem` file downloads to your browser at that moment, and the certificate is saved to your [Secrets](/resources/vault). Access to the endpoint then requires the HTTP client to present this certificate. Here are a few examples:
 
 
 **Using curl command**
 ```bash showLineNumbers={false}
-curl -X 'POST' 'https://<endpoint_url>/openai/v1/chat/completions' \
-  --cert <path to TLS certificate> \   # Downloaded certificate
+# --cert points to the .pem file downloaded when you generated the certificate
+curl -X 'POST' 'https://<endpoint_url>/v1/chat/completions' \
+  --cert <path to TLS certificate> \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -93,7 +96,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="no_key",
-    base_url="https://<endpoint url>/openai/v1",
+    base_url="https://<endpoint url>/v1",
     http_client=httpx.Client(cert="<path to TLS certificate>"),
 )
 ```
@@ -103,11 +106,11 @@ client = OpenAI(
 
 <CardGroup cols={3}>
   <Card
-    title="Managing Vault Objects"
+    title="Managing Secrets"
     icon="fa-solid fa-key"
     href="/resources/vault"
   >
-    Learn how to generate and store NVIDIA CCluster tokens and other vault objects.
+    Learn how to generate and store NVIDIA CCluster tokens and other secrets.
   </Card>
   <Card
     title="Clients"

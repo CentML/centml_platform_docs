@@ -22,11 +22,11 @@ After building the container, push it to a container registry. The NVIDIA CClust
 
 For **public images**, navigate to the General Inference option in the NVIDIA CCluster and enter the image name, tag, and container port to deploy your application.
 
-For **private images**, you will need to provide registry credentials so CCluster can pull the image. Enter the registry username and password directly when configuring the deployment. CCluster automatically detects the registry from the image URL. If your cluster administrator already manages an image pull secret, you can reference it through the API as described below.
+For **private images**, you will need to provide registry credentials so CCluster can pull the image. Under **Image pull authentication**, choose **Username and password** and select **Image Registry Credentials** saved in [Secrets](/resources/vault). CCluster automatically detects the registry from the image URL. If your cluster administrator already manages an image pull secret, choose **Existing cluster pull secret** and enter its name, or reference it through the API as described below.
 
 ## Use an existing image pull secret
 
-[General Inference](/apps/inference), [Compute](/apps/compute), and [Batch Jobs](/apps/jobs) support the API field `image_pull_secret_name` to pull private container images using an existing Kubernetes Secret. This is useful when your cluster administrator manages registry credentials and their refresh outside CCluster.
+[General Inference](/apps/inference), [Compute](/apps/compute), and [Batch Jobs](/apps/jobs) support an existing cluster pull secret (the **Existing cluster pull secret** option in the console, or the API field `image_pull_secret_name`) to pull private container images using an existing Kubernetes Secret. This is useful when your cluster administrator manages registry credentials and their refresh outside CCluster.
 
 Before deploying, ask your cluster administrator to ensure that the image pull secret exists in the **deployment namespace on the target cluster** and contains valid credentials for your image's registry. Use the Kubernetes Secret's name for `image_pull_secret_name`.
 
@@ -55,11 +55,11 @@ CCluster references the secret but does not create, refresh, or delete it. Your 
 
 <CardGroup cols={3}>
   <Card
-    title="LLM Serving"
-    icon="fa-solid fa-comments"
-    href="/apps/llm"
+    title="NVIDIA Dynamo"
+    icon="fa-solid fa-diagram-project"
+    href="/apps/dynamo"
   >
-    Explore dedicated, protected endpoints for production model and model infrastructure management.
+    Serve LLMs with disaggregated prefill/decode, autoscaling, and scale to zero.
  </Card>
   <Card
     title="Clients"

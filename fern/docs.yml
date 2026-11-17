@@ -20,6 +20,8 @@ navbar-links:
   - type: primary
     text: Get Started
     href: /ccluster/home/quickstart
+  - type: github
+    value: https://github.com/NVIDIA/ccluster
 
 navigation:
   - section: Getting Started
@@ -33,14 +35,14 @@ navigation:
         path: ../docs/home/quickstart.mdx
         slug: quickstart
         icon: fa-solid fa-rocket
+      - page: Open Source
+        path: ../docs/home/open-source.mdx
+        slug: open-source
+        icon: fa-brands fa-github
 
   - section: Deployments
     slug: apps
     contents:
-      - page: LLM Serving
-        path: ../docs/apps/llm.mdx
-        slug: llm
-        icon: fa-solid fa-comments
       - page: NVIDIA Dynamo
         path: ../docs/apps/dynamo.mdx
         slug: dynamo
@@ -85,6 +87,14 @@ navigation:
         path: ../docs/resources/managing-deployments.mdx
         slug: managing-deployments
         icon: fa-solid fa-sliders
+      - page: Managing Storage
+        path: ../docs/resources/storage.mdx
+        slug: storage
+        icon: fa-solid fa-hard-drive
+      - page: Monitoring Usage
+        path: ../docs/resources/usage.mdx
+        slug: usage
+        icon: fa-solid fa-chart-line
       - page: gRPC Inference Endpoints
         path: ../docs/resources/grpc.mdx
         slug: grpc
@@ -109,7 +119,7 @@ navigation:
         path: ../docs/resources/json-and-tool.mdx
         slug: json-and-tool
         icon: fa-solid fa-user-secret
-      - page: Managing Vault Objects
+      - page: Managing Secrets
         path: ../docs/resources/vault.mdx
         slug: vault
         icon: fa-solid fa-key

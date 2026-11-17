@@ -7,7 +7,7 @@ We make it easy for you to containerize and deploy any custom models on CCluster
 
 ## 1. Configure your inference deployment
 
-Use the **Add or Select Image** dropdown to choose a pre-configured recipe or manually enter a custom image URL. Similarly, use the **Container Tag** dropdown to pick an available tag or type one in directly. If you select a recipe, all fields except **Add command** are auto-filled (some may be empty). You will still need to provide the entrypoint command under **Optional Details → Add command**.
+Use the **Add or Select Image** dropdown to choose a pre-configured recipe or manually enter a custom image URL. Similarly, use the **Container Tag** dropdown to pick an available tag or type one in directly. If you select a recipe, all fields except **Add command** are auto-filled (some may be empty). You will still need to provide the entrypoint command in the **Advanced** step under **Add command**.
 
 At a minimum, you need to specify:
 
@@ -15,20 +15,20 @@ At a minimum, you need to specify:
 - **Container Tag** — the image tag (select from dropdown or enter manually).
 - **Container Port** — the port your container exposes its HTTP or gRPC service on.
 - **Protocol** — select `HTTP` (default) or `gRPC`.
-- **Health check path** — the endpoint used to verify readiness (e.g., `/health`, `/`). For gRPC deployments, CCluster uses TCP socket checks automatically, so this field is ignored.
-- **Image Registry Username / Password** — credentials for private images (e.g., Docker Hub private repo). API deployments can instead [reference an existing image pull secret](/resources/custom-image#use-an-existing-image-pull-secret).
+- **Image pull authentication** — for private images, choose **Username and password** and select **Image Registry Credentials** saved in [Secrets](/resources/vault), or choose **Existing cluster pull secret** and enter the **Cluster pull secret name** that your cluster administrator manages. Leave it unset for public images. See [Deploying Custom Models](/resources/custom-image#use-an-existing-image-pull-secret).
+- **Hugging Face Token** — select a Hugging Face token saved in [Secrets](/resources/vault) for gated or private models. Do not pass `HF_TOKEN` as a plain environment variable.
 
-The create wizard splits optional settings across **Advanced** and **Scaling**.
+The create wizard has three steps: **Endpoint**, **Advanced**, and **Hardware**. Optional runtime settings are in **Advanced**, and **Scaling** settings are in **Hardware**.
 
 **Advanced**
 
 - **Enable logging** — collect container stdout/stderr and show it on the deployment **Logs** tab. If this is off, that revision has no logs in the console.
 - **Enable Model Caching** — store model files in a node-local persistent cache. Restarts and replicas scheduled on the same node can reuse the files instead of downloading them again.
 - **Session affinity** — best-effort sticky routing using the `X-Session-Id` request header. Requests with the same header value land on the same pod, which helps KV-cache reuse for agentic workloads. Requests without the header are routed at random. Affinity is **not** durable: scaling, rollouts, restarts, or readiness-probe transitions can remap sessions to different pods. Do not use it for irreplaceable in-pod state.
-- **Health check path** — the endpoint used to verify readiness (also listed in the required fields above).
+- **Health check path** — the endpoint used to verify readiness (e.g., `/health`, `/`). For gRPC deployments, CCluster uses TCP socket checks automatically, so this field is ignored.
 - **Add command** — entrypoint command and arguments. If left empty, the image's default entrypoint is used.
 - **Metrics port** / **Metrics path** — optional Prometheus scrape endpoint. Set **both** together, or leave both empty to use the defaults (the container port and `/metrics`).
-- **Environment variables** — pass additional variables to the container (e.g., `HF_TOKEN`).
+- **Environment variables** — pass additional variables to the container.
 - **Config file** — mount a file into the container. Provide **Filename**, **Mount Path (directory)**, and **File Content**. For worked examples, see [gRPC Inference Endpoints](/resources/grpc) and [Deploying TensorRT-LLM](/resources/trtllm).
 - **Annotations** — optional key/value metadata on the deployment.
 
@@ -40,7 +40,7 @@ CCluster scales replicas from in-flight request concurrency (**Max Concurrency**
 | --- | --- |
 | **Min Replicas** | Lower bound for replica count. `0` allows scale-to-zero when demand drops. |
 | **Max Replicas** | Upper bound for replica count. Set equal to **Min Replicas** for a fixed size. |
-| **Max Concurrency** | Target in-flight requests per replica. Required when **Max Replicas** is greater than **Min Replicas**. |
+| **Max Concurrency** | Target in-flight requests per replica. Optional; leave unset for no concurrency target. |
 | **Cooldown Period (s)** | Scale-down stabilization time, from `0` to `3600`. |
 
 <Note>
@@ -48,11 +48,11 @@ Changing min or max replica counts on a running deployment scales in place and *
 </Note>
 
 <Frame>
-    <img src="./images/inf-1.png" alt="General Inference deployment page" />
+    <img src="./images/inf-1.png" alt="General Inference Endpoint step with image, port, protocol, image pull authentication, Hugging Face token, and private endpoint fields" />
 </Frame>
 
 <Tip>
-Every deployment must be protected — there are no public endpoints. Secure your endpoint with a Bearer token (an `Authorization: Bearer <token>` header), an mTLS client certificate, or both. To enable mTLS, select the "Make it a private endpoint?" option, which generates a TLS certificate you can download as a .pem file after the deployment is complete. For more details, see [Securing Endpoints](/resources/private).
+Every deployment must be protected — there are no public endpoints. Secure your endpoint with a Bearer token (an `Authorization: Bearer <token>` header), an mTLS client certificate, or both. To enable mTLS, select the **Private Endpoint** option, which generates a TLS certificate you can download as a .pem file after the deployment is complete. For more details, see [Securing Endpoints](/resources/private).
 </Tip>
 
 <Tip>
@@ -112,10 +112,10 @@ For the full NIM configuration and an end-to-end walkthrough, see [Deploying NVI
 By default, NVIDIA CCluster provides several managed clusters and GPU instances for you to deploy your inference containers. 
 
 <Frame>
-    <img src="./images/inf-2.png" alt="Hardware instance selection for general inference" />
+    <img src="./images/inf-2.png" alt="General Inference Hardware step with cluster, hardware cards, storage, and scaling settings" />
 </Frame>
 
-Select the regional cluster and hardware instance that best fits your need and click Deploy.
+Select the regional cluster and hardware instance that best fits your need. To mount persistent storage, add a mount in the **Storage** section below the hardware cards; see [Managing Storage](/resources/storage). Then click Deploy.
 
 <Tip>
 You can integrate your own private cluster into CCluster through bring-your-own-infrastructure support. To get started, open a support request through your NVIDIA CCluster support channel.
@@ -126,7 +126,7 @@ You can integrate your own private cluster into CCluster through bring-your-own-
 Once deployed, you can see all your deployments under the listing view along with their current status.
 
 <Frame>
-    <img src="./images/inf-3.png" alt="Container image configuration for general inference" />
+    <img src="./images/inf-3.png" alt="Deployments list showing a general inference deployment and its status" />
 </Frame>
 
 Click on the deployment to view the details page, logs and monitoring information.
@@ -183,10 +183,10 @@ For gRPC deployments, see [gRPC Inference Endpoints](/resources/grpc) for connec
 Learn how to protect your endpoints with Bearer tokens and mTLS certificates
  </Card>
   <Card
-    title="LLM Serving"
-    icon="fa-solid fa-comments"
-    href="/apps/llm"
+    title="NVIDIA Dynamo"
+    icon="fa-solid fa-diagram-project"
+    href="/apps/dynamo"
   >
-    Explore dedicated, protected endpoints for production model deployments.
+    Serve LLMs with disaggregated prefill/decode, autoscaling, and scale to zero.
  </Card>
 </CardGroup>

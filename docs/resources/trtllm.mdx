@@ -31,7 +31,7 @@ The image might appear as `nvidia/tensorrt-llm/release` in the prebuilt image li
 
 ### Add command
 
-The TensorRT-LLM release image does not start an inference server by itself. Under **Optional Details → Add command**, enter:
+The TensorRT-LLM release image does not start an inference server by itself. In the **Advanced** step, under **Add command**, enter:
 
 ```bash showLineNumbers={false}
 /bin/bash -lc 'trtllm-serve TinyLlama/TinyLlama-1.1B-Chat-v1.0 --host 0.0.0.0 --port 8000 --config /etc/engine/config.yaml'
@@ -78,7 +78,7 @@ Tune `max_batch_size`, `max_seq_len`, and `free_gpu_memory_fraction` for your mo
 
 ### Model credentials
 
-Under **Optional Details → Environment Variables**, set `HF_TOKEN` to a Hugging Face token when the model is gated or private. You can store the token in a [Vault object](/resources/vault) instead of entering it directly.
+In the **Endpoint** step, select a **Hugging Face Token** saved in [Secrets](/resources/vault) when the model is gated or private.
 
 Every endpoint must also be protected with a Bearer token, an mTLS client certificate, or both. See [Securing Endpoints](/resources/private).
 
@@ -144,7 +144,7 @@ Use the exact model `id` returned by `/v1/models` in subsequent requests. The fi
     Protect your endpoints with Bearer tokens and mTLS certificates.
   </Card>
   <Card
-    title="Managing Vault Objects"
+    title="Managing Secrets"
     icon="fa-solid fa-key"
     href="/resources/vault"
   >

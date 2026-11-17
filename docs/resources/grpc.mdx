@@ -41,7 +41,7 @@ The `vllm/vllm-openai` image does **not** bundle the gRPC extra, so startup is t
 
 Keeping **Add command** to a simple script invocation is also the recommended pattern — commands with special characters (`.`, `,`, `[]`, and the like) placed directly in **Add command** can currently fail to deploy. This is a known issue CCluster is addressing.
 
-Under **Optional Details → Config File**:
+In the **Advanced** step, under **Config File**:
 
 - **Filename** — `entry.sh`
 - **Mount Path (directory)** — `/etc/start`
@@ -65,11 +65,11 @@ The file is mounted at `<mount path>/<filename>`, so set **Add command** to run 
 ```
 
 <Frame>
-    <img src="./images/grpc-vllm-entry-script.png" alt="Config File entry.sh installing vllm[grpc] and launching the gRPC server, invoked from Add command" />
+    <img src="./images/grpc-vllm-entry-script.png" alt="General Inference Advanced step with Add command and Config File fields" />
 </Frame>
 
 <Tip>
-Every endpoint is protected — there are no public endpoints. Secure access with a Bearer token, an mTLS client certificate, or both. For mTLS, select **Make it a private endpoint?** and CCluster generates a TLS certificate that clients must present. See [Securing Endpoints](/resources/private) for details.
+Every endpoint is protected — there are no public endpoints. Secure access with a Bearer token, an mTLS client certificate, or both. For mTLS, select **Private Endpoint** and CCluster generates a TLS certificate that clients must present. See [Securing Endpoints](/resources/private) for details.
 </Tip>
 
 ## 2. Select the cluster and hardware
@@ -77,7 +77,7 @@ Every endpoint is protected — there are no public endpoints. Secure access wit
 Choose the cluster and GPU instance that match your model and setup, then click **Deploy**.
 
 <Frame>
-    <img src="./images/grpc-vllm-hardware.png" alt="Hardware instance selection" />
+    <img src="./images/grpc-vllm-hardware.png" alt="General Inference Hardware step with cluster and hardware cards" />
 </Frame>
 
 ## 3. Call your gRPC endpoint
@@ -138,7 +138,7 @@ Endpoints are protected, so authenticate every call — pass a Bearer token, or 
     Interact with NVIDIA CCluster programmatically.
   </Card>
   <Card
-    title="Managing Vault Objects"
+    title="Managing Secrets"
     icon="fa-solid fa-key"
     href="/resources/vault"
   >
