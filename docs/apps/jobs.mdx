@@ -51,6 +51,10 @@ You can integrate your own private cluster into CCluster through bring-your-own-
 
 Once created, your job appears in the deployments listing view alongside its current status. Click into the job to view its details page, including per-pod status and, when **Enable logging** is turned on, the logs from each pod. While pods are running, the **Terminal** tab opens an in-browser shell. Jobs can be paused and resumed from the details page, but they are not revision-aware and have no replica autoscaling. See [Managing Deployments](/resources/managing-deployments).
 
+<Warning>
+Pausing a job deletes its pods, and resuming starts the job again from the beginning. Completed work and in-memory progress are not preserved, so work can run again. To keep progress across a pause, checkpoint in your application and write the checkpoints to persistent storage. See [Managing Storage](/resources/storage).
+</Warning>
+
 Because jobs are batch workloads, there is no endpoint to call — the job runs until your container exits. A job is considered complete once the requested number of **Completions** finish successfully, and failed pods are retried up to the **Backoff Limit** (or until the **Active Deadline Seconds** is reached).
 
 ## What's next

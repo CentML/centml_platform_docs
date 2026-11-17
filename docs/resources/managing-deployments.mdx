@@ -44,7 +44,7 @@ On the deployment detail page you can **Pause** an Active deployment or **Resume
 
 - **General Inference** and **Compute**: pause and resume the whole deployment.
 - **Dynamo**: pause and resume the whole deployment. You cannot pause only an in-progress Dynamo rollout. See [NVIDIA Dynamo](/apps/dynamo).
-- **Jobs**: pause and resume the whole job from the details page.
+- **Jobs**: pause and resume the whole job from the details page. Pausing deletes the job's pods and resuming restarts the job from the beginning, so completed work can run again. Checkpoint in your application and write to persistent storage to keep progress. See [Batch Jobs](/apps/jobs) and [Managing Storage](/resources/storage).
 
 You can also pause and resume from the CLI (`ccluster pause <id>` / `ccluster resume <id>`). See [Client Setup](/clients/setup).
 

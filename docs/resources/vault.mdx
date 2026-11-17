@@ -75,7 +75,7 @@ When generated, certificates download a `.pem` file to your local browser. That 
 ### Example usage
 
 ```bash showLineNumbers={false}
-curl -X POST 'https://centml-private-2.fe178792.c-09.centml.com/openai/v1/chat/completions' \
+curl -X POST 'https://<endpoint_url>/v1/chat/completions' \
   --cert gen-cert.pem \
   -H 'Accept: application/json' \
   -H 'Content-Type: application/json' \
