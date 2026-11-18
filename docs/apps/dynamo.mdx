@@ -117,6 +117,10 @@ Choose a hardware type and a replica count of at least `1` for each pool. **Use 
 
 Prefill and Decode pools do not autoscale, and they cannot scale to zero.
 
+<Frame>
+    <img src="./images/dynamo-disaggregated-hardware.png" alt="Dynamo Hardware step with split Prefill and Decode pools, fixed replica counts, and the Require GPU Direct RDMA toggle turned off" />
+</Frame>
+
 ### Storage volumes
 
 Both topologies can mount reusable volumes from the cluster in the **Storage** section of the **Hardware** step. To create volumes, see [Managing Storage](/resources/storage). Mounts apply to the Frontend and to every worker's main container, at the same paths. Volumes must belong to the deployment's creator. When you edit a deployment, removing a mount changes only the new revision; the volume and its data are kept.
@@ -216,6 +220,10 @@ Open the deployment to access:
 - **Logs** — logs for a selected component pod and revision. Logs are available only for revisions with logging enabled.
 - **Terminal** — an interactive shell for an active deployment.
 - **Usage** — Frontend time to first token, time per output token, request duration, output throughput, request outcomes, and queue depth per worker pool; worker GPU utilization and memory, running requests, and KV cache occupancy; and, for disaggregated deployments, KV transfer throughput, duration, completion rate, and failure rate.
+
+<Frame>
+    <img src="./images/dynamo-deployment-detail.png" alt="Paused Dynamo deployment detail page showing revision history, endpoint configuration, serving topology, worker capacity, model, runtime version, and hardware configuration" />
+</Frame>
 
 <Note>
 On an aggregated deployment, changing **Min Replicas** or **Max Replicas** scales the running deployment in place and **does not create a new revision**. Editing the spec (model, protocol, extra arguments, and similar), changing the hardware, or resizing a disaggregated Prefill or Decode pool creates a new revision. See [Managing Deployments](/resources/managing-deployments) for Terminal, pause/resume, clone, and the shared revision model.
