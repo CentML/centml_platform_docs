@@ -18,11 +18,11 @@ docker build --platform linux/amd64 -t stable-diffusion:latest .
 ```
 </Note>
 
-After building the container, push it to a container registry. The NVIDIA CCluster supports both public registries (e.g., [Docker Hub](https://hub.docker.com/)) and private registries (e.g., Amazon ECR, Google Artifact Registry, Azure Container Registry, or self-hosted registries).
+After building the container, push it to a container registry. The NVIDIA CCluster supports public and private images on registries such as [NVIDIA NGC](https://catalog.ngc.nvidia.com/containers) (`nvcr.io`), Amazon ECR, Google Artifact Registry, Azure Container Registry, or self-hosted registries.
 
 For **public images**, navigate to the General Inference option in the NVIDIA CCluster and enter the image name, tag, and container port to deploy your application.
 
-For **private images**, you will need to provide registry credentials so CCluster can pull the image. Under **Image pull authentication**, choose **Username and password** and select **Image Registry Credentials** saved in [Secrets](/resources/vault). CCluster automatically detects the registry from the image URL. If your cluster administrator already manages an image pull secret, choose **Existing cluster pull secret** and enter its name, or reference it through the API as described below.
+For **images that require authentication**, [save registry credentials in Secrets](/resources/vault#example-nvidia-ngc-nvcrio), then choose **Image pull authentication → Registry credentials** and select **Saved registry credentials** in General Inference. For NVIDIA NGC, the username is the literal `$oauthtoken` and the password is your NGC API key. CCluster detects the registry from the image URL. If your administrator manages a Kubernetes pull secret, choose **Existing cluster pull secret** or reference it through the API as described below.
 
 ## Use an existing image pull secret
 

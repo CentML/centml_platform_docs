@@ -15,7 +15,7 @@ At a minimum, you need to specify:
 - **Container Tag** — the image tag (select from dropdown or enter manually).
 - **Container Port** — the port your container exposes its HTTP or gRPC service on.
 - **Protocol** — select `HTTP` (default) or `gRPC`.
-- **Image pull authentication** — for private images, choose **Username and password** and select **Image Registry Credentials** saved in [Secrets](/resources/vault), or choose **Existing cluster pull secret** and enter the **Cluster pull secret name** that your cluster administrator manages. Leave it unset for public images. See [Deploying Custom Models](/resources/custom-image#use-an-existing-image-pull-secret).
+- **Image pull authentication → Registry credentials** — select **Saved registry credentials** for images that require authentication. For NVIDIA NGC (`nvcr.io`), first [save credentials](/resources/vault#example-nvidia-ngc-nvcrio) with username `$oauthtoken` and your NGC API key as the password. Leave the selection empty for images that allow anonymous pulls. Alternatively, choose **Existing cluster pull secret** for a secret managed by your administrator; API deployments can [reference it by name](/resources/custom-image#use-an-existing-image-pull-secret).
 - **Hugging Face Token** — select a Hugging Face token saved in [Secrets](/resources/vault) for gated or private models. Do not pass `HF_TOKEN` as a plain environment variable.
 
 The create wizard has three steps: **Endpoint**, **Advanced**, and **Hardware**. Optional runtime settings are in **Advanced**, and **Scaling** settings are in **Hardware**.

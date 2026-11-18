@@ -12,7 +12,7 @@ Under the **Job Information** section, provide the core details for your workloa
 - **Job Name** — a unique name for the job. It must start with a lowercase letter, contain only lowercase letters, digits, or hyphens (`-`), end with an alphanumeric character, and be at most 20 characters.
 - **Container Image URL** — the container image to run (e.g., `nvcr.io/nvidia/base/ubuntu`).
 - **Container Tag** — the image tag (e.g., `latest`).
-- **Image pull authentication** — for private images, choose **Username and password** and select **Image Registry Credentials** saved in [Secrets](/resources/vault), or choose **Existing cluster pull secret** and enter the **Cluster pull secret name** that your cluster administrator manages. Leave it unset for public images. API deployments can also [reference an existing image pull secret](/resources/custom-image#use-an-existing-image-pull-secret) using `image_pull_secret_name`.
+- **Image pull authentication → Registry credentials** — enter **Registry username** and **Password or access token** for images that require authentication. For NVIDIA NGC (`nvcr.io`), enter the literal username `$oauthtoken` and your NGC API key as the password. Leave both empty for images that allow anonymous pulls; if you provide one, you must provide the other. Alternatively, choose **Existing cluster pull secret** for a secret managed by your administrator. API deployments can [reference it using `image_pull_secret_name`](/resources/custom-image#use-an-existing-image-pull-secret).
 
 ## 2. Set optional details
 

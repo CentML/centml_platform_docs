@@ -114,12 +114,34 @@ The certificate then appears in the **Certificates** list. Select it under **Pri
 
 ## Step 2C: Adding registry credentials
 
-Registry credentials allow the NVIDIA CCluster to pull container images from private registries when creating [General Inference](/apps/inference), [Compute](/apps/compute), or [Batch Jobs](/apps/jobs) deployments.
+Registry credentials let CCluster pull private container images. Save credentials in **Secrets** for reuse in [General Inference](/apps/inference) and [Compute](/apps/compute) deployments. [Batch Jobs](/apps/jobs) accept credentials directly in the deployment form.
 
-To add registry credentials, select **Add Secret** and choose `Registry Credentials` from the dropdown. Enter a name, along with the registry username and password (or access token). The credentials are stored securely and can be selected as **Image Registry Credentials** during deployment configuration.
+### Example: NVIDIA NGC (`nvcr.io`)
 
-Supported registries include Docker Hub, Amazon ECR, Google Artifact Registry, Azure Container Registry, and any Docker-compatible private registry. CCluster automatically detects the registry from the image URL at deployment time.
+1. Create an [NGC API key](https://org.ngc.nvidia.com/setup/personal-keys) with access to the container image you want to pull. See NVIDIA's [NGC authentication guide](https://docs.nvidia.com/ngc/latest/ngc-user-guide.html) for key types and permissions.
+2. In CCluster, open **Secrets → Add Secret → Registry Credentials**.
+3. Complete the form:
 
+   | Field | What to enter for NGC |
+   | --- | --- |
+   | **Registry username** | `$oauthtoken` — enter this literal text, including the dollar sign, without quotes. |
+   | **Password or access token** | Paste the raw NGC API key. |
+   | **Visibility** | **User** for personal use, or **Organization** to share credentials within your CCluster organization. |
+
+4. Click **Save credentials**. Saving stores the credentials; it does not verify that NGC accepts them or that they can pull a particular image.
+5. In the deployment form, choose **Image pull authentication → Registry credentials**. In General Inference, select the entry under **Saved registry credentials**. In Compute, select the saved entry in **Registry username**; its password is filled automatically.
+
+<Note>
+**Registry username** is the login username, not a friendly name for the secret. For NGC, use `$oauthtoken`, not your NVIDIA email, organization name, or `nvcr.io`. The password field accepts the API key itself, not Docker config JSON.
+</Note>
+
+For example, for image `nvcr.io/nvidia/pytorch` and tag `26.01-py3`, the registry is inferred from the image URL. You still use `$oauthtoken` as the username; `nvidia` is the image namespace.
+
+You can also select **Create registry credentials** from the General Inference or Compute form. This opens a new tab and keeps your unfinished deployment open. Save the credentials, return to the deployment tab, and select **refresh credentials** before choosing the new entry.
+
+If credentials for the same username and visibility already exist, select the existing entry. The current form does not support updating credentials or storing multiple entries with the same username and visibility.
+
+For images that allow anonymous pulls, leave credentials empty. To use a Kubernetes pull secret managed by your administrator, see [Use an existing image pull secret](/resources/custom-image#use-an-existing-image-pull-secret).
 
 ## Step 2D: Adding environment variables
 
