@@ -39,6 +39,10 @@ Administrators can manage a cluster's hardware catalog from the same page. Click
 - **Memory (MiB)** — `1024` MiB is one GiB.
 - **Node affinity labels** — at least one key and value that the scheduler must match when it places the hardware. Selecting a GPU type pre-fills `nvidia.com/gpu.product`.
 
+<Frame>
+    <img src="./images/add-hardware-configuration.png" alt="Add hardware configuration modal with B200 selected, a four-GPU hardware profile, CPU and memory allocations, and node affinity labels" />
+</Frame>
+
 To remove a configuration, click the trash button in its row and confirm **Delete**. This removes the configuration from the cluster catalog so new deployments cannot use it. Existing deployments are not deleted.
 
 Adding and deleting hardware requires the `PERM_ADMIN_MANAGE_HARDWARE` permission. The **Add hardware configuration** button is visible to everyone in the console, but the request is rejected for users without that permission.
