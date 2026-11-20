@@ -42,8 +42,8 @@ For Compute instances, the Terminal does **not** replace SSH. Use [SSH](/apps/co
 
 On the deployment detail page you can **Pause** an Active deployment or **Resume** a paused one. Pausing stops serving (or stops the Compute instance) without deleting the deployment. On Compute, pausing deletes files on the default disk unless you mounted a writable volume at `/home` or `/root`; files in a mounted volume survive pause. Restarts and updates keep your home files.
 
-- **General Inference** and **Compute**: pause and resume the whole deployment.
-- **Dynamo**: pause and resume the whole deployment. You cannot pause only an in-progress Dynamo rollout. See [NVIDIA Dynamo](/apps/dynamo).
+- **General Inference** and **Compute**: pause and resume the whole deployment. Pausing a General Inference deployment scales its replicas to zero and keeps the deployment and its endpoint; an authenticated HTTP request to the paused endpoint returns `503` with the error code `deployment_paused`.
+- **Dynamo**: pause and resume the whole deployment. Pausing scales every component to zero and keeps the endpoint, which answers `503` while paused. You cannot pause only an in-progress Dynamo rollout. See [NVIDIA Dynamo](/apps/dynamo).
 - **Jobs**: pause and resume the whole job from the details page. Pausing deletes the job's pods and resuming restarts the job from the beginning, so completed work can run again. Checkpoint in your application and write to persistent storage to keep progress. See [Batch Jobs](/apps/jobs) and [Managing Storage](/resources/storage).
 
 You can also pause and resume from the CLI (`ccluster pause <id>` / `ccluster resume <id>`). See [Client Setup](/clients/setup).

@@ -14,7 +14,7 @@ The integration supports two serving topologies:
 - **Aggregated** (**Combined workers** in the console) — each Worker performs both prompt processing and token generation. Aggregated Workers can use a fixed replica count, autoscale within a configured range, or scale to zero when idle.
 - **Disaggregated** (**Split prefill & decode** in the console, a Preview feature) — separate Prefill and Decode pools perform prompt processing and token generation. The Frontend routes work between the pools, and Prefill transfers KV state to Decode. These pools currently use fixed replica counts.
 
-Both topologies use one CPU-only **Frontend**. Every GPU worker replica consumes one complete instance of its selected hardware type. NVIDIA CCluster supplies the Dynamo runtime image, so you select the model, the hardware, and optionally a runtime version instead of providing a container image.
+Both topologies use a CPU-only **Frontend**, which runs as three pods by default. Every GPU worker replica consumes one complete instance of its selected hardware type. NVIDIA CCluster supplies the Dynamo runtime image, so you select the model, the hardware, and optionally a runtime version instead of providing a container image.
 
 ## Before you begin
 
@@ -34,6 +34,7 @@ From **New Deployment**, choose **Dynamo**. The **Endpoint** step contains the r
 - **Served Model Name** — an optional alias clients can send in the OpenAI `model` field. If you leave it empty, use the Hugging Face model identifier.
 - **Hugging Face Token** — required for gated and private models. Select a token saved in [Secrets](/resources/vault).
 - **Protocol** — `HTTP` for the OpenAI-compatible API or `gRPC` for the KServe v2 inference protocol.
+- **Frontend Replicas** — the number of Frontend pods that serve the endpoint and route requests to the workers. The default is `3`, and the maximum is `10`. The pods run on separate nodes where possible, so two or more keep the endpoint up if a node fails. Changing this value restarts every component of a running deployment.
 - **Private Endpoint** — select or create a Bearer token or client certificate.
 - **Annotations** — optional key/value metadata applied to the deployment components.
 
@@ -42,7 +43,7 @@ For Bearer token and mTLS setup, see [Securing Endpoints](/resources/private). D
 </Tip>
 
 <Frame>
-    <img src="./images/dynamo-endpoint-configuration.png" alt="NVIDIA Dynamo Endpoint step with model, protocol, private endpoint, and annotation fields" />
+    <img src="./images/dynamo-endpoint-configuration.png" alt="NVIDIA Dynamo Endpoint step with model, protocol, Frontend Replicas, private endpoint, and annotation fields" />
 </Frame>
 
 ## 2. Configure runtime options
@@ -161,9 +162,19 @@ You can also create a disaggregated deployment through the API. Send a `POST` re
 
 Each pool needs a `hardware_instance_id` and a fixed size: set `min_replicas` and `max_replicas` to the same value, at least `1`. The older per-pool `replicas` field is deprecated but still accepted. The Prefill and Decode pools can use the same GPU hardware profile or different profiles, but both profiles must be available in the selected cluster. Every replica consumes one complete hardware instance, so the deployment's GPU footprint is the sum of the Prefill and Decode pool footprints.
 
-To pin the model to a Hugging Face branch, tag, or commit, set `model_revision`. NVIDIA CCluster resolves it to a commit and runs every worker at that commit.
+You can also set `frontend` to choose the number of Frontend pods: `"frontend": {"min_replicas": 3, "max_replicas": 3}`. The Frontend has a fixed size for now, so `min_replicas` must equal `max_replicas`, between `1` and `10`. If you omit `frontend`, the Frontend runs three pods. Changing `frontend` restarts every component of a running deployment.
 
-On clusters that support GPU Direct RDMA, `"weight_transfer": {}` lets a starting worker copy the model weights GPU to GPU from a running worker of the same pool instead of downloading the checkpoint. It pins the model to a single commit, and it needs the same EFA-enabled AWS clusters as `require_gpu_direct_rdma`. When you enable it, `--revision` and `--load-format` in extra arguments are rejected, and environment variable names starting with `MX_` or `MODEL_EXPRESS_`, and `VLLM_PLUGINS`, are reserved.
+`frontend` also accepts `cpu` (`1000` to `8000` millicores) and `memory` (`1024` to `16384` MiB) to size each Frontend pod, for example `"frontend": {"min_replicas": 3, "max_replicas": 3, "cpu": 2000, "memory": 4096}`. If you omit them, the Frontend uses the platform's default size. These are API fields only: the console does not expose them, and no published client library includes them yet, so send them in a raw API request.
+
+To pin the model, set `model_revision` to a Hugging Face branch, tag, or commit. NVIDIA CCluster resolves it to a commit SHA and stores it, so restarts, resumes, and rollbacks load the same commit.
+
+- Each worker downloads the pinned commit before it starts and serves the weights, tokenizer, chat template, generation config, and MTP draft model from that local copy. The Frontend reads the model metadata from the workers, so prompt rendering and tokenization use the same commit.
+- New commits on the model's default branch do not affect running workers or workers added by scaling.
+- An update that omits `model_revision` keeps the stored commit. To move to a newer commit, send the branch or tag again. An update that should pick up the current deployment chart must also omit `chart_revision`.
+- Pinning requires `centml` 0.7.2 or later, or `platform-api-python-client` 4.37.1 or later.
+- `/dynamo-pinned-model` is a reserved mount path. Storage mounts cannot use it.
+
+On clusters that support GPU Direct RDMA, `"weight_transfer": {}` lets a starting worker copy the model weights GPU to GPU from a running worker of the same pool instead of downloading the checkpoint. It pins the model to a single commit through the ModelExpress loader instead of the local copy described above, and it needs the same EFA-enabled AWS clusters as `require_gpu_direct_rdma`. When you enable it, `--revision` and `--load-format` in extra arguments are rejected, and environment variable names starting with `MX_` or `MODEL_EXPRESS_`, and `VLLM_PLUGINS`, are reserved.
 
 The `endpoint_bearer_token` in this request protects the deployed inference endpoint. It is separate from the credential used to authenticate the request to the NVIDIA CCluster API.
 
@@ -207,12 +218,12 @@ The KV transfer charts on the **Usage** tab show transfer activity for both poli
 
 The deployments list and revision table report Dynamo pods by component instead of combining them into one replica count:
 
-- **Frontend** — the request-routing component. A standard deployment has one Frontend pod.
+- **Frontend** — the request-routing component. A deployment runs three Frontend pods by default; see **Frontend Replicas**.
 - **Worker** — the GPU-backed vLLM replicas in an aggregated deployment.
 - **Prefill** — the GPU-backed prompt-processing replicas in a disaggregated deployment.
 - **Decode** — the GPU-backed token-generation replicas in a disaggregated deployment.
 
-For example, `Frontend (1 / 1 observed pods ready)` and `Worker (2 / 2 observed pods ready)` describe a ready aggregated deployment. `Frontend (1 / 1 observed pods ready)`, `Prefill (1 / 1 observed pods ready)`, and `Decode (2 / 2 observed pods ready)` describe a ready disaggregated deployment. The overall deployment can remain not ready when the Frontend is unhealthy, even if all workers are running, because the endpoint cannot accept traffic without it.
+For example, `Frontend (3 / 3 observed pods ready)` and `Worker (2 / 2 observed pods ready)` describe a ready aggregated deployment. `Frontend (3 / 3 observed pods ready)`, `Prefill (1 / 1 observed pods ready)`, and `Decode (2 / 2 observed pods ready)` describe a ready disaggregated deployment. The overall deployment can remain not ready when the Frontend is unhealthy, even if all workers are running, because the endpoint cannot accept traffic without it.
 
 Open the deployment to access:
 
@@ -229,7 +240,7 @@ Open the deployment to access:
 On an aggregated deployment, changing **Min Replicas** or **Max Replicas** scales the running deployment in place and **does not create a new revision**. Editing the spec (model, protocol, extra arguments, and similar), changing the hardware, or resizing a disaggregated Prefill or Decode pool creates a new revision. See [Managing Deployments](/resources/managing-deployments) for Terminal, pause/resume, clone, and the shared revision model.
 </Note>
 
-Editing a Dynamo deployment creates a new revision and starts an operator-managed rolling update. When you edit an Active aggregated deployment, you can also set **Max Unavailable** and **Max Surge** for the worker rollout. Changing **Dynamo Runtime Version** restarts every component, including the Frontend. You can inspect historical revision status and logs, clone a deployment, or roll back to an earlier revision. Pausing or resuming the whole deployment is supported; pausing only an in-progress Dynamo rollout is not.
+Editing a Dynamo deployment creates a new revision and starts an operator-managed rolling update. When you edit an Active aggregated deployment, you can also set **Max Unavailable** and **Max Surge** for the worker rollout. Changing **Dynamo Runtime Version** restarts every component, including the Frontend. You can inspect historical revision status and logs, clone a deployment, or roll back to an earlier revision. Pausing or resuming the whole deployment is supported; pausing only an in-progress Dynamo rollout is not. Pausing scales every component, including the Frontend, to zero replicas while keeping the deployment and its endpoint, and an authenticated HTTP request to a paused endpoint returns `503` with the error code `deployment_paused`. Resuming starts the components again.
 
 The console's **Edit** and **Clone** flows support both topologies. An edit keeps the deployment's serving topology and cluster; clone the deployment to change either.
 
@@ -269,7 +280,7 @@ The beta integration currently supports:
 - Revision-aware status, logs, rollback, editing, and cloning for both topologies.
 - A selectable Dynamo runtime version.
 
-The current integration has a single Frontend and does not expose Frontend high availability, independent Prefill or Decode autoscaling, scale to zero for disaggregated pools, coordinated or guaranteed same-node placement, an NVLink or CUDA IPC KV path, an accelerated KV path outside EFA-enabled AWS EKS clusters, custom Dynamo runtime images, or config-file mounts. For Dynamo architecture and features outside the NVIDIA CCluster integration, see the [NVIDIA Dynamo documentation](https://docs.nvidia.com/dynamo/latest/).
+The Frontend runs as three pods on separate nodes where possible, but it does not autoscale. The current integration does not expose independent Prefill or Decode autoscaling, scale to zero for disaggregated pools, coordinated or guaranteed same-node placement, an NVLink or CUDA IPC KV path, an accelerated KV path outside EFA-enabled AWS EKS clusters, custom Dynamo runtime images, or config-file mounts. For Dynamo architecture and features outside the NVIDIA CCluster integration, see the [NVIDIA Dynamo documentation](https://docs.nvidia.com/dynamo/latest/).
 
 ## What's next
 
