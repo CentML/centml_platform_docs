@@ -28,9 +28,14 @@ The create wizard has three steps: **Endpoint**, **Advanced**, and **Hardware**.
 - **Health check path** — the endpoint used to verify readiness (e.g., `/health`, `/`). For gRPC deployments, CCluster uses TCP socket checks automatically, so this field is ignored.
 - **Add command** — entrypoint command and arguments. If left empty, the image's default entrypoint is used.
 - **Metrics port** / **Metrics path** — optional Prometheus scrape endpoint. Set **both** together, or leave both empty to use the defaults (the container port and `/metrics`).
+- **Request body limit (MiB)** — maximum request body size, including encoding and multipart overhead. Integer from `1` to `1024`; defaults to `15`. API field: `request_body_limit_mib`. A full-request update that omits it resets the limit to `15`.
 - **Environment variables** — pass additional variables to the container.
 - **Config file** — mount a file into the container. Provide **Filename**, **Mount Path (directory)**, and **File Content**. For worked examples, see [gRPC Inference Endpoints](/resources/grpc) and [Deploying TensorRT-LLM](/resources/trtllm).
 - **Annotations** — optional key/value metadata on the deployment.
+
+<Frame>
+    <img src="./images/inference-advanced.png" alt="General Inference Advanced step with logging, model caching, session affinity, priority class, request body limit, health check path, command, metrics, environment variable, and config file settings" />
+</Frame>
 
 **Scaling**
 
