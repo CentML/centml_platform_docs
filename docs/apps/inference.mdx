@@ -28,10 +28,14 @@ The create wizard has three steps: **Endpoint**, **Advanced**, and **Hardware**.
 - **Health check path** — the endpoint used to verify readiness (e.g., `/health`, `/`). For gRPC deployments, CCluster uses TCP socket checks automatically, so this field is ignored.
 - **Add command** — entrypoint command and arguments. If left empty, the image's default entrypoint is used.
 - **Metrics port** / **Metrics path** — optional Prometheus scrape endpoint. Set **both** together, or leave both empty to use the defaults (the container port and `/metrics`).
-- **Request body limit (MiB)** — the largest request body the endpoint accepts, for example for large video uploads. Enter a whole number from `1` to `1024`, or leave it empty to use `15` MiB. The size includes encoding and multipart overhead, and your application's own limits still apply. In the API, set `request_body_limit_mib`; use `1024` for a 1 GiB limit. A full-request API update that omits the field resets the limit to `15` MiB. The **Detail** tab shows the configured limit, and resume and rollback use the limit saved with the revision. Dynamo and older General Inference deployments keep the `15` MiB limit. Sustained concurrent large uploads need enough shared ingress storage and I/O capacity on the cluster.
+- **Request body limit (MiB)** — the largest request body the endpoint accepts, for example for large video uploads. Enter a whole number from `1` to `1024`, or leave it empty to use `15` MiB. The size includes encoding and multipart overhead, and your application's own limits still apply. In the API, set `request_body_limit_mib`; use `1024` for a 1 GiB limit. A full-request API update that omits the field resets the limit to `15` MiB. The **Detail** tab shows the configured limit, and resume and rollback use the limit saved with the revision. Dynamo and older General Inference deployments keep the `15` MiB limit.
 - **Environment variables** — pass additional variables to the container.
 - **Config file** — mount a file into the container. Provide **Filename**, **Mount Path (directory)**, and **File Content**. For worked examples, see [gRPC Inference Endpoints](/resources/grpc) and [Deploying TensorRT-LLM](/resources/trtllm).
 - **Annotations** — optional key/value metadata on the deployment.
+
+<Frame>
+    <img src="./images/inference-advanced.png" alt="General Inference Advanced step with logging, model caching, session affinity, priority class, request body limit, health check path, command, metrics, environment variable, and config file settings" />
+</Frame>
 
 **Scaling**
 
