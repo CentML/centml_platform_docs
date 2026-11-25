@@ -18,6 +18,14 @@ At a minimum, you need to specify:
 - **Image pull authentication → Registry credentials** — select **Saved registry credentials** for images that require authentication. For NVIDIA NGC (`nvcr.io`), first [save credentials](/resources/vault#example-nvidia-ngc-nvcrio) with username `$oauthtoken` and your NGC API key as the password. Leave the selection empty for images that allow anonymous pulls. Alternatively, choose **Existing cluster pull secret** for a secret managed by your administrator; API deployments can [reference it by name](/resources/custom-image#use-an-existing-image-pull-secret).
 - **Hugging Face Token** — select a Hugging Face token saved in [Secrets](/resources/vault) for gated or private models. Do not pass `HF_TOKEN` as a plain environment variable.
 
+<Frame>
+    <img src="./images/inf-1.png" alt="General Inference Endpoint step with image, port, protocol, image pull authentication, Hugging Face token, and private endpoint fields" />
+</Frame>
+
+<Tip>
+Every deployment must be protected — there are no public endpoints. Secure your endpoint with a Bearer token (an `Authorization: Bearer <token>` header), an mTLS client certificate, or both. To enable mTLS, select the **Private Endpoint** option, which generates a TLS certificate you can download as a .pem file after the deployment is complete. For more details, see [Securing Endpoints](/resources/private).
+</Tip>
+
 The create wizard has three steps: **Endpoint**, **Advanced**, and **Hardware**. Optional runtime settings are in **Advanced**, and **Scaling** settings are in **Hardware**.
 
 **Advanced**
@@ -51,14 +59,6 @@ CCluster scales replicas from in-flight request concurrency (**Max Concurrency**
 <Note>
 Changing min or max replica counts on a running deployment scales in place and **does not create a new revision**. Spec changes such as image, command, or affinity do. See [Managing Deployments](/resources/managing-deployments).
 </Note>
-
-<Frame>
-    <img src="./images/inf-1.png" alt="General Inference Endpoint step with image, port, protocol, image pull authentication, Hugging Face token, and private endpoint fields" />
-</Frame>
-
-<Tip>
-Every deployment must be protected — there are no public endpoints. Secure your endpoint with a Bearer token (an `Authorization: Bearer <token>` header), an mTLS client certificate, or both. To enable mTLS, select the **Private Endpoint** option, which generates a TLS certificate you can download as a .pem file after the deployment is complete. For more details, see [Securing Endpoints](/resources/private).
-</Tip>
 
 <Tip>
 For building your own custom container image and deploying on NVIDIA CCluster, please refer to this [resource](/resources/custom-image).
