@@ -45,21 +45,6 @@ The create wizard has three steps: **Endpoint**, **Advanced**, and **Hardware**.
     <img src="./images/inference-advanced.png" alt="General Inference Advanced step with logging, model caching, session affinity, priority class, request body limit, health check path, command, metrics, environment variable, and config file settings" />
 </Frame>
 
-**Scaling**
-
-CCluster scales replicas from in-flight request concurrency (**Max Concurrency**). Leave concurrency unset for no concurrency target (effectively unlimited).
-
-| Setting | Description |
-| --- | --- |
-| **Min Replicas** | Lower bound for replica count. `0` allows scale-to-zero when demand drops. |
-| **Max Replicas** | Upper bound for replica count. Set equal to **Min Replicas** for a fixed size. |
-| **Max Concurrency** | Target in-flight requests per replica. Optional; leave unset for no concurrency target. |
-| **Cooldown Period (s)** | Scale-down stabilization time, from `0` to `3600`. |
-
-<Note>
-Changing min or max replica counts on a running deployment scales in place and **does not create a new revision**. Spec changes such as image, command, or affinity do. See [Managing Deployments](/resources/managing-deployments).
-</Note>
-
 <Tip>
 For building your own custom container image and deploying on NVIDIA CCluster, please refer to this [resource](/resources/custom-image).
 </Tip>
@@ -120,7 +105,24 @@ By default, NVIDIA CCluster provides several managed clusters and GPU instances 
     <img src="./images/inf-2.png" alt="General Inference Hardware step with cluster, hardware cards, storage, and scaling settings" />
 </Frame>
 
-Select the regional cluster and hardware instance that best fits your need. To mount persistent storage, add a mount in the **Storage** section below the hardware cards; see [Managing Storage](/resources/storage). Then click Deploy.
+Select the regional cluster and hardware instance that best fits your need. To mount persistent storage, add a mount in the **Storage** section below the hardware cards; see [Managing Storage](/resources/storage).
+
+**Scaling**
+
+CCluster scales replicas from in-flight request concurrency (**Max Concurrency**). Leave concurrency unset for no concurrency target (effectively unlimited).
+
+| Setting | Description |
+| --- | --- |
+| **Min Replicas** | Lower bound for replica count. `0` allows scale-to-zero when demand drops. |
+| **Max Replicas** | Upper bound for replica count. Set equal to **Min Replicas** for a fixed size. |
+| **Max Concurrency** | Target in-flight requests per replica. Optional; leave unset for no concurrency target. |
+| **Cooldown Period (s)** | Scale-down stabilization time, from `0` to `3600`. |
+
+<Note>
+Changing min or max replica counts on a running deployment scales in place and **does not create a new revision**. Spec changes such as image, command, or affinity do. See [Managing Deployments](/resources/managing-deployments).
+</Note>
+
+Then click **Deploy**.
 
 <Tip>
 You can integrate your own private cluster into CCluster through bring-your-own-infrastructure support. To get started, open a support request through your NVIDIA CCluster support channel.
