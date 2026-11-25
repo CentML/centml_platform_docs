@@ -9,7 +9,7 @@ Jobs let you run any containerized workload as a **batch task** that runs to com
 
 Under the **Job Information** section, provide the core details for your workload:
 
-- **Job Name** — a unique name for the job. It must start with a lowercase letter, contain only lowercase letters, digits, or hyphens (`-`), end with an alphanumeric character, and be at most 20 characters.
+- **Job Name** — a unique name for the job. It must start with a lowercase letter, contain only lowercase letters, digits, or hyphens (`-`), end with an alphanumeric character, and be at most 20 characters. The cluster can enforce a shorter limit; the error message states the maximum allowed length.
 - **Container Image URL** — the container image to run (e.g., `nvcr.io/nvidia/base/ubuntu`).
 - **Container Tag** — the image tag (e.g., `latest`).
 - **Image pull authentication → Registry credentials** — enter **Registry username** and **Password or access token** for images that require authentication. For NVIDIA NGC (`nvcr.io`), enter the literal username `$oauthtoken` and your NGC API key as the password. Leave both empty for images that allow anonymous pulls; if you provide one, you must provide the other. Alternatively, choose **Existing cluster pull secret** for a secret managed by your administrator. API deployments can [reference it using `image_pull_secret_name`](/resources/custom-image#use-an-existing-image-pull-secret).

@@ -29,7 +29,7 @@ Prepare the following:
 
 From **New Deployment**, choose **Dynamo**. The **Endpoint** step contains the required serving settings:
 
-- **Endpoint Name** — a unique name containing lowercase letters, numbers, and hyphens. It must begin with a lowercase letter, end with a letter or number, and be no more than 20 characters.
+- **Endpoint Name** — a unique name containing lowercase letters, numbers, and hyphens. It must begin with a lowercase letter, end with a letter or number, and be no more than 20 characters. The cluster can enforce a shorter limit, because the endpoint name is combined with your user ID and the cluster domain; if the name is too long, the request fails and the error states the maximum allowed length.
 - **Model** — the Hugging Face model identifier loaded by the vLLM workers.
 - **Served Model Name** — an optional alias clients can send in the OpenAI `model` field. If you leave it empty, use the Hugging Face model identifier.
 - **Hugging Face Token** — required for gated and private models. Select a token saved in [Secrets](/resources/vault).
@@ -50,15 +50,15 @@ For Bearer token and mTLS setup, see [Securing Endpoints](/resources/private). D
 
 The **Advanced** step includes optional runtime and observability settings:
 
-- **Dynamo Runtime Version** — the NVIDIA Dynamo vLLM runtime version the deployment runs. The list shows versions that NVIDIA CCluster has validated, and you can also type another published version tag. Leave it empty to use the platform default, which accounts for the target cluster and the KV transfer policy. Changing the version of an existing deployment restarts every component. When the deployment does not run the newest validated version, the **Detail** tab shows **Update Available**.
+- **Dynamo Runtime Version** — the NVIDIA Dynamo vLLM runtime version the deployment runs. The list shows versions that NVIDIA CCluster has validated, and you can also type another published version tag. Leave it empty on a new deployment to use the platform default, which accounts for the target cluster and the KV transfer policy. When you edit an existing deployment and leave it empty, the deployment keeps its current version, unless you also change the KV transfer policy, in which case it takes the platform default. Changing the version of an existing deployment restarts every component. When the deployment does not run the newest validated version, the **Detail** tab shows **Update Available**.
 - **Enable logging** — enabled by default. Container output is collected and displayed in the deployment's **Logs** tab.
 - **Enable Model Caching** — stores model files in a node-local persistent cache. Restarts and replicas scheduled on the same node can reuse the files instead of downloading them again.
 - **Priority class** — an optional Kubernetes PriorityClass name for the deployment's pods. Leave it empty unless your cluster defines a PriorityClass you want these pods to use.
-- **Extra Arguments (all worker pools)** — additional vLLM worker arguments, applied to every worker pool. During the beta, use this field only when directed by NVIDIA CCluster support; an unsupported value can prevent the worker from starting. Disaggregated deployments reject arguments that override the Prefill and Decode settings NVIDIA CCluster manages, such as `--kv-transfer-config`.
+- **Extra Arguments (all worker pools)** — additional vLLM worker arguments, applied to every worker pool. During the beta, use this field only when directed by NVIDIA CCluster support; an unsupported value can prevent the worker from starting. Disaggregated deployments reject arguments that override the Prefill and Decode settings NVIDIA CCluster manages, such as `--kv-transfer-config`. Dynamo plane flags such as `--request-plane`, `--event-plane`, and `--response-plane` are also reserved and rejected.
 - **Environment Variables** — additional variables passed to the Frontend and every worker pool. Use shell-compatible names containing letters, numbers, and underscores, beginning with a letter or underscore. Names that NVIDIA CCluster manages, such as `DYN_HTTP_PORT` and `DYN_REQUEST_PLANE`, are rejected.
 
 <Tip>
-The Frontend uses KV-aware routing (`DYN_ROUTER_MODE=kv`) by default. To use another Dynamo router mode, such as `round-robin`, set `DYN_ROUTER_MODE` in **Environment Variables**. See [Using the Dynamo Frontend](https://docs.nvidia.com/dynamo/v1.5.1/kubernetes/kv-aware-routing/using-the-dynamo-frontend) for how KV-aware routing selects a worker.
+The Frontend uses KV-aware routing (`DYN_ROUTER_MODE=kv`) by default. To use another Dynamo router mode, such as `round-robin`, set `DYN_ROUTER_MODE` in **Environment Variables**. See [Using the Dynamo Frontend](https://docs.nvidia.com/dynamo/v1.6.2/kubernetes/kv-aware-routing/using-the-dynamo-frontend) for how KV-aware routing selects a worker.
 </Tip>
 
 <Frame>
@@ -178,7 +178,7 @@ On clusters that support GPU Direct RDMA, `"weight_transfer": {}` lets a startin
 
 The `endpoint_bearer_token` in this request protects the deployed inference endpoint. It is separate from the credential used to authenticate the request to the NVIDIA CCluster API.
 
-`communications.kv_transfer.policy` selects the KV transfer policy: `allow_tcp`, the console default, or `require_gpu_direct_rdma`. If you omit `communications`, NVIDIA CCluster uses its default NIXL configuration, which also allows TCP. To pin a runtime version, set `runtime_version` to a Dynamo runtime version tag; otherwise NVIDIA CCluster selects the platform default for the cluster and policy.
+`communications.kv_transfer.policy` selects the KV transfer policy: `allow_tcp`, the console default, or `require_gpu_direct_rdma`. If you omit `communications`, NVIDIA CCluster uses its default NIXL configuration, which also allows TCP. To pin a runtime version, set `runtime_version` to a Dynamo runtime version tag; otherwise NVIDIA CCluster selects the platform default for the cluster and policy. When you update an existing deployment and omit `runtime_version`, the deployment keeps its current version unless the update changes `communications` or `weight_transfer`; then NVIDIA CCluster selects the platform default.
 
 Prefill and Decode pools are fixed-size in the current release and do not autoscale independently. Do not set `concurrency` or `cooldown_period` on the pools, and do not include the aggregated top-level fields `hardware_instance_id`, `min_replicas`, `max_replicas`, `concurrency`, or `cooldown_period` in a disaggregated request. Use `worker_pools` from `GET /deployments/dynamo/{deployment_id}` as the source of truth for its hardware and replica configuration.
 
@@ -295,7 +295,7 @@ The Frontend runs as three pods on separate nodes where possible, but it does no
   <Card
     title="NVIDIA Dynamo Frontend"
     icon="fa-solid fa-diagram-project"
-    href="https://docs.nvidia.com/dynamo/v1.5.1/knowledge-base/modular-components/frontend/overview"
+    href="https://docs.nvidia.com/dynamo/v1.6.2/knowledge-base/modular-components/frontend/overview"
   >
     Review Dynamo's OpenAI-compatible HTTP and KServe gRPC interfaces.
   </Card>
