@@ -87,6 +87,59 @@ While the instance is **Active**, the deployment **Terminal** tab opens a shell 
 
 Compute deployments are revision-aware: spec edits create a new revision, and the **Detail** tab lists revisions so you can inspect them and roll back. See [Managing Deployments](/resources/managing-deployments#revisions-rollback-and-rollout).
 
+## Profile GPU workloads
+
+Nsight Compute, CUPTI metrics, and the GPU metrics in Nsight Systems read the GPU's performance counters. By default the NVIDIA driver allows that only for admin processes, and the tools report [`ERR_NVGPUCTRPERM`](https://developer.nvidia.com/ERR_NVGPUCTRPERM). CCluster-managed clusters load the driver with `NVreg_RestrictProfilingToAdminUsers=0`, so you can profile from a compute instance without extra privileges:
+
+```bash showLineNumbers={false}
+ncu -o report python train.py
+```
+
+To check a cluster's setting, run this on the instance. `RmProfilingAdminOnly: 0` means profiling is open to non-admin processes.
+
+```bash showLineNumbers={false}
+grep RmProfilingAdminOnly /proc/driver/nvidia/params
+```
+
+Nsight Systems CUDA tracing works either way. Only its GPU metrics (`--gpu-metrics-devices`) need the counters.
+
+### Clusters your organization operates
+
+If your organization runs its own cluster, your cluster administrator sets the parameter wherever the cluster installs the NVIDIA driver. It applies to every workload on the node, and it takes effect only after the driver reloads on each GPU node, which interrupts the GPU workloads running there.
+
+#### Driver installed by the GPU Operator
+
+Create a ConfigMap with the parameter in the GPU Operator's namespace (`gpu-operator` here):
+
+```bash showLineNumbers={false}
+kubectl create configmap kernel-module-params -n gpu-operator \
+  --from-literal=nvidia.conf=NVreg_RestrictProfilingToAdminUsers=0
+```
+
+Point the driver at it in the GPU Operator's Helm values and upgrade the release. With the default upgrade policy, the GPU Operator then reloads the driver one node at a time, evicting GPU pods from each node first.
+
+```yaml showLineNumbers={false}
+driver:
+  kernelModuleConfig:
+    name: kernel-module-params
+```
+
+If you manage the driver with `NVIDIADriver` resources, set `spec.kernelModuleConfig.name` on each of them instead. The GPU Operator does not reload the driver when only a ConfigMap's contents change, so to change the parameters later, create a ConfigMap under a new name and point the configuration at it.
+
+#### Driver included in the node image
+
+Add the parameter to the driver's module options on each GPU node, for example when you build the node image:
+
+```bash showLineNumbers={false}
+echo 'options nvidia NVreg_RestrictProfilingToAdminUsers=0' > /etc/modprobe.d/nvidia-profiling.conf
+```
+
+The driver reads the option when it loads, so it takes effect after the node reboots. If your image loads the driver from the initramfs, rebuild the initramfs after adding the file.
+
+<Note>
+NVIDIA restricts the counters by default as a precaution for shared GPUs: on a GPU that several users share, the counters can reveal some of another process's activity. Workloads with whole GPUs only see their own work, so this only matters where users share a GPU through MIG or time-slicing.
+</Note>
+
 
 ## What's next
 
